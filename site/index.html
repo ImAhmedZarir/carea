@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
   <title>carea — Craft And Reverse Engineer Everything | Orchestration &amp; Airlock CLI</title>
-  <meta name="description" content="Independent Level-1 orchestration framework, Python 3.10+ stdlib airlock CLI, and dual-axis verification workflows unifying REA and Craft Anything cleanly.">
-  <meta name="keywords" content="carea, Craft And Reverse Engineer Everything, Ahmed Ishtiaque Zarir, REA, morluto rea, craft-anything-cli, two-team clean room, airlock-lint, reverse engineering workflow, dual-axis verification, AgentEnv">
+  <meta name="description" content="Autonomous single-command reverse engineering (/carea target.apk, URL, .exe) extracting architecture.md, design-system.md, and verified rebuilds over REA and Craft Anything.">
+  <meta name="keywords" content="carea, Craft And Reverse Engineer Everything, Ahmed Ishtiaque Zarir, reverse engineer apk, reverse engineer website, reverse engineer exe, architecture extraction, design extraction, REA, morluto rea, craft-anything-cli, two-team clean room, airlock-lint, AgentEnv">
   <meta name="author" content="Ahmed Ishtiaque Zarir">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://imahmedzarir.github.io/carea/">
@@ -102,11 +102,11 @@
           </a>
         </div>
 
-        <h1 class="hero-h1 mt-4" style="max-width: 18ch;">
+        <h1 class="hero-h1 mt-4" style="max-width: 19ch;">
           Break It Down.<br><span class="text-gradient">Build It Better.</span>
         </h1>
         <p class="lead mt-4">
-          An independent Level-1 skill pack, zero-dependency Python 3.10+ stdlib airlock CLI, and dual-axis verification contract over external <strong>REA</strong> and <strong>Craft Anything</strong> engines.
+          Give one command — <code>/carea app.apk</code>, <code>https://...</code>, or <code>tool.exe</code> — to automatically map full system <strong>architecture</strong>, <strong>UI/UX design</strong>, and a verified reconstruction over external <strong>REA</strong> and <strong>Craft Anything</strong> engines, with optional two-team airlock gates.
         </p>
 
         <div class="flex flex-wrap items-center gap-3 mt-6">
@@ -288,17 +288,29 @@
         <div class="grid-bento">
           <div class="card hairline-top span-7 stack" data-tab-group>
             <div class="flex flex-wrap items-center justify-between gap-2">
-              <h2 class="h3">Three Entry Points · Non-Overlapping Triggers</h2>
+              <h2 class="h3">Single-Command Intake &amp; Skill Routing</h2>
               <div class="tabs" role="tablist" aria-label="Skill quickstarts">
-                <button class="tab-btn" type="button" role="tab" data-tab-target="carea" aria-selected="true">/carea</button>
+                <button class="tab-btn" type="button" role="tab" data-tab-target="auto" aria-selected="true">/carea &lt;target&gt;</button>
+                <button class="tab-btn" type="button" role="tab" data-tab-target="carea" aria-selected="false">Airlock Mode 2</button>
                 <button class="tab-btn" type="button" role="tab" data-tab-target="rea" aria-selected="false">/rea</button>
                 <button class="tab-btn" type="button" role="tab" data-tab-target="ca" aria-selected="false">/ca</button>
               </div>
             </div>
 
-            <div class="code-box" data-tab-panel="carea">
+            <div class="code-box" data-tab-panel="auto">
               <div class="code-head">
-                <span>Mode 2 · Two-Team Clean Room + Dual Parity</span>
+                <span>Track A (Default) · Auto-Detect Target -&gt; Architecture + Design + Rebuild</span>
+                <button class="copy-pill" type="button" data-copy="/carea ./target.apk reverse engineer full architecture, design tokens, and rebuild plan"><span data-copy-label>Copy</span></button>
+              </div>
+              <pre class="code-pre"><code>/carea ./target.apk        # Auto: REA Android/Flutter/JNI + CA adb UI capture
+/carea https://app.example # Auto: REA JS/network trace + CA multi-width capture
+/carea ./tool.exe          # Auto: REA PE/native analysis + runtime rebuild
+-> Outputs: architecture.md + design-system.md + verified rebuild blueprint</code></pre>
+            </div>
+
+            <div class="code-box" data-tab-panel="carea" hidden>
+              <div class="code-head">
+                <span>Track B · Two-Team Clean Room + Dual Parity (Mode 2)</span>
                 <button class="copy-pill" type="button" data-copy="carea init ./my-rebuild --mode two-team-process --topology b&#10;carea isolation-check ./my-rebuild&#10;carea airlock-lint ./my-rebuild/airlock --strict&#10;carea parity-report --handoff ./my-rebuild/airlock/carea-handoff.json"><span data-copy-label>Copy</span></button>
               </div>
               <pre class="code-pre"><code>carea init ./my-rebuild --mode two-team-process --topology b

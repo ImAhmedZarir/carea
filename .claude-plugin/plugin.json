@@ -1,19 +1,23 @@
 {
   "name": "carea",
   "version": "1.0.0",
-  "description": "Independent Level-1 orchestration skills (/carea, /rea, /ca), airlock CLI checks, two-team clean-room workflow, and handoff schemas coordinating external REA and Craft Anything engines.",
+  "description": "Autonomous target-to-architecture and clean-room orchestration skills (/carea, /rea, /ca) over external REA and Craft Anything engines, plus zero-dependency airlock CLI gates and schemas.",
   "author": {
     "name": "Ahmed Ishtiaque Zarir",
     "url": "https://github.com/ImAhmedZarir"
   },
+  "homepage": "https://imahmedzarir.github.io/carea/",
   "repository": "https://github.com/ImAhmedZarir/carea",
   "license": "MIT",
   "keywords": [
     "carea",
     "rea",
     "craft-anything",
-    "clean-room",
     "reverse-engineering",
+    "architecture-extraction",
+    "design-extraction",
+    "apk-analysis",
+    "clean-room",
     "orchestration",
     "parity-verification"
   ],

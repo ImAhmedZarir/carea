@@ -1,55 +1,62 @@
 ---
 name: carea
-description: Orchestrate the combined four-stage pipeline (REA deep inspection -> airlock spec/handoff -> Craft Anything rebuild -> dual behavioral + pixel parity) and route multi-engine tasks across Modes 1-6 via carea CLI gates (init, isolation-check, spec-draft, airlock-lint, airlock-sign, validate-handoff, parity-report, return-feedback). Triggered by /carea or requests needing BOTH internal analysis (REA) and clean/rebuilt output (CA), two-team airlock isolation, private deep rebuilds, game/mobile rebuilds, or automatic mode selection.
+description: Autonomous target-to-architecture and combined rebuild pipeline (/carea <target>) over external REA and Craft Anything engines. Auto-detects .apk/.aab, web URLs/.asar, .exe/.dll/binaries, or Unity/Godot/Unreal games to reverse engineer system architecture (architecture.md), UI/UX design tokens (design-system.md), and reconstructed apps via REA + CA, plus enforces the optional two-team clean-room airlock CLI gates (init, isolation-check, spec-draft, airlock-lint, airlock-sign, validate-handoff, parity-report, return-feedback) across Modes 1-6.
 ---
 
 # carea — Craft And Reverse Engineer Everything
 
 > *"Break It Down. Build It Better."*
 
-`carea` is an **independent, unofficial Level-1 orchestration layer** coordinating external **REA (`rea`)** and **Craft Anything (`craft-anything-cli`)** processes across the Study -> Spec -> Clean Rebuild -> Dual Parity pipeline. Neither engine is vendored or bundled.
+`carea` is an **independent, unofficial Level-1 orchestration layer** coordinating external **REA (`rea`)** and **Craft Anything (`craft-anything-cli`)** processes so a single `/carea <target>` invocation can analyze an authorized target, extract its complete **architecture + UI/UX design**, and rebuild it cleanly. Neither upstream engine is vendored or bundled.
 
-> Read [`../_shared/responsible-use.md`](../_shared/responsible-use.md) before starting. `carea`'s Two-Team Clean Room protocol is an **engineering process aid — NOT legal advice and NOT a legal guarantee**.
+> Read [`../_shared/responsible-use.md`](../_shared/responsible-use.md) before starting: **authorized targets only**, never bypass DRM/auth/paywalls/anti-cheat/CAPTCHA, and never copy proprietary brand logos, photos, or copy. When clean-room independence is requested, remember `carea`'s airlock is an **engineering process aid — NOT legal advice**.
 
-## 1. Mode Router & Single-Engine Delegation
+---
 
-Pick one of the six documented modes in [`references/modes.md`](references/modes.md) (and [`references/intent-router.md`](references/intent-router.md)):
+## 0. Single-Command Auto-Intake (`/carea <target>`)
 
-1. **Mode 1 — Clean-Room UI / Web Rebuild -> delegate to `/ca`:** Only observable UI/web/window behavior is needed (`craft-anything-cli` `--clean-room` only).
-2. **Mode 2 — Two-Team Clean Room Process (Full `/carea` Pipeline):** Internal protocols, API shapes, state machines, or binary/JS logic must inform a fresh clean rebuild. Enforce separate directories (`analyst-evidence/`, `airlock/`, `builder-workspace/`, `verification/`), Topology B recommended (separate fresh agent session driving `craft-anything-cli mcp --clean-room`).
-3. **Mode 3 — Deep Investigation / Verification / AgentEnv -> delegate to `/rea`:** Forensics, binary/JS comparison, `verify_reconstruction`, or `AgentEnv` export without rebuilding UI.
-4. **Mode 4 — Private Deep Rebuild (`deep_private: true`):** User owns or holds explicit written permission to combine REA deep inspection with Craft Anything `--deep`. **NOT CLEAN-ROOM**: display the mandatory non-clean-room banner in every spec/output and never set clean-room assertions in `carea-handoff.json`.
-5. **Mode 5 — Game Rebuild Path:** Building/recreating game mechanics in Unity/Unreal/Godot via CA (`--build-with`), enforcing the authorization gate, no-asset-copy rule, and noting that CA `game_*` inspection/extraction tools are **Deep-only**.
-6. **Mode 6 — Android / Mobile App Path:** Hybrid REA mobile logic analysis (`android`, `apktool`, `jeb`, `flutter`, `frida`, `application`, `session`) paired with CA observable UI checks (`adb`, `adb_screenshot_take`, `adb_window_show`, `runtime_captures_compare`) across the Airlock (when clean-room) or Private Deep (when authorized Mode 4).
+When invoked as `/carea <target>` (e.g., `/carea app.apk`, `/carea https://app.example.com`, `/carea tool.exe`, `/carea ./game-dir`), **automatically classify the target and start the pipeline immediately** without stalling on unnecessary configuration questions:
 
-## 2. CLI Gates & Four-Stage Execution
+| Input Pattern | Auto-Detected Target | Engines & Profiles Loaded | Mode Track |
+| --- | --- | --- | --- |
+| `*.apk`, `*.aab`, Android `package:` | Android / Flutter App | REA (`android,apktool,jeb,flutter,frida,application,session`) + CA `adb` UI capture | Mode 6 *(or Mode 4 Direct)* |
+| `https://...`, `http://...`, SPA bundle, `*.asar` | Web / Electron App | REA (`browser,electron,application,javascript-runtime,session`) + CA web capture/rebuild | Mode 1 *(UI-only `/ca`)* or Mode 2 / 4 |
+| `*.exe`, `*.dll`, `*.so`, `*.dylib`, ELF, Mach-O, `.nupkg` | Native / Managed Binary | REA (`hot-cold` / `native` / `managed`) + CA runtime/UI if GUI exists | Mode 3 (`/rea` analysis) or Mode 4 / 2 |
+| `*.pak`, `*.pck`, Unity/Unreal/Godot folder | Game Project | CA `--build-with` + original generated assets (`assets_image_generate`); `game_*` only if Deep authorized | Mode 5 |
+| Firmware `.bin` / `.rom` / `.fd` / UEFI | Embedded / Firmware | REA (`firmware,uefi,artifact,session,direct`) | Mode 3 (`/rea` analysis) |
 
-Replace honor-system isolation with executable `carea` CLI checks at each boundary:
+See [`references/intent-router.md`](references/intent-router.md) for full tool-routing and context-budget rules.
 
-1. **Initialize & Isolate:**
-   - Run `carea doctor` to check upstream binaries against `compat/matrix.json`.
-   - Run `carea init <project-dir> --mode <mode>` to create `.carea/config.json`, `analyst-evidence/`, `airlock/`, `builder-workspace/`, `verification/`.
-   - Run `carea isolation-check <project-dir>` before starting Lane B.
-2. **Lane A (Analyst via REA -> `analyst-evidence/`):**
-   - Load lean REA schemas (`REA_MCP_TOOL_CATALOG_PROFILE=hot-cold` or target-scoped `REA_MCP_TOOL_FAMILIES` + `compact` input + `off` output).
-   - Export REA bundle (`export_evidence_bundle`) into `analyst-evidence/`. Never pass raw source or payloads directly to Lane B.
-3. **Airlock Gate (`airlock/`):**
-   - Generate draft skeleton: `carea spec-draft analyst-evidence/bundle.json --out airlock/clean-room-spec.md`.
-   - Refine `airlock/clean-room-spec.md` and `airlock/carea-handoff.json` (`1.1.0` schema).
-   - Run heuristic scan + schema validation + explicit human review sign-off:
-     - `carea airlock-lint airlock/` *(heuristic gate only; human review still required)*
-     - `carea validate-handoff airlock/carea-handoff.json`
-     - `carea airlock-sign airlock/carea-handoff.json --reviewer "<name>"`
-4. **Lane B (Builder via CA -> `builder-workspace/`) & Dual Parity (`verification/`):**
-   - Run Craft Anything `--clean-room` (without `--all-tools`, verifying `clean_room: true` via `core_session_show`) — or `--deep` only for authorized Mode 4 (`deep_private: true`) / explicitly authorized Deep game asset workflows.
-   - Merge CA checks and REA verification with `carea parity-report` into `verification/parity-checklist.md`.
-   - Pass remediation via `carea return-feedback` (failing vectors & pixel diff descriptions only).
+---
+
+## 1. Choose Execution Track (Auto-Direct vs Clean-Room Airlock)
+
+1. **Track A — Default Autonomous Extraction & Rebuild (Owned / Authorized Direct — Modes 4 / 5 / 6):**
+   Use by default when the user supplies `/carea <target>` asking to reverse engineer the full design, architecture, and rebuild/blueprint for an **owned or authorized target** without asking for a clean-room firewall:
+   - Run **REA deep inspection** + **Craft Anything UI/runtime capture & rebuild** in one coordinated pass.
+   - Produce three structured deliverables:
+     1. **`architecture.md`** ([`../../templates/architecture-report.template.md`](../../templates/architecture-report.template.md)): entrypoints, subsystems, call/module graphs, state machines, API/IPC schemas, storage layout, `ev_...` observations, `[INFERRED]` notes, and `unk_...` gaps.
+     2. **`design-system.md`** ([`../../templates/design-system.template.md`](../../templates/design-system.template.md)): screen/route inventory, layout grid, original design tokens, typography hierarchy, and 5 UI states (no copied media/logos/prose).
+     3. **Rebuilt Implementation + Parity Summary**: working target implementation (`rebuild/` or `builder-workspace/`) plus CA visual checks (`rebuild_check`, `web_pixels_compare`) and REA behavioral checks (`verify_reconstruction`, `carea parity-report`).
+   - Emit the **Mode 4 non-clean-room notice** (`deep_private: true`) whenever internal binaries/sources were inspected directly (`NOT CLEAN-ROOM`).
+
+2. **Track B — Strict Two-Team Clean Room Process (Only When `clean-room` / `two-team` / `airlock` Requested — Mode 2):**
+   Enforce strict separation (`analyst-evidence/`, `airlock/`, `builder-workspace/`, `verification/`) with **Topology B** recommended (separate fresh agent session driving `craft-anything-cli mcp --clean-room`) and mandatory CLI gates:
+   - **Stage 1 (Setup & Isolation):** `carea doctor` -> `carea init <project-dir> --mode two-team-process` -> `carea isolation-check <project-dir>`.
+   - **Stage 2 (Lane A Analyst -> REA):** Inspect with lean `REA_MCP_TOOL_CATALOG_PROFILE=hot-cold` (or family-scoped `compact`/`off`); export `analyst-evidence/bundle.json` (`export_evidence_bundle`).
+   - **Stage 3 (Airlock Gate -> `airlock/`):** `carea spec-draft` -> refine `airlock/clean-room-spec.md` & `airlock/carea-handoff.json` (`1.1.0`) -> `carea airlock-lint airlock/ --strict` -> `carea validate-handoff` -> human review -> `carea airlock-sign --reviewer "<name>" --confirm-human-review`.
+   - **Stage 4 (Lane B Builder -> CA `--clean-room` & Dual Parity):** Confirm `core_session_show` (`clean_room: true`), build cleanly from `airlock/` specs only, merge checks via `carea parity-report`, and route failures back cleanly via `carea return-feedback`.
+
+3. **Single-Engine Delegation:**
+   - **UI-only observable clone** (no binary/API forensics needed) -> delegate to `/ca` (Mode 1).
+   - **Forensics / `AgentEnv` / verification without rebuilding** -> delegate to `/rea` (Mode 3).
+
+---
 
 ## References
 
+- Auto-intake routing & context-budget table: [`references/intent-router.md`](references/intent-router.md)
 - Modes 1–6 & Lane B Topologies A/B: [`references/modes.md`](references/modes.md)
-- Tool routing & context-budget table: [`references/intent-router.md`](references/intent-router.md)
-- Shared Two-Team Clean Room protocol: [`../_shared/clean-room-protocol.md`](../_shared/clean-room-protocol.md)
-- Shared Evidence & Handoff schema guide: [`../_shared/evidence-handoff.md`](../_shared/evidence-handoff.md)
-- Shared Dual Parity guide: [`../_shared/parity-verification.md`](../_shared/parity-verification.md)
-- Responsible use & non-circumvention rules: [`../_shared/responsible-use.md`](../_shared/responsible-use.md)
+- Architecture blueprint template: [`../../templates/architecture-report.template.md`](../../templates/architecture-report.template.md)
+- Design system blueprint template: [`../../templates/design-system.template.md`](../../templates/design-system.template.md)
+- Shared protocols: [`../_shared/clean-room-protocol.md`](../_shared/clean-room-protocol.md) · [`../_shared/evidence-handoff.md`](../_shared/evidence-handoff.md) · [`../_shared/parity-verification.md`](../_shared/parity-verification.md) · [`../_shared/responsible-use.md`](../_shared/responsible-use.md)

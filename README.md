@@ -25,8 +25,8 @@
 ## What `carea` Is — and What It Is Not
 
 ### What `carea` provides
-- **Three non-conflicting agent skills** across `.claude-plugin/`, `.codex-plugin/`, and `.cursor-plugin/`:
-  - [`/carea`](skills/carea/SKILL.md): Combined pipeline (`REA -> Airlock -> CA -> Dual Parity`) and automatic router across Modes 1–6.
+- **Single-command auto-intake (`/carea <target>`) plus specialized triggers** across `.claude-plugin/`, `.codex-plugin/`, and `.cursor-plugin/`:
+  - [`/carea`](skills/carea/SKILL.md): Auto-detects `.apk`/`.aab`, `https://...` web/Electron targets, `.exe`/native binaries, or games to extract full [`architecture.md`](templates/architecture-report.template.md), [`design-system.md`](templates/design-system.template.md), and reconstructed code — with optional **Two-Team Airlock Mode 2** gating.
   - [`/rea`](skills/rea/SKILL.md): REA-first static/runtime investigation, `ev_...` / `unk_...` evidence tracking, formal verification, and AgentEnv export.
   - [`/ca`](skills/ca/SKILL.md): Craft Anything-first observable UI study, clean-room rebuild, visual pixel diffs, and original asset generation.
 - **Zero-dependency Python 3.10+ stdlib CLI (`carea`):** Replaces honor-system clean-room claims with real checks (`init`, `doctor`, `validate-handoff`, `airlock-lint`, `airlock-sign`, `isolation-check`, `spec-draft`, `parity-report`, `return-feedback`, `mcp-profile`).
@@ -138,7 +138,7 @@ Detailed walkthroughs: [`docs/workflows/private-deep-game-mobile.md`](docs/workf
 
 - **Architecture:** [`docs/architecture/architecture.md`](docs/architecture/architecture.md) & [`carea-architecture.mmd`](docs/architecture/carea-architecture.mmd)
 - **Setup & Coexistence:** [`docs/getting-started.md`](docs/getting-started.md) · [`docs/coexistence.md`](docs/coexistence.md) · [`docs/compatibility.md`](docs/compatibility.md)
-- **Schemas & Templates:** [`schemas/README.md`](schemas/README.md) · [`schemas/carea-handoff.schema.json`](schemas/carea-handoff.schema.json) · [`templates/`](templates/clean-room-spec.template.md)
+- **Schemas & Templates:** [`schemas/README.md`](schemas/README.md) · [`schemas/carea-handoff.schema.json`](schemas/carea-handoff.schema.json) · [`clean-room-spec`](templates/clean-room-spec.template.md) · [`architecture-report`](templates/architecture-report.template.md) · [`design-system`](templates/design-system.template.md) · [`parity-checklist`](templates/parity-checklist.template.md)
 - **Security & Help:** [`docs/threat-model.md`](docs/threat-model.md) · [`docs/faq.md`](docs/faq.md) · [`docs/troubleshooting.md`](docs/troubleshooting.md) · [`docs/AUDIT.md`](docs/AUDIT.md)
 
 ---
