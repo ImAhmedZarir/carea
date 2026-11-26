@@ -1,7 +1,7 @@
 {
   "name": "carea",
-  "version": "1.0.0",
-  "description": "Autonomous target-to-architecture and clean-room orchestration pack (/carea, /rea, /ca) coordinating external REA and Craft Anything engines with architecture/design templates and airlock CLI checks.",
+  "version": "1.1.0",
+  "description": "Autonomous reverse engineering orchestrator (/carea, /rea, /ca) running REA -> CA observable study -> complete architecture and design breakdown without unsolicited rebuilding, plus optional clean-room airlock CLI.",
   "author": {
     "name": "Ahmed Ishtiaque Zarir",
     "url": "https://github.com/ImAhmedZarir"

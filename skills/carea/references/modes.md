@@ -1,6 +1,6 @@
 # `carea` Operational Modes (1–6) & Lane B Topologies
 
-This guide defines all six operational modes spanning **Craft Anything (`craft-anything-cli`)** and **REA (`rea`)**, plus the two isolation topologies for Lane B when running Two-Team workflows.
+> **Default `/carea <target>` Behavior (v1.1.0):** Running `/carea <target>` executes **Reverse-Engineer-Only Mode** first: **Stage 1 (`/rea`) -> Stage 2 (`/ca` observable study only, NO `rebuild_start`) -> Stage 3 (`full-breakdown.md` + `architecture.md` + `design-system.md`)**. The six modes below apply when running deep verification (`/rea`), airlock workflows, or explicit opt-in rebuilds.
 
 ---
 

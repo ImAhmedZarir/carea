@@ -2,7 +2,7 @@
 
 <!-- GENERATED FROM compat/matrix.json via `python scripts/render-compatibility.py`. DO NOT HAND-EDIT. -->
 
-`carea` target release **`1.0.0`** supports handoff schema versions `1.0.0`, `1.1.0` (current: `1.1.0`).
+`carea` target release **`1.1.0`** supports handoff schema versions `1.0.0`, `1.1.0` (current: `1.1.0`).
 All version bounds in `carea` (`carea doctor`, `scripts/verify-upstream.sh`, and `scripts/verify-upstream.ps1`) read [`compat/matrix.json`](../compat/matrix.json) as the single source of truth.
 
 ## Engine Version Matrix
@@ -72,4 +72,4 @@ pwsh -File scripts/verify-upstream.ps1
 
 Or run `carea doctor` (which checks binaries, versions, and MCP config profiles directly against `compat/matrix.json`).
 
-*Matrix updated: `2026-11-26`. Claim-by-claim evidence lives in [`docs/upstream-facts.md`](upstream-facts.md).*
+*Matrix updated: `2026-11-27`. Claim-by-claim evidence lives in [`docs/upstream-facts.md`](upstream-facts.md).*

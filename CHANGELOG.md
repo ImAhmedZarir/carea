@@ -6,8 +6,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-27
+
 ### Added
-- Planned: run `scripts/verify-upstream.sh` / `.ps1` against global Node `>=22` + `rea-agents@6.10.1` CLI and live Mode 5/6 engine/device trials before final `v1.0.0` tag.
+- **Reverse-Engineer-Only `/carea <target>` Pipeline (`REA -> CA Study -> Full Breakdown`):**
+  - Updated `skills/carea/SKILL.md` and `skills/carea/references/intent-router.md` so invoking `/carea <target>` auto-classifies targets (`.apk`/`.aab`, web URLs/`.asar`, `.exe`/native/managed binaries, games, firmware), executes **Stage 1 (`/rea` internal inspection)** followed by **Stage 2 (`/ca` observable UI/runtime study ONLY)**, and synthesizes `full-breakdown.md`, `architecture.md`, and `design-system.md` **without automatically triggering `rebuild_start` or writing rebuilt app code**.
+  - Added `templates/full-breakdown.template.md`, `templates/architecture-report.template.md`, and `templates/design-system.template.md`.
+  - Kept clean-room airlock Mode 2 and Modes 1/4/5/6 rebuilds as explicit opt-in tracks.
+- **Rebuilt Documentation & Portfolio Web App (`site/`):**
+  - Deployed multi-page documentation, interactive Mode/CLI/Airlock workbench, `⌘K` command palette, SEO metadata, and `pulse-timer` portfolio case study via GitHub Pages.
+
+### Fixed
+- Prevented Craft Anything study stages inside `/carea` from unexpectedly starting application rebuilds when only reverse engineering analysis and architectural breakdown were requested.
 
 ## [1.0.0-rc1] - 2026-11-26
 
