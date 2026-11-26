@@ -1,0 +1,40 @@
+flowchart TD
+    U["User / Coding Agent"] --> SK["carea Layer (Level-1 Skill & Plugin Pack)"]
+
+    subgraph CAREA["carea Orchestration Layer (No Merged Code)"]
+        SK --> IR["Intent Router\nPhase-scoped tool & CLI selection"]
+        IR --> MODE{"Workflow Mode"}
+    end
+
+    MODE -- "Observable UI / Web" --> CA_LANE
+    MODE -- "Two-Team Process Aid" --> ANALYST
+    MODE -- "Deep Forensics / RL Env" --> REA_CORE
+
+    subgraph ANALYST["Lane A: Analyst (Isolated Analysis Workspace)"]
+        REA_CORE["External REA Engine\n(Node.js / TS: rea / MCP)\nREA_MCP_TOOL_FAMILIES or hot-cold"]
+        REA_CORE --> EXT_A["Optional Backends:\nGhidra, Hopper, IDA, Kuna,\nFrida, JADX, Browser/HAR"]
+        REA_CORE --> LEDGER["REA Evidence Bundle\n(ev_... / parent_evidence_id / unknowns)"]
+    end
+
+    ANALYST -->|"Strip code, pseudocode, & media"| AIRLOCK
+
+    subgraph AIRLOCK["Explicit Airlock Boundary"]
+        SPEC["Sanitized clean-room-spec.md\n+ carea-handoff.json"]
+        AUDIT["Airlock Gate Checklist\n(Zero source code, zero copyrighted assets)"]
+        SPEC --> AUDIT
+    end
+
+    AIRLOCK -->|"Fresh agent context & clean workspace"| CA_LANE
+
+    subgraph CA_LANE["Lane B: Builder (Clean Builder Workspace)"]
+        CA_CORE["External Craft Anything Engine\n(Rust: craft-anything-cli / MCP)\n--clean-room (no --all-tools)"]
+        CA_CORE --> BUILD["Study -> Build -> Check -> Refine\nClean UI captures & original assets"]
+    end
+
+    CA_LANE --> VERIFY
+    LEDGER -.->|"Opaque IDs & test vectors"| VERIFY
+
+    subgraph VERIFY["Dual Parity Verification Gate"]
+        V_CA["Visual & UX Parity (CA)\nweb_pixels_compare / rebuild_check"]
+        V_REA["Behavioral & Structural Parity (REA)\nverify_reconstruction / compare_*"]
+    end
