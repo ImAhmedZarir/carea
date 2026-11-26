@@ -1,0 +1,58 @@
+carea — Craft And Reverse Engineer Everything
+Copyright (c) 2026 Ahmed Ishtiaque Zarir
+
+carea is an independent, unofficial orchestration layer (agent skill pack,
+intent-routing guide, clean-room process protocol, and handoff schema) that
+coordinates two external reverse-engineering and reconstruction projects as
+separate dependencies. carea does not redistribute or vendor upstream source
+code, binaries, fonts, icons, or brand artwork.
+
+Notice on trademarks:
+The carea name, full project title ("Craft And Reverse Engineer Everything"),
+tagline ("Break It Down. Build It Better."), and logo artwork at
+docs/brand/carea.png are trademarks of Ahmed Ishtiaque Zarir and are governed
+by docs/brand/LICENSE-brand.txt (not the MIT License in LICENSE).
+
+================================================================================
+Upstream Project Attribution Notices
+================================================================================
+
+1. REA (Reverse Engineer Anything)
+   Author: morluto
+   Repository: https://github.com/morluto/rea
+   Website / Package: https://rea.tools/ | npm: rea-agents
+   Copyright (c) 2026 morluto
+   License: MIT License (see THIRD_PARTY_NOTICES.md for the verbatim license text
+   and upstream third-party engine/dependency notices).
+
+2. Craft Anything
+   Authors: ArtCraft Team and the Craft Anything contributors
+   Repository: https://github.com/storytold/craft-anything
+   License: MIT License OR Apache License, Version 2.0, at your option.
+
+   Preserved upstream NOTICE content from storytold/craft-anything:
+   -----------------------------------------------------------------------------
+   Craft Anything
+   Copyright (c) 2026 ArtCraft Team and the Craft Anything contributors.
+   Licensed under the MIT License or the Apache License, Version 2.0, at your
+   option (LICENSE-MIT, LICENSE-APACHE).
+
+   The ArtCraft name, wordmark and logos in docs/brand/ are trademarks of the
+   ArtCraft Team. They are not open source and are not covered by the license
+   above; their terms are in docs/brand/LICENSE-brand.txt.
+
+   Third-party material (upstream Craft Anything releases)
+   Upstream Craft Anything bundles third-party fonts (Inter, JetBrains Mono,
+   Archivo, Geist Mono under SIL OFL 1.1; DM Sans / Figtree under SIL OFL 1.1;
+   egui default fonts including Ubuntu Light under UFL 1.0, Noto Emoji under
+   SIL OFL 1.1, Hack under MIT / Bitstream Vera License, and emoji-icon-font
+   under MIT), Lucide icons (ISC License), and Rust crate dependencies listed in
+   upstream ATTRIBUTION.md and docs/licences.md. None of those upstream assets
+   or binaries are bundled inside carea.
+   -----------------------------------------------------------------------------
+
+Affiliation Disclaimer:
+carea is an independent, unofficial community project. It is not affiliated
+with, sponsored by, certified by, or endorsed by morluto, the ArtCraft Team,
+or storytold. No ArtCraft Marks, raven icons, or REA logos are included in
+or claimed by carea.
