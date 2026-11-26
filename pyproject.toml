@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "carea-cli"
+version = "1.0.0"
+description = "Independent Level-1 orchestration CLI and airlock checks for carea (Craft And Reverse Engineer Everything)"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [
+  { name = "Ahmed Ishtiaque Zarir" }
+]
+dependencies = []
+
+[project.scripts]
+carea = "carea.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+carea = ["data/*.json"]

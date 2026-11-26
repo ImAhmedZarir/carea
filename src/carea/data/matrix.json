@@ -1,0 +1,186 @@
+{
+  "schema_version": "1.0",
+  "carea_version": "1.0.0",
+  "handoff_schema_version": "1.1.0",
+  "handoff_schema_supported": [
+    "1.0.0",
+    "1.1.0"
+  ],
+  "updated_at": "2026-11-26",
+  "engines": {
+    "rea": {
+      "display_name": "REA",
+      "package": "rea-agents",
+      "binary": "rea",
+      "repository": "https://github.com/morluto/rea",
+      "license": "MIT",
+      "maturity": "active-release",
+      "runtime_requirement": {
+        "node": "^22.23.4 || ^24.22.1 || >=26.12.1",
+        "description": "Node.js 22.23.4+, 24.22.1+, or 26.12.1+ plus npm"
+      },
+      "recommended": "6.10.1",
+      "minimum_compatible": "6.8.0",
+      "ranges": [
+        {
+          "min": "6.10.0",
+          "max_exclusive": "6.11.0",
+          "status": "supported",
+          "summary": "Recommended baseline (`evidence_format: 2`, `uefi` family, `hot-cold` catalog profile, `compact`/`off` schema profiles; `full` schema profiles rejected)."
+        },
+        {
+          "min": "6.8.0",
+          "max_exclusive": "6.10.0",
+          "status": "limited",
+          "summary": "Older evidence shape and tool catalog; lacks `uefi` family and `6.10.0+` schema/setup features."
+        }
+      ],
+      "observed": [
+        {
+          "version": "6.10.1",
+          "channel": "upstream-source-and-docs",
+          "verified": [
+            "264 advertised tool schema files in scripts/verify/advertised-schemas/tools/",
+            "19 TOOL_FAMILY_IDS in src/contracts/toolFamilyIds.ts",
+            "REA_MCP_TOOL_CATALOG_PROFILE=hot-cold (5 initial tools + discover_tools)",
+            "REA_MCP_INPUT_SCHEMA_PROFILE=compact and REA_MCP_OUTPUT_SCHEMA_PROFILE=off|compact (full rejected)",
+            "Node.js ^22.23.4 || ^24.22.1 || >=26.12.1 requirement in package.json"
+          ],
+          "unverified_on_host": [
+            "Local CLI execution (`rea --version`, `rea --help`, `rea doctor`) not run on build host because Node.js >=22 is absent."
+          ]
+        },
+        {
+          "version": "6.8.0",
+          "channel": "live-mcp-server",
+          "verified": [
+            "Live `rea_rea` MCP `binary_session` tool responded in session."
+          ],
+          "unverified_on_host": [
+            "Local CLI execution (`rea --version`) failed because host only had Deno node_compat and unbuilt plugin tree."
+          ]
+        }
+      ]
+    },
+    "craft_anything": {
+      "display_name": "Craft Anything",
+      "package": "craft-anything-cli",
+      "binary": "craft-anything-cli",
+      "repository": "https://github.com/storytold/craft-anything",
+      "license": "MIT OR Apache-2.0",
+      "maturity": "early-alpha",
+      "runtime_requirement": {
+        "prebuilt": "Official portable release binary for OS/arch (no external runtime required for core CLI)",
+        "source_build": "Rust stable toolchain (`cargo install --path apps/craft-anything-cli`)"
+      },
+      "recommended": "0.6.1",
+      "minimum_compatible": "0.6.0",
+      "ranges": [
+        {
+          "min": "0.6.0",
+          "max_exclusive": "0.7.0",
+          "status": "supported",
+          "summary": "Verified clean-room and deep modes; 322 CLI commands in 0.6.0, 303 engine tools / 320 total documented in 0.6.1 across 17 toolsets; early alpha."
+        }
+      ],
+      "observed": [
+        {
+          "version": "0.6.0",
+          "channel": "local-cli-and-live-mcp",
+          "verified": [
+            "`craft-anything-cli.exe --version` -> `craft-anything-cli 0.6.0`",
+            "`craft-anything-cli.exe doctor` -> `healthy: true`, `MCP server answered (protocol 2025-06-18, 30 tools listed)`",
+            "`craft-anything-cli.exe capabilities --json` -> `analysis_mode: clean-room`, `tools: 322`, 17 toolsets",
+            "Live `craft-anything:core_session_show` MCP call -> `clean_room: true`, `server.version: 0.6.0`"
+          ],
+          "unverified_on_host": []
+        },
+        {
+          "version": "0.6.1",
+          "channel": "upstream-release-docs",
+          "verified": [
+            "GitHub release `v0.6.1` (`2026-11-12`)",
+            "`docs/tools.md`: 303 engine tools in 17 toolsets; `README.md`: 320 tools total; early alpha notice"
+          ],
+          "unverified_on_host": [
+            "Local `0.6.1` binary not installed on build host (host binary is `0.6.0`)."
+          ]
+        }
+      ]
+    }
+  },
+  "mcp_profiles": {
+    "rea": {
+      "hot_cold": {
+        "min_rea_version": "6.10.0",
+        "env": {
+          "REA_MCP_TOOL_CATALOG_PROFILE": "hot-cold",
+          "REA_MCP_INPUT_SCHEMA_PROFILE": "compact",
+          "REA_MCP_OUTPUT_SCHEMA_PROFILE": "off"
+        }
+      },
+      "native": {
+        "env": {
+          "REA_MCP_TOOL_FAMILIES": "native,enhanced,application,session",
+          "REA_MCP_INPUT_SCHEMA_PROFILE": "compact",
+          "REA_MCP_OUTPUT_SCHEMA_PROFILE": "off"
+        }
+      },
+      "web_js_electron": {
+        "env": {
+          "REA_MCP_TOOL_FAMILIES": "browser,electron,application,javascript-runtime,session",
+          "REA_MCP_INPUT_SCHEMA_PROFILE": "compact",
+          "REA_MCP_OUTPUT_SCHEMA_PROFILE": "off"
+        }
+      },
+      "android_mobile": {
+        "env": {
+          "REA_MCP_TOOL_FAMILIES": "android,apktool,jeb,flutter,frida,adb,application,session",
+          "REA_MCP_INPUT_SCHEMA_PROFILE": "compact",
+          "REA_MCP_OUTPUT_SCHEMA_PROFILE": "off"
+        }
+      },
+      "firmware_uefi": {
+        "min_rea_version": "6.10.0",
+        "env": {
+          "REA_MCP_TOOL_FAMILIES": "firmware,uefi,artifact,session,direct",
+          "REA_MCP_INPUT_SCHEMA_PROFILE": "compact",
+          "REA_MCP_OUTPUT_SCHEMA_PROFILE": "off"
+        }
+      },
+      "managed_dotnet": {
+        "env": {
+          "REA_MCP_TOOL_FAMILIES": "managed,artifact,application,session",
+          "REA_MCP_INPUT_SCHEMA_PROFILE": "compact",
+          "REA_MCP_OUTPUT_SCHEMA_PROFILE": "off"
+        }
+      }
+    },
+    "craft_anything": {
+      "clean_room_default": {
+        "command": "craft-anything-cli",
+        "args": [
+          "mcp",
+          "--clean-room"
+        ]
+      },
+      "clean_room_restricted_web": {
+        "command": "craft-anything-cli",
+        "args": [
+          "mcp",
+          "--clean-room",
+          "--restricted",
+          "--allow-web",
+          "--allow-capture"
+        ]
+      },
+      "private_deep_rebuild": {
+        "command": "craft-anything-cli",
+        "args": [
+          "mcp",
+          "--deep"
+        ]
+      }
+    }
+  }
+}
