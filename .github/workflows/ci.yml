@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  verify:
+    name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.10", "3.12"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install PyYAML for strict workflow YAML linting
+        run: python -m pip install --no-cache-dir pyyaml
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Verify compatibility doc matches compat/matrix.json
+        run: python scripts/render-compatibility.py --check
+
+      - name: Run link, schema, manifest, and upstream-asset-ban checks
+        run: python scripts/check_repo.py
+
+      - name: Smoke-test carea CLI entry point
+        run: |
+          python -m pip install --no-deps --no-build-isolation .
+          carea --version
+          carea doctor --json
+
+      - name: Smoke-test upstream verifier script (Unix)
+        if: runner.os != 'Windows'
+        run: bash scripts/verify-upstream.sh --json
+
+      - name: Smoke-test upstream verifier script (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./scripts/verify-upstream.ps1 -Json

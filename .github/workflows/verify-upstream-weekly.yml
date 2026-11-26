@@ -1,0 +1,101 @@
+name: Weekly Upstream Compatibility Check
+
+on:
+  schedule:
+    - cron: "15 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  check-upstream-releases:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12 and Node.js 22
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check latest REA (npm) & Craft Anything (GitHub releases) vs compat/matrix.json
+        id: compat
+        run: |
+          python - <<'PYEOF'
+          import json, os, re, subprocess, urllib.request
+          from pathlib import Path
+
+          def fetch_json(url):
+              req = urllib.request.Request(url, headers={"User-Agent": "carea-weekly-compat"})
+              with urllib.request.urlopen(req, timeout=20) as r:
+                  return json.loads(r.read().decode("utf-8"))
+
+          def parse_sv(text):
+              m = re.search(r"(\d+)\.(\d+)\.(\d+)", text or "")
+              return tuple(map(int, m.groups())) if m else None
+
+          def in_ranges(ver_str, ranges):
+              sv = parse_sv(ver_str)
+              if sv is None:
+                  return False, "unparseable"
+              for r in ranges:
+                  if parse_sv(r["min"]) <= sv < parse_sv(r["max_exclusive"]):
+                      return r["status"] in ("supported", "limited"), r["status"]
+              return False, "out_of_range"
+
+          matrix = json.loads(Path("compat/matrix.json").read_text(encoding="utf-8"))
+          rea_npm = fetch_json("https://registry.npmjs.org/rea-agents/latest")
+          ca_rel = fetch_json("https://api.github.com/repos/storytold/craft-anything/releases/latest")
+
+          rea_latest = rea_npm.get("version", "")
+          ca_latest = ca_rel.get("tag_name", "").lstrip("v")
+
+          rea_ok, rea_state = in_ranges(rea_latest, matrix["engines"]["rea"]["ranges"])
+          ca_ok, ca_state = in_ranges(ca_latest, matrix["engines"]["craft_anything"]["ranges"])
+
+          # Try real verify-upstream.sh against latest npm rea-agents if available
+          npx_out = ""
+          try:
+              res = subprocess.run(
+                  ["npx", "-y", f"rea-agents@{rea_latest}", "--version"],
+                  capture_output=True, text=True, timeout=60, check=False
+              )
+              npx_out = (res.stdout + res.stderr).strip()[:300]
+          except Exception as exc:
+              npx_out = str(exc)
+
+          summary = (
+              f"REA latest={rea_latest} ({rea_state}, ok={rea_ok}); "
+              f"CA latest={ca_latest} ({ca_state}, ok={ca_ok}); "
+              f"npx rea --version={npx_out}"
+          )
+          print(summary)
+
+          out_path = Path(os.environ["GITHUB_OUTPUT"])
+          with out_path.open("a", encoding="utf-8") as f:
+              f.write(f"needs_issue={'true' if (not rea_ok or not ca_ok) else 'false'}\n")
+              f.write(f"rea_latest={rea_latest}\n")
+              f.write(f"ca_latest={ca_latest}\n")
+              f.write(f"summary={summary.replace(chr(10), ' ')}\n")
+          PYEOF
+
+      - name: Open compatibility tracking issue if release leaves compat/matrix.json bounds
+        if: steps.compat.outputs.needs_issue == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TITLE="[compat]: Upstream release outside compat/matrix.json (REA ${{ steps.compat.outputs.rea_latest }}, CA ${{ steps.compat.outputs.ca_latest }})"
+          EXISTING=$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number // empty')
+          if [[ -z "$EXISTING" ]]; then
+            gh issue create \
+              --title "$TITLE" \
+              --label "compatibility" \
+              --body "Automated weekly check detected an upstream release outside current compat/matrix.json ranges.\n\nDetails: ${{ steps.compat.outputs.summary }}\n\nUpdate compat/matrix.json, run \`python scripts/render-compatibility.py\`, and update \`docs/upstream-facts.md\` after verifying."
+          fi

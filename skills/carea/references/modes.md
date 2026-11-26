@@ -33,7 +33,7 @@ Because `craft-anything-cli rebuild` (`rebuild_start`) spawns its own coding age
 
 - **How it works:** Session 1 (Lane A / Analyst using REA MCP) closes completely after Stage 2 (`carea airlock-lint` + human review + `carea airlock-sign`). Lane B opens as an **entirely separate, fresh agent session** whose MCP config loads **only** `craft-anything-cli mcp --clean-room` (NO REA MCP server, NO `--all-tools`), with filesystem read access scoped to `airlock/` and read-write access scoped to `builder-workspace/`.
 - **Isolation guarantees:** Context window, conversation memory, and prompt history start empty for Lane B; REA MCP tools do not exist in Lane B's tool catalog.
-- **Weaknesses (Residual Risk):** `--clean-room` is still not an OS sandbox; shell access, shared OS temp/logs, clipboard, or misconfigured workspace permissions (`carea isolation-check` checks symlinks and parent/child overlap) remain residual channels summarized in [`DISCLAIMER.md`](../../../DISCLAIMER.md).
+- **Weaknesses (Residual Risk):** `--clean-room` is still not an OS sandbox; shell access, shared OS temp/logs, clipboard, or misconfigured workspace permissions (`carea isolation-check` checks symlinks and parent/child overlap) remain residual channels documented in [`docs/threat-model.md`](../../../docs/threat-model.md).
 
 > **Which gives stronger separation?** **Topology `(b)` gives strictly stronger separation** than Topology `(a)` because Lane B's conversation context, prompt history, and MCP tool table are isolated from Session 1 and REA. Still, neither topology is a legal clean-room guarantee (`DISCLAIMER.md`).
 

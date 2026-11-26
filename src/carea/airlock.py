@@ -220,7 +220,7 @@ def lint_airlock(target: Path) -> dict[str, Any]:
             if ext in (".md", ".txt") and not in_fence:
                 is_blockquote = stripped.startswith(">") and not stripped.startswith(("> **Airlock", "> **Process", "> [!"))
                 if stripped == "" or stripped.startswith(("#", "|", "-", "*", "```")):
-                    if prose_block_words >= 85:
+                    if prose_block_words >= 70:
                         findings.append(
                             LintFinding("WARN", "long-verbatim-prose", rel, prose_block_start, f"Long continuous prose paragraph ({prose_block_words} words); verify not verbatim target copy")
                         )
@@ -234,7 +234,7 @@ def lint_airlock(target: Path) -> dict[str, Any]:
                             LintFinding("WARN", "quoted-verbatim-prose", rel, idx, "Long verbatim blockquote in airlock spec; paraphrase behavior instead")
                         )
 
-        if prose_block_words >= 85:
+        if prose_block_words >= 70:
             findings.append(
                 LintFinding("WARN", "long-verbatim-prose", rel, prose_block_start, f"Long continuous prose paragraph ({prose_block_words} words); verify not verbatim target copy")
             )
