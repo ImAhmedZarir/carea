@@ -10,90 +10,134 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square"></a>
-  <a href="BRAND.md"><img alt="Brand: Trademark Notice" src="https://img.shields.io/badge/brand-trademark%20notice-informational?style=flat-square"></a>
-  <a href="DISCLAIMER.md"><img alt="Responsible Use" src="https://img.shields.io/badge/use-authorized%20only-warning?style=flat-square"></a>
+  An independent, unofficial Level-1 agent skill pack, airlock CLI, and dual-axis verification layer coordinating external <strong>REA</strong> and <strong>Craft Anything</strong> engines.
 </p>
 
 ---
 
-**carea** is an open-source, **Level-1 agent skill and orchestration pack** that coordinates two external tools through their own CLI and MCP interfaces:
+## What `carea` Is — and What It Is Not
 
-1. **[REA (`morluto/rea`)](https://github.com/morluto/rea)** — Deep reverse-engineering, binary/runtime instrumentation, evidence ledgers, reconstruction verification, and AgentEnv export (TypeScript / Node.js).
-2. **[Craft Anything (`storytold/craft-anything`)](https://github.com/storytold/craft-anything)** — Observable study, clean-room build loop, multi-viewport visual pixel diffing, and project workspace orchestration (Rust, *early alpha*).
+### What `carea` provides
+- **Three non-conflicting agent skills** across `.claude-plugin/`, `.codex-plugin/`, and `.cursor-plugin/`:
+  - [`/carea`](skills/carea/SKILL.md): Combined pipeline (`REA -> Airlock -> CA -> Dual Parity`) and automatic router across Modes 1–6.
+  - [`/rea`](skills/rea/SKILL.md): REA-first static/runtime investigation, `ev_...` / `unk_...` evidence tracking, formal verification, and AgentEnv export.
+  - [`/ca`](skills/ca/SKILL.md): Craft Anything-first observable UI study, clean-room rebuild, visual pixel diffs, and original asset generation.
+- **Zero-dependency Python 3.10+ stdlib CLI (`carea`):** Replaces honor-system clean-room claims with real checks (`init`, `doctor`, `validate-handoff`, `airlock-lint`, `airlock-sign`, `isolation-check`, `spec-draft`, `parity-report`, `return-feedback`, `mcp-profile`).
+- **Dual-axis parity & versioned handoff schema (`1.1.0`, `1.0.0`-compatible):** Maps CA visual/walkthrough checks alongside REA behavioral/structural verification (`schemas/carea-handoff.schema.json`).
 
-`carea` does **not** merge, vendor, fork, or redistribute either upstream codebase or binary. Both engines remain separate external dependencies managed by their official installers.
+### What `carea` is NOT
+- **Not a merged codebase or analysis engine:** `carea` contains zero vendored source code, binaries, fonts, or logos from REA or Craft Anything. You install and run both upstream engines externally.
+- **Not a legal clean room or OS sandbox:** `carea`'s Two-Team Clean Room workflow and `carea airlock-lint` are **engineering process aids**, not legal advice or operating-system isolation. See [`DISCLAIMER.md`](DISCLAIMER.md) and [`docs/threat-model.md`](docs/threat-model.md).
+- **Not affiliated with upstream maintainers:** `carea` is an independent, unofficial project by Ahmed Ishtiaque Zarir and is not endorsed by `morluto` or `ArtCraft Team / storytold`.
 
 ---
 
-## Core Workflow
+## Install & Verify Upstream Prerequisites
 
-`carea` connects deep understanding with clean reconstruction and measurable parity verification:
+1. **Install REA (`rea-agents`, MIT)** — requires Node.js `^22.23.4 || ^24.22.1 || >=26.12.1`:
+   ```bash
+   npm install -g rea-agents@6.10.1
+   rea --version && rea doctor
+   ```
+2. **Install Craft Anything (`craft-anything-cli`, MIT OR Apache-2.0)** *(early alpha)*:  
+   Download an official archive from [storytold/craft-anything Releases](https://github.com/storytold/craft-anything/releases) (or build from source with Cargo), then check:
+   ```bash
+   craft-anything-cli --version
+   craft-anything-cli doctor
+   ```
+3. **Install `carea` CLI & check compatibility** (Python 3.10+, zero external pip dependencies):
+   ```bash
+   pip install --no-deps .
+   carea doctor
+   ```
+   Or without installing globally:
+   - Linux/macOS: `bash scripts/carea doctor` and `bash scripts/verify-upstream.sh`
+   - Windows PowerShell: `.\scripts\carea.ps1 doctor` and `.\scripts\verify-upstream.ps1`
 
-```text
-Observe / Reverse-Engineer (REA or CA)
-        │
-        ▼
-Spec + Obligation Ledger (Sanitized Behavioral Spec + Handoff JSON)
-        │
-        ▼  [Airlock Boundary]
-Clean Rebuild (Craft Anything --clean-room)
-        │
-        ▼
-Visual + Behavioral + Binary Parity Check (CA Pixel Diff + REA Verification)
+See [`docs/compatibility.md`](docs/compatibility.md) (generated from [`compat/matrix.json`](compat/matrix.json)), [`docs/upstream-facts.md`](docs/upstream-facts.md), and [`docs/coexistence.md`](docs/coexistence.md).
+
+---
+
+## 5-Minute Quickstarts
+
+### Quickstart A — `/rea` (Mode 3: Deep Inspection & Verification)
+Use when investigating a self-owned or authorized package, firmware image, or JS bundle without running a UI rebuild:
+```bash
+# Inspect lean REA hot-cold MCP config before adding to your client
+carea mcp-profile rea-hot-cold
 ```
+In your agent prompt, invoke `/rea`: inspect target artifacts (`open_binary`, `analyze_javascript_application`, `inspect_artifact`), record unresolved gaps with `record_unknown`, and verify declared obligations with `verify_reconstruction` or export via `export_environment_bundle`.  
+Guide: [`docs/workflows/binary-parity-rebuild.md`](docs/workflows/binary-parity-rebuild.md).
 
-See [`docs/architecture/architecture.md`](docs/architecture/architecture.md) and [`docs/architecture/carea-architecture.mmd`](docs/architecture/carea-architecture.mmd) for the full orchestration model.
+### Quickstart B — `/ca` (Mode 1: Clean-Room UI Rebuild)
+Use when recreating an observable web or desktop UI using Craft Anything `--clean-room` only:
+```bash
+# Serve the self-owned sample target locally
+python examples/sample-target/server.py --port 4173
 
----
+# Inspect minimal Craft Anything MCP profile (no --all-tools)
+carea mcp-profile ca-clean-room
+```
+In your agent prompt, invoke `/ca` against `http://127.0.0.1:4173/`: verify `core_session_show` reports `clean_room: true`, capture views with `web_site_open` -> `web_site_capture` -> `web_page_states_capture`, rebuild cleanly, and check UI likeness with `rebuild_check` and `web_pixels_compare`.  
+Guide: [`docs/workflows/clean-room-ui-rebuild.md`](docs/workflows/clean-room-ui-rebuild.md).
 
-## Clean-Room & Legal Notice
+### Quickstart C — `/carea` (Mode 2: Two-Team Clean Room + Airlock CLI)
+Use when internal state machines or HTTP contracts must inform a separate clean rebuild:
+```bash
+# 1. Create isolated 4-directory project layout and verify separation
+carea init ./my-rebuild --mode two-team-process --topology b --target-name pulse-timer
+carea isolation-check ./my-rebuild
 
-> [!IMPORTANT]
-> `carea`'s Two-Team Clean Room protocol is an **engineering and process aid — NOT legal advice and NOT a legal clean-room guarantee**.
-> Craft Anything's `--clean-room` mode is a **tool-level rule rather than an operating-system sandbox**, and **a single person or agent acting as both Analyst and Builder does not constitute a true legal clean room**.
-> Read [`DISCLAIMER.md`](DISCLAIMER.md) in full before analyzing any target.
+# 2. After Lane A exports analyst-evidence/bundle.json, draft a spec skeleton (IDs only)
+carea spec-draft ./my-rebuild/analyst-evidence/bundle.json --out ./my-rebuild/airlock/clean-room-spec.md
 
----
+# 3. Edit spec & handoff, run heuristic leak scanner, validate schema, and sign after human review
+carea airlock-lint ./my-rebuild/airlock --strict
+carea validate-handoff ./my-rebuild/airlock/carea-handoff.json
+carea airlock-sign ./my-rebuild/airlock/carea-handoff.json --reviewer "YourName" --confirm-human-review
 
-## Compatibility & Verification
-
-`carea` tracks supported upstream engine ranges, runtime prerequisites, and verified vs unverified host facts in [`compat/matrix.json`](compat/matrix.json) and renders them into [`docs/compatibility.md`](docs/compatibility.md). Run `scripts/verify-upstream.sh` (or `scripts/verify-upstream.ps1` on Windows) to inspect your locally installed binaries against the matrix.
-
-- **Verified claim ledger:** [`docs/upstream-facts.md`](docs/upstream-facts.md)
-- **Generated compatibility matrix:** [`docs/compatibility.md`](docs/compatibility.md) *(single source: [`compat/matrix.json`](compat/matrix.json))*
-
----
-
-## Getting Started
-
-Install both upstream engines from their official distributions and configure lean MCP profiles (to avoid flooding your agent's context window with 500+ tools) by following [`docs/getting-started.md`](docs/getting-started.md).
-
-### Project Status (Phased Build)
-
-- **Phase 1 (Complete):** Repository skeleton, licensing & trademark governance, responsible-use disclaimer, architecture diagram, and getting-started/MCP profile docs.
-- **Phase 2 (v0.2 / v1.0 upgrade in progress):** Multi-client manifests ([`.claude-plugin/plugin.json`](.claude-plugin/plugin.json), [`.codex-plugin/plugin.json`](.codex-plugin/plugin.json), [`.cursor-plugin/plugin.json`](.cursor-plugin/plugin.json)), non-overlapping skills ([`/carea`](skills/carea/SKILL.md), [`/rea`](skills/rea/SKILL.md), [`/ca`](skills/ca/SKILL.md)), shared protocols ([clean-room](skills/_shared/clean-room-protocol.md), [evidence handoff](skills/_shared/evidence-handoff.md), [parity verification](skills/_shared/parity-verification.md), [responsible use](skills/_shared/responsible-use.md)), [upstream coexistence](docs/coexistence.md), and [intent router](skills/carea/references/intent-router.md).
-- **Phase 3 (Complete):** Worked workflow guides ([clean-room UI rebuild](docs/workflows/clean-room-ui-rebuild.md), [two-team clean room](docs/workflows/two-team-clean-room.md), [binary parity & AgentEnv](docs/workflows/binary-parity-rebuild.md)) and validated examples ([sanitized spec](examples/clean-room-spec.example.md), [handoff record](examples/handoff.example.json)).
-
----
-
-## Licensing & Branding
-
-- **Code, skills, schemas & docs:** Original `carea` materials are licensed under the **[MIT License](LICENSE)** (`Copyright (c) 2026 Ahmed Ishtiaque Zarir`). MIT applies **only** to original `carea` files; upstream engines keep their own licenses and copyrights.
-- **Brand & trademarks:** The name **carea**, full title **Craft And Reverse Engineer Everything**, tagline **"Break It Down. Build It Better."**, and logo ([`docs/brand/carea.png`](docs/brand/carea.png)) are trademarks of Ahmed Ishtiaque Zarir and are **not** covered by the MIT License. Forks and modified versions must remove or replace them. See [`BRAND.md`](BRAND.md) and [`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt).
-- **Upstream notices:** Preserved in [`NOTICE`](NOTICE) and [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+# 4. After Lane B (Topology b fresh MCP session) builds & checks run, merge dual parity
+carea parity-report --handoff ./my-rebuild/airlock/carea-handoff.json --ca-report ca.json --rea-report rea.json --out ./my-rebuild/verification/parity-checklist.md
+```
+Guide: [`docs/workflows/two-team-clean-room.md`](docs/workflows/two-team-clean-room.md).
 
 ---
 
-## Credits & Upstream
+## Mode Chooser (`skills/carea/references/modes.md`)
 
-`carea` is built on top of the capabilities of two independent open-source projects. Please install them from and support their official repositories:
+| Mode | ID | Skill | Clean-Room? | Use When |
+| --- | --- | --- | --- | --- |
+| **1. Clean-Room UI Rebuild** | `clean-room-ui` | `/ca` | Tool-level (`--clean-room`) | Visual layout, styling, and public web/app UI suffice |
+| **2. Two-Team Clean Room** | `two-team-process` | `/carea` | Process aid (`airlock/`) | Hidden state machines/APIs require REA -> Airlock -> CA + Dual Parity |
+| **3. Deep Investigation / AgentEnv** | `deep-verification` | `/rea` | N/A | Forensics, `verify_reconstruction`, capture diffs, or AgentEnv export |
+| **4. Private Deep Rebuild** | `private-deep-rebuild` | `/carea` | **NO** (`deep_private: true`) | First-party/authorized migration combining REA + CA `--deep` (prints loud non-clean-room banner) |
+| **5. Game Rebuild Path** | `game-rebuild` | `/carea` / `/ca` | Only without `game_*` / `--deep` | Recreating mechanics in Unity/Unreal/Godot with generated assets (`game_*` extraction is Deep-only; no asset copying) |
+| **6. Android / Mobile App Path** | `android-mobile` | `/carea` | Only across Airlock | Pairing REA `android`/`apktool`/`flutter`/`frida` logic with CA `adb` screenshots |
 
-- **REA (Reverse Engineer Anything)** by **morluto** (MIT License)
-  - GitHub: <https://github.com/morluto/rea>
-  - Website & Guides: <https://rea.tools/>
-  - npm Package: <https://www.npmjs.com/package/rea-agents>
-- **Craft Anything** by **ArtCraft Team / storytold** and contributors (MIT OR Apache-2.0)
-  - GitHub: <https://github.com/storytold/craft-anything>
+Detailed walkthroughs: [`docs/workflows/private-deep-game-mobile.md`](docs/workflows/private-deep-game-mobile.md).
 
-`carea` is an **independent, UNOFFICIAL project** and is **not** affiliated with, sponsored by, certified by, or endorsed by `morluto` or `ArtCraft Team / storytold`.
+---
+
+## Honest Status & Known Limits
+
+- **Upstream alpha maturity:** `craft-anything-cli` is explicitly **early alpha**; tool availability (`322` commands in `0.6.0`, `303` engine tools / `320` total in `0.6.1`) and CLI flags can shift across releases.
+- **Verification ceiling:** Parity checks are only as strong as upstream evidence (`verify_reconstruction` checks only declared finite claims in its `specification`, never global equivalence).
+- **Heuristic airlock:** `carea airlock-lint` catches common structural leaks (code fences, asm, hex dumps, minified JS, base64, assets, secrets, `analyst-evidence/` paths, long prose) and NEVER proves zero leakage. Human review and Topology `(b)` separation remain essential (`docs/threat-model.md`).
+- **Build-host observation bounds:** See [`docs/upstream-facts.md`](docs/upstream-facts.md) and [`docs/AUDIT.md`](docs/AUDIT.md) for what was executed on the build host vs verified only from pinned upstream source (`rea` CLI execution was unrun on the build host because Node.js `>=22` was absent).
+
+---
+
+## Documentation Index
+
+- **Architecture:** [`docs/architecture/architecture.md`](docs/architecture/architecture.md) & [`carea-architecture.mmd`](docs/architecture/carea-architecture.mmd)
+- **Setup & Coexistence:** [`docs/getting-started.md`](docs/getting-started.md) · [`docs/coexistence.md`](docs/coexistence.md) · [`docs/compatibility.md`](docs/compatibility.md)
+- **Schemas & Templates:** [`schemas/README.md`](schemas/README.md) · [`schemas/carea-handoff.schema.json`](schemas/carea-handoff.schema.json) · [`templates/`](templates/clean-room-spec.template.md)
+- **Security & Help:** [`docs/threat-model.md`](docs/threat-model.md) · [`docs/faq.md`](docs/faq.md) · [`docs/troubleshooting.md`](docs/troubleshooting.md) · [`docs/AUDIT.md`](docs/AUDIT.md)
+
+---
+
+## Licensing, Trademarks & Credits
+
+- **Original code, CLI, skills, schemas & docs:** [MIT License](LICENSE) (`Copyright (c) 2026 Ahmed Ishtiaque Zarir`). MIT applies strictly to original `carea` materials.
+- **Brand & trademarks:** The name **carea**, full title **Craft And Reverse Engineer Everything**, tagline **"Break It Down. Build It Better."**, and [`docs/brand/carea.png`](docs/brand/carea.png) are trademarks of Ahmed Ishtiaque Zarir and are excluded from the MIT License. See [`BRAND.md`](BRAND.md) and [`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt).
+- **Upstream credits & notices:** Preserved in [`NOTICE`](NOTICE) and [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). `carea` coordinates **[REA (`morluto/rea`)](https://github.com/morluto/rea)** and **[Craft Anything (`storytold/craft-anything`)](https://github.com/storytold/craft-anything)** without affiliation or endorsement.

@@ -44,6 +44,15 @@ class TestRepoHygiene(unittest.TestCase):
         self.assertIn("without binary decompilation", descs["ca"].lower())
         self.assertIn("combined", descs["carea"].lower())
 
+    def test_sample_target_unit_tests_pass(self) -> None:
+        res = subprocess.run(
+            [sys.executable, "-m", "unittest", "discover", "-s", str(REPO_ROOT / "examples" / "sample-target"), "-v"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(res.returncode, 0, res.stdout + res.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

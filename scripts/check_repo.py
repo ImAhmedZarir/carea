@@ -149,14 +149,16 @@ def check_upstream_asset_ban(errors: list[str]) -> int:
 
 
 def check_examples_and_fixtures(errors: list[str]) -> None:
-    # Examples must pass validate-handoff and airlock-lint --strict
+    # Airlock example artifacts must pass validate-handoff and airlock-lint --strict
     ex_handoff = REPO_ROOT / "examples" / "handoff.example.json"
+    ex_spec = REPO_ROOT / "examples" / "clean-room-spec.example.md"
     val = cmd_validate_handoff(ex_handoff)
     if not val["valid"]:
         errors.append(f"examples/handoff.example.json invalid: {val['errors']}")
-    lint = lint_airlock(REPO_ROOT / "examples")
-    if lint["status"] != "PASS":
-        errors.append(f"examples/ failed airlock-lint --strict ({lint['status']}): {lint['findings']}")
+    for ex_file in (ex_spec, ex_handoff):
+        lint = lint_airlock(ex_file)
+        if lint["status"] != "PASS":
+            errors.append(f"{ex_file.name} failed airlock-lint --strict ({lint['status']}): {lint['findings']}")
 
     # Positive handoff fixtures must pass
     for pf in sorted((REPO_ROOT / "tests" / "fixtures" / "handoffs" / "positive").glob("*.json")):

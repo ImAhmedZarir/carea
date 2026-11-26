@@ -1,81 +1,82 @@
-# Workflow Guide: Two-Team Clean Room Process
+# Workflow Guide: Two-Team Clean Room Process (Mode 2)
 
-Use **Mode 2 (Two-Team Clean Room Process)** when recreating an application whose behavior depends on internal client/server contracts, Electron IPC channels, state machines, or algorithms that observable screenshots alone cannot reveal.
+Use **Mode 2 (`two-team-process` -> `/carea`)** when rebuilding an application whose correctness depends on internal API contracts, validation math, or state transitions (here demonstrated on the self-owned [`examples/sample-target/`](../../examples/sample-target/README.md) `pulse-timer` app).
 
-> [!IMPORTANT]
-> **Process Aid — Not a Legal Guarantee:** This workflow is an engineering process aid, **not legal advice and not a legal clean-room guarantee**. Craft Anything's `--clean-room` mode is a tool-level rule rather than an OS sandbox, and **a single person or continuous agent session acting as both Analyst and Builder does not constitute a true legal clean room**. See [`../../DISCLAIMER.md`](../../DISCLAIMER.md) and [`../../skills/_shared/clean-room-protocol.md`](../../skills/_shared/clean-room-protocol.md).
+> **Process Aid — Not a Legal Guarantee:** Mode 2 is an engineering isolation workflow, **not legal advice and not a legal clean-room guarantee**. Use **Topology `(b)`** (two separate sessions) and human review for practical separation (`docs/threat-model.md`).
 
-See worked example files produced by this workflow:
+See validated example artifacts produced in this pattern:
 - Sanitized spec: [`../../examples/clean-room-spec.example.md`](../../examples/clean-room-spec.example.md)
 - Handoff record: [`../../examples/handoff.example.json`](../../examples/handoff.example.json)
 
 ---
 
-## 1. Workspace Layout
-
-Maintain four strictly separated directories:
-
-```text
-<project-root>/
-├── analyst-evidence/      # Lane A only: REA exported evidence bundle
-├── airlock/               # Sanitized boundary only: clean-room-spec.md + carea-handoff.json
-├── builder-workspace/     # Lane B only: clean project built under CA --clean-room
-└── verification/          # Stage 4 only: parity-checklist.md + comparison outputs
-```
-
----
-
-## 2. Lane A — Analyst (REA Deep Mode)
-
-Configure REA with minimal families matching the target (for example, an Electron/JS app):
+## 1. Initialize Workspace & Check Isolation
 
 ```bash
-# Example scoped env for Electron/JS analysis (REA >= 6.10.x)
-REA_MCP_TOOL_FAMILIES=browser,electron,application,javascript-runtime,session
-REA_MCP_INPUT_SCHEMA_PROFILE=compact
-REA_MCP_OUTPUT_SCHEMA_PROFILE=off
+carea init ./pulse-timer-rebuild --mode two-team-process --topology b --target-name pulse-timer
+carea isolation-check ./pulse-timer-rebuild
 ```
 
-1. **Inspect without dumping:**
-   - For ASAR/JS apps: call `analyze_javascript_application` with `detail: "summary"`, then page modules/routes via `inspect_analysis_view`.
-   - Trace target features via `trace_application_feature` and `trace_javascript_semantics`.
-   - For packaged Electron apps, inspect `inspect_electron_fuses` before attempting live inspector attachment.
-   - Build an obligation inventory with `build_reconstruction_obligation_ledger` and log unobserved gaps via `record_unknown`.
-2. **Export & close:**
-   - Save the complete evidence bundle to `analyst-evidence/session.bundle.json` with `export_evidence_bundle`.
-   - Close any active native session (`close_binary`).
-3. **Draft sanitized Airlock files:**
-   - Write `airlock/clean-room-spec.md` using [`../../templates/clean-room-spec.template.md`](../../templates/clean-room-spec.template.md) containing only abstract behaviors, value-free schemas, state tables, math formulas, and deterministic test vectors.
-   - Write `airlock/carea-handoff.json` matching [`../../schemas/carea-handoff.schema.json`](../../schemas/carea-handoff.schema.json) with opaque `ev_...` IDs (no raw code or secrets).
+Verify the workspace contains four separate folders (`analyst-evidence/`, `airlock/`, `builder-workspace/`, `verification/`) and apply the recommended host-agent permission deny snippet printed by `carea isolation-check` so Lane B cannot read `analyst-evidence/`.
 
 ---
 
-## 3. Airlock Gate (Human / Separate Audit)
+## 2. Lane A — Analyst Session (REA MCP Only)
 
-Before starting Lane B:
-1. Verify `airlock/clean-room-spec.md` and `airlock/carea-handoff.json` contain **zero** source snippets, pseudocode, disassembly, CSS/DOM dumps, or copyrighted logos/text.
-2. Validate `airlock/carea-handoff.json` against the JSON Schema and set `airlock.status` to `"passed"`.
+Configure Session 1 with REA only (`carea mcp-profile two-team-lane-a` or scoped `REA_MCP_TOOL_FAMILIES=browser,electron,application,javascript-runtime,session`, `compact` input, `off` output):
 
----
-
-## 4. Lane B — Builder (Craft Anything `--clean-room`)
-
-Start a **fresh agent conversation** inside `builder-workspace/` with Craft Anything running in Clean-Room mode:
-
-```bash
-craft-anything-cli mcp --clean-room
-```
-
-1. Confirm Clean Room via `core_session_show`.
-2. Read **only** `airlock/clean-room-spec.md`, the obligations/test vectors in `airlock/carea-handoff.json`, and optional observable UI captures (`web_site_capture`, `native_window_capture`).
-3. Build fresh code via `rebuild_start`, `build_files_list`, `build_file_write`, `build_file_edit`, and `build_command_run`, generating original replacement assets (`assets_image_generate`) rather than reusing original media.
-4. Run `rebuild_check` and `web_pixels_compare` / `web_walkthrough_check` to refine UI likeness.
+1. Inspect `examples/sample-target/timer.mjs`, `server.py`, and live `http://127.0.0.1:4173/api/timer/status` with REA tools (`analyze_javascript_application`, `inspect_web_page`, `capture_browser_scenario`).
+2. Build an obligation ledger (`build_reconstruction_obligation_ledger`) covering clamping bounds (`[1000, 86400000]`), `warning_active <= 10000ms`, and `GET /api/timer/status`.
+3. Log unverified aspects via `record_unknown`.
+4. Export the session evidence bundle strictly inside `analyst-evidence/` (`export_evidence_bundle`), close active sessions, and **end Session 1**.
 
 ---
 
-## 5. Stage 4 — Dual Parity Verification
+## 3. Airlock Gate (`carea spec-draft` -> `airlock-lint` -> `airlock-sign`)
 
-In a separate Verifier session (so Lane B never inspects `analyst-evidence/`):
-1. Verify **Visual parity** with Craft Anything (`web_pixels_compare`, `web_walkthrough_check`, `runtime_captures_compare`).
-2. Verify **Behavioral & Structural parity** with REA (`verify_reconstruction`, `evaluate_reconstruction_coverage`, `compare_javascript_export_shapes`, `compare_process_captures`) against `analyst-evidence/session.bundle.json` and the rebuilt artifact.
-3. Record `passed` / `partial` / `failed` / `unknown` for each `obl_...` in `verification/parity-checklist.md` using [`../../templates/parity-checklist.template.md`](../../templates/parity-checklist.template.md). If repairs are needed, pass only failing test vectors or visual diffs back to Lane B.
+1. Extract only opaque IDs and structure into a draft skeleton:
+   ```bash
+   carea spec-draft ./pulse-timer-rebuild/analyst-evidence/bundle.json --out ./pulse-timer-rebuild/airlock/clean-room-spec.md
+   ```
+2. Edit `airlock/clean-room-spec.md` with mathematical bounds, state tables, HTTP shapes, and deterministic test vectors (zero JS/Python code fences, zero `analyst-evidence/` paths).
+3. Update `airlock/carea-handoff.json` and run checks:
+   ```bash
+   carea airlock-lint ./pulse-timer-rebuild/airlock --strict
+   carea validate-handoff ./pulse-timer-rebuild/airlock/carea-handoff.json
+   carea airlock-sign ./pulse-timer-rebuild/airlock/carea-handoff.json --reviewer "<your-name>" --confirm-human-review
+   ```
+
+---
+
+## 4. Lane B — Fresh Builder Session (Topology `(b)`, CA `--clean-room` Only)
+
+Start a brand-new Session 2 configured solely via `carea mcp-profile two-team-lane-b` (`craft-anything-cli mcp --clean-room`, no REA MCP, no `--all-tools`):
+
+1. Verify `clean_room: true` with `core_session_show`.
+2. Read **only** `airlock/clean-room-spec.md` and `obligations[]` from `airlock/carea-handoff.json`.
+3. Implement cleanly inside `builder-workspace/` via `rebuild_start` or `build_files_list`, `build_file_write`, `build_file_edit`, `build_command_run`, generating original visual controls.
+4. Run CA visual checks (`rebuild_check`, `web_pixels_compare`, `web_walkthrough_check`) and save CA report JSON.
+
+---
+
+## 5. Stage 4 — Independent Dual Parity & Sanitized Feedback
+
+In Session 3 (or original Analyst/Verifier environment reading both `analyst-evidence/` and `builder-workspace/`):
+
+1. Run REA verification (`verify_reconstruction`, `evaluate_reconstruction_coverage`, `compare_web_captures`, `compare_javascript_export_shapes`) against the built output and export REA results JSON.
+2. Merge both axes cleanly:
+   ```bash
+   carea parity-report \
+     --handoff ./pulse-timer-rebuild/airlock/carea-handoff.json \
+     --ca-report ./pulse-timer-rebuild/verification/ca-report.json \
+     --rea-report ./pulse-timer-rebuild/verification/rea-report.json \
+     --out ./pulse-timer-rebuild/verification/parity-checklist.md
+   ```
+3. If any obligation fails, emit sanitized feedback for Lane B:
+   ```bash
+   carea return-feedback \
+     --handoff ./pulse-timer-rebuild/airlock/carea-handoff.json \
+     --ca-report ./pulse-timer-rebuild/verification/ca-report.json \
+     --rea-report ./pulse-timer-rebuild/verification/rea-report.json \
+     --out ./pulse-timer-rebuild/airlock/return-feedback.md
+   ```

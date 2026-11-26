@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse Timer — carea Sample Target</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; min-height: 100dvh; display: grid; place-items: center; background: #0b0e14; color: #f3f5f8; padding: 16px; }
+    main { width: 100%; max-width: 440px; background: #141923; border: 1px solid #263042; border-radius: 12px; padding: 24px; box-sizing: border-box; }
+    .digits { font-variant-numeric: tabular-nums; font-size: 3rem; font-weight: 700; text-align: center; margin: 16px 0; }
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    button { min-height: 44px; min-width: 72px; padding: 10px 16px; border-radius: 8px; border: 1px solid #3b4b68; background: #1d2638; color: #f3f5f8; cursor: pointer; }
+    button.primary { background: #1e73be; border-color: #368ce0; }
+    .status { text-align: center; font-size: 0.9rem; color: #9eb0c9; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 style="margin:0;font-size:1.1rem;text-align:center;">Pulse Timer</h1>
+    <div id="readout" class="digits">01:00</div>
+    <div class="controls">
+      <button id="toggle" class="primary" type="button">Start</button>
+      <button id="reset" type="button">Reset</button>
+      <button data-sec="300" type="button">5m</button>
+      <button data-sec="600" type="button">10m</button>
+    </div>
+    <div id="status" class="status">Status: idle</div>
+  </main>
+  <script type="module">
+    let remainingSec = 60;
+    let running = false;
+    const readout = document.getElementById("readout");
+    const statusEl = document.getElementById("status");
+    const render = () => {
+      const m = String(Math.floor(remainingSec / 60)).padStart(2, "0");
+      const s = String(remainingSec % 60).padStart(2, "0");
+      readout.textContent = `${m}:${s}`;
+      statusEl.textContent = `Status: ${running ? "running" : remainingSec === 0 ? "completed" : "idle"}`;
+    };
+    document.getElementById("toggle").addEventListener("click", () => {
+      running = !running;
+      document.getElementById("toggle").textContent = running ? "Pause" : "Start";
+      render();
+    });
+    document.getElementById("reset").addEventListener("click", () => {
+      running = false;
+      remainingSec = 60;
+      document.getElementById("toggle").textContent = "Start";
+      render();
+    });
+    for (const btn of document.querySelectorAll("button[data-sec]")) {
+      btn.addEventListener("click", () => {
+        running = false;
+        remainingSec = Number(btn.dataset.sec);
+        document.getElementById("toggle").textContent = "Start";
+        render();
+      });
+    }
+    setInterval(() => {
+      if (running && remainingSec > 0) {
+        remainingSec -= 1;
+        if (remainingSec === 0) running = false;
+        render();
+      }
+    }, 1000);
+    render();
+  </script>
+</body>
+</html>
