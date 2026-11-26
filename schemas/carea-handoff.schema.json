@@ -1,0 +1,268 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ImAhmedZarir/carea/schemas/carea-handoff.schema.json",
+  "title": "carea Evidence and Clean-Room Handoff Record",
+  "description": "Maps sanitized Analyst specifications, opaque REA evidence IDs, Craft Anything Clean-Room check targets, and Stage 4 parity verification outcomes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "project",
+    "mode",
+    "airlock",
+    "target_summary",
+    "analyst_lane",
+    "obligations",
+    "builder_lane",
+    "parity_summary"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "created_at", "authorized"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "authorized": {
+          "type": "boolean",
+          "const": true,
+          "description": "Caller confirms ownership or explicit authorization for the target."
+        }
+      }
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["clean-room-ui", "two-team-process", "deep-verification"]
+    },
+    "airlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "no_source_code",
+        "no_proprietary_assets",
+        "separate_builder_context",
+        "spec_path"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["pending", "passed", "rejected", "not_applicable"]
+        },
+        "audited_by": { "type": "string" },
+        "audited_at": { "type": "string", "format": "date-time" },
+        "no_source_code": { "type": "boolean" },
+        "no_proprietary_assets": { "type": "boolean" },
+        "separate_builder_context": { "type": "boolean" },
+        "spec_path": { "type": "string", "minLength": 1 },
+        "disclaimer_acknowledged": {
+          "type": "boolean",
+          "description": "Acknowledges Two-Team Clean Room is a process aid, not legal advice or a legal guarantee."
+        }
+      }
+    },
+    "target_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "label"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "website",
+            "web-app",
+            "electron-app",
+            "native-binary",
+            "cli-tool",
+            "managed-assembly",
+            "android-apk",
+            "game",
+            "other"
+          ]
+        },
+        "label": { "type": "string", "minLength": 1 },
+        "observable_url": { "type": "string" },
+        "subject_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "analyst_lane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine", "rea_version", "evidence_format", "evidence_ids", "unknown_ids"],
+      "properties": {
+        "engine": { "type": "string", "enum": ["rea", "none"] },
+        "rea_version": { "type": "string" },
+        "evidence_format": { "type": "integer", "enum": [1, 2] },
+        "analyst_bundle_path": {
+          "type": "string",
+          "description": "Kept inside analyst-evidence/ for Stage 4 Verifier only; never read by Builder Lane."
+        },
+        "tool_families_used": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^ev_[A-Za-z0-9_-]+$" }
+        },
+        "unknown_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "obligations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "obligation_id",
+          "title",
+          "category",
+          "spec_section",
+          "source_evidence_ids",
+          "acceptance_criteria",
+          "status"
+        ],
+        "properties": {
+          "obligation_id": {
+            "type": "string",
+            "pattern": "^obl_[a-z0-9_-]+$"
+          },
+          "title": { "type": "string", "minLength": 1 },
+          "category": {
+            "type": "string",
+            "enum": [
+              "ui-layout",
+              "user-flow",
+              "api-contract",
+              "state-machine",
+              "algorithm-logic",
+              "cli-behavior",
+              "storage-schema",
+              "security-boundary"
+            ]
+          },
+          "spec_section": { "type": "string", "minLength": 1 },
+          "source_evidence_ids": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^ev_[A-Za-z0-9_-]+$" }
+          },
+          "acceptance_criteria": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "test_vectors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["test_id", "input_description", "expected_outcome"],
+              "properties": {
+                "test_id": { "type": "string", "minLength": 1 },
+                "input_description": { "type": "string", "minLength": 1 },
+                "expected_outcome": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "ca_check_targets": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "rebuild_check",
+                "web_pixels_compare",
+                "web_walkthrough_check",
+                "runtime_captures_compare",
+                "none"
+              ]
+            }
+          },
+          "rea_verification_method": {
+            "type": "string",
+            "enum": [
+              "verify_reconstruction",
+              "evaluate_reconstruction_coverage",
+              "compare_source_to_bundle",
+              "compare_javascript_export_shapes",
+              "compare_managed_members",
+              "compare_process_captures",
+              "compare_web_captures",
+              "compare_wasm_interfaces",
+              "correlate_static_and_runtime",
+              "manual-test-vector",
+              "none"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "passed", "partial", "failed", "unknown"]
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "builder_lane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine", "clean_room_verified", "workspace_path"],
+      "properties": {
+        "engine": { "type": "string", "enum": ["craft-anything", "manual"] },
+        "ca_version": { "type": "string" },
+        "clean_room_verified": { "type": "boolean" },
+        "workspace_path": { "type": "string", "minLength": 1 },
+        "ca_project_id": { "type": "string" },
+        "ca_checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tool", "status", "summary"],
+            "properties": {
+              "tool": { "type": "string" },
+              "status": { "type": "string", "enum": ["passed", "partial", "failed", "skipped"] },
+              "summary": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "parity_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "visual_status",
+        "behavioral_status",
+        "structural_status",
+        "overall_status",
+        "unresolved_unknowns"
+      ],
+      "properties": {
+        "visual_status": { "type": "string", "enum": ["passed", "partial", "failed", "unknown", "not_applicable"] },
+        "behavioral_status": { "type": "string", "enum": ["passed", "partial", "failed", "unknown", "not_applicable"] },
+        "structural_status": { "type": "string", "enum": ["passed", "partial", "failed", "unknown", "not_applicable"] },
+        "overall_status": { "type": "string", "enum": ["passed", "partial", "failed", "unknown"] },
+        "limitations": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "unresolved_unknowns": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}
