@@ -7,11 +7,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
-- Planned: expanded worked examples validated end-to-end against self-owned fixture targets.
+- Planned: run `scripts/verify-upstream.sh` / `.ps1` against global Node `>=22` + `rea-agents@6.10.1` CLI and live Mode 5/6 engine/device trials before final `v1.0.0` tag.
 
-## [1.0.0] - 2026-11-26
+## [1.0.0-rc1] - 2026-11-26
 
 ### Added
+- Hardened `carea airlock-lint` against inline code snippets (`inline-code-snippet`), 4+ digit hex constants (`0x5A3C`, `0x1F40`), obfuscated emails (`user [at] corp [dot] com`), spaced/prefixed tokens (`sk_live_ ...`), and high-entropy alphanumeric tokens (`tests/fixtures/airlock/tp_adversarial_leaks.md`).
+- Verified cross-OS CI matrix (`ubuntu-latest`, `macos-latest`, `windows-latest` × Python `3.10` & `3.12`) green with `setuptools` + `wheel` packaging smoke check.
+- Executed live Mode 2 end-to-end verification over `examples/sample-target` (`pulse-timer`) coordinating `rea_rea` MCP + `craft-anything-cli --clean-room` + `carea` CLI.
 - **Upstream Fact Ledger & Compatibility Matrix:**
   - `docs/upstream-facts.md` verifying referenced tool names, tool families, environment variables, CLI flags, and versions (`VERIFIED` / `UNVERIFIED` / `WRONG` audit log).
   - Single-source `compat/matrix.json` plus generated `docs/compatibility.md` via `scripts/render-compatibility.py`.

@@ -8,9 +8,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import re
 import stat
+from collections import Counter
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Any
@@ -50,7 +52,13 @@ ASM_RE = re.compile(
     r"[^\n]{0,40}\b(?:rax|rbx|rcx|rdx|rsi|rdi|rsp|rbp|eax|ebx|ecx|edx|eip|rip|x[0-9]{1,2}|w[0-9]{1,2}|sp|lr)\b",
     re.IGNORECASE,
 )
-MEM_ADDR_RE = re.compile(r"\b0x[0-9a-fA-F]{6,16}\b")
+INLINE_CODE_RE = re.compile(
+    r"(?:\b(?:if|while|for|switch)\s*\([^()\n]{2,60}\)\s*\{|"
+    r"\b(?:return|const|let|var|def|fn|pub\s+fn)\s+[A-Za-z_][A-Za-z0-9_]*\s*(?:=|\([^)\n]*\)\s*\{)|"
+    r"\{[A-Za-z_]\w*\s*=\s*[A-Za-z0-9_]+\s*(?:>>|<<|\^|\||&)\s*[^}\n]+\}|"
+    r"\b[A-Za-z_]\w*\s*(?:>>|<<|\^=|\|=|&=)\s*(?:0x[0-9a-fA-F]+|\d+))"
+)
+MEM_ADDR_RE = re.compile(r"\b0x[0-9a-fA-F]{4,16}\b")
 HEX_DUMP_RE = re.compile(r"(?:^[0-9a-fA-F]{6,8}:\s*(?:[0-9a-fA-F]{2}\s+){4,}|(?:[0-9a-fA-F]{2}\s+){8,}[0-9a-fA-F]{2})")
 MINIFIED_JS_RE = re.compile(
     r"(?:webpackJsonp|__webpack_require__|__webpack_modules__|Object\.defineProperty\([^,]+,\s*[\"']__esModule[\"']|"
@@ -64,6 +72,8 @@ HOST_HOME_PATH_RE = re.compile(r"(?:C:\\Users\\[^\s\"'`]+|/Users/[^\s\"'`]+|/hom
 
 SECRET_PATTERNS = [
     ("secret-openai-key", re.compile(r"\bsk-[A-Za-z0-9_-]{20,}\b")),
+    ("secret-prefixed-token", re.compile(r"\b(?:sk_live|sk_test|pk_live|pk_test|rk_live|rk_test|whsec|gh[pousr]|xox[baprs]|glpat)_[ \t]{0,3}[A-Za-z0-9_-]{8,}\b")),
+    ("secret-spaced-bearer", re.compile(r"\b(?:Bearer|sk-live|sk-proj)[ \t]+[A-Za-z0-9._-]{16,}\b")),
     ("secret-github-token", re.compile(r"\bgh[pousr]_[A-Za-z0-9]{20,}\b")),
     ("secret-aws-key", re.compile(r"\bAKIA[0-9A-Z]{16}\b")),
     ("secret-google-key", re.compile(r"\bAIza[0-9A-Za-z_-]{30,}\b")),
@@ -73,7 +83,34 @@ SECRET_PATTERNS = [
 ]
 
 EMAIL_RE = re.compile(r"\b[A-Za-z0-9._%+-]+@([A-Za-z0-9.-]+\.[A-Za-z]{2,})\b")
+OBFUSCATED_EMAIL_RE = re.compile(
+    r"\b[A-Za-z0-9._%+-]+\s*(?:\[\s*at\s*\]|\(\s*at\s*\)|\{\s*at\s*\})\s*"
+    r"([A-Za-z0-9.-]+(?:\s*(?:\[\s*dot\s*\]|\(\s*dot\s*\)|\{\s*dot\s*\}|\.)\s*[A-Za-z]{2,})+)\b",
+    re.IGNORECASE,
+)
 SAFE_EMAIL_DOMAINS = {"example.com", "example.org", "example.net", "localhost.localdomain", "test.invalid"}
+TOKEN_CANDIDATE_RE = re.compile(r"(?<![A-Za-z0-9_/\\.-])([A-Za-z0-9_-]{24,})(?![A-Za-z0-9_/\\.-])")
+
+
+def _shannon_entropy(s: str) -> float:
+    counts = Counter(s)
+    n = len(s)
+    return -sum((c / n) * math.log2(c / n) for c in counts.values())
+
+
+def _looks_high_entropy_secret(tok: str) -> bool:
+    if tok.startswith(("ev_", "unk_", "obl_", "handoff_")):
+        return False
+    if re.fullmatch(r"[a-f0-9]{24,64}", tok.lower()):
+        return False
+    if re.fullmatch(r"[a-z]+(?:[_-][a-z0-9]+)+", tok):
+        return False
+    has_upper = any(c.isupper() for c in tok)
+    has_lower = any(c.islower() for c in tok)
+    has_digit = any(c.isdigit() for c in tok)
+    if (has_upper + has_lower + has_digit) < 3:
+        return False
+    return _shannon_entropy(tok) >= 3.8
 
 
 @dataclass
@@ -178,14 +215,18 @@ def lint_airlock(target: Path) -> dict[str, Any]:
                     LintFinding("WARN", "host-home-path", rel, idx, "Machine-specific user home path present in airlock document")
                 )
 
+            if ext in (".md", ".txt") and not in_fence and INLINE_CODE_RE.search(line):
+                findings.append(
+                    LintFinding("FAIL", "inline-code-snippet", rel, idx, "Inline code / bitwise logic snippet detected outside spec contract")
+                )
+
             if ASM_RE.search(line):
                 findings.append(
                     LintFinding("FAIL", "assembly-mnemonic", rel, idx, "Disassembly instruction/register pattern detected")
                 )
             elif MEM_ADDR_RE.search(line) and not re.search(r'"[a-f0-9]{64}"', line):
-                # Allow short spec hex constants if <= 4 hex digits; >=6 hex digits looks like VM address/offset
                 findings.append(
-                    LintFinding("WARN", "memory-address-hex", rel, idx, "Long 0x... hex address/offset literal detected (verify not raw binary offset)")
+                    LintFinding("WARN", "memory-address-hex", rel, idx, "4+ digit 0x... hex constant/offset literal detected (verify not raw binary offset)")
                 )
 
             if HEX_DUMP_RE.search(line):
@@ -209,11 +250,24 @@ def lint_airlock(target: Path) -> dict[str, Any]:
                         LintFinding("FAIL", rule_name, rel, idx, f"Potential secret, credential, or cookie matched rule {rule_name}")
                     )
 
+            for tok_m in TOKEN_CANDIDATE_RE.finditer(line):
+                if _looks_high_entropy_secret(tok_m.group(1)):
+                    findings.append(
+                        LintFinding("WARN", "high-entropy-token", rel, idx, "High-entropy alphanumeric string detected; verify not an API key or secret")
+                    )
+
             for em in EMAIL_RE.finditer(line):
                 domain = em.group(1).lower()
                 if domain not in SAFE_EMAIL_DOMAINS:
                     findings.append(
                         LintFinding("WARN", "non-example-email", rel, idx, f"Email address with non-placeholder domain @{domain} detected")
+                    )
+
+            for oem in OBFUSCATED_EMAIL_RE.finditer(line):
+                norm_dom = re.sub(r"\s*(?:\[\s*dot\s*\]|\(\s*dot\s*\)|\{\s*dot\s*\})\s*", ".", oem.group(1), flags=re.I).lower()
+                if norm_dom not in SAFE_EMAIL_DOMAINS:
+                    findings.append(
+                        LintFinding("WARN", "obfuscated-email", rel, idx, f"Obfuscated email address (@{norm_dom}) detected")
                     )
 
             # Long verbatim prose heuristic (paragraphs / blockquotes >= 85 words on non-list markdown)

@@ -71,6 +71,16 @@ class TestAirlockLeakFixtures(unittest.TestCase):
             res = lint_airlock(FIXTURES / "airlock" / name)
             self.assertEqual(res["status"], "PASS", f"{name}: {res['findings']}")
 
+    def test_true_positive_adversarial_leaks(self) -> None:
+        res = lint_airlock(FIXTURES / "airlock" / "tp_adversarial_leaks.md")
+        self.assertEqual(res["status"], "FAIL")
+        rules = {f["rule"] for f in res["findings"]}
+        self.assertIn("inline-code-snippet", rules)
+        self.assertIn("memory-address-hex", rules)
+        self.assertIn("obfuscated-email", rules)
+        self.assertIn("secret-prefixed-token", rules)
+        self.assertIn("high-entropy-token", rules)
+
 
 class TestHandoffSchemaFixtures(unittest.TestCase):
     def test_all_positive_handoff_fixtures_valid(self) -> None:

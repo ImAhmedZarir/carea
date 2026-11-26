@@ -35,22 +35,26 @@
 
 ---
 
-## 2. Verified Directly on Build Host (Windows)
+## 2. Verified on Build Host & GitHub Actions CI
 
-- `craft-anything-cli.exe` (`0.6.0`): `--version`, `doctor`, `commands`, `capabilities --json` (`322` commands, 17 toolsets, `analysis_mode: clean-room`), and subcommand `--help` outputs executed directly.
-- Live session MCP probes: `craft-anything:core_session_show` (`clean_room: true`, `0.6.0`) and `rea_rea:binary_session` (`6.8.0`-era backend capabilities).
-- Pinned upstream release files inspected from GitHub (`morluto/rea` tag `rea-agents-6.10.1`, `storytold/craft-anything` tag `v0.6.1`).
-- `scripts/verify-upstream.ps1` and `scripts/verify-upstream.sh` executed on host (`verify-upstream.ps1` verified `craft-anything-cli 0.6.0` as `supported` and reported `rea` as `missing`).
-- Full `carea` test and integrity suite (`python -m unittest discover -s tests -v`, `python scripts/render-compatibility.py --check`, `python scripts/check_repo.py`, plus `examples/sample-target` unit tests and live CLI smoke checks). Exact final test counts are reported in the delivery summary after the final run.
+- **Cross-OS GitHub Actions CI (`f9fa6eb`, Run [`45852406649`](https://github.com/ImAhmedZarir/carea/actions/runs/45852406649)):** Completed with **`WORKFLOW_RUN_CONCLUSION_SUCCESS`** in `5m 47s` across all 6 runners (`ubuntu-latest`, `macos-latest`, `windows-latest` × Python `3.10` & `3.12`), including `PyYAML` workflow/frontmatter validation, wheel packaging (`setuptools` + `wheel`), `unittest`, `render-compatibility.py --check`, `check_repo.py`, `verify-upstream.sh`, and `verify-upstream.ps1`.
+- **`craft-anything-cli.exe` (`0.6.0`):** `--version`, `doctor`, `commands`, `capabilities --json` (`322` commands, 17 toolsets, `analysis_mode: clean-room`), and subcommand `--help` executed directly.
+- **Live MCP & Mode 2 E2E trial on self-owned `examples/sample-target` (`pulse-timer`):**
+  - `rea_rea:binary_session` (`6.8.0`-era live MCP) and `rea_rea:analyze_javascript_application` (`ev_835b...`, `parent_evidence_id: ev_7615...`) + `export_evidence_bundle` (`149,804` bytes).
+  - `carea spec-draft` on the exported 149 KB REA bundle -> `carea airlock-lint --strict` (`PASS`) -> `carea airlock-sign --confirm-human-review` -> `carea validate-handoff` (`1.1.0`).
+  - `craft-anything:core_session_show` (`clean_room: true`, `0.6.0`) and `craft-anything-cli.exe --clean-room --allow-run web-site-open` against local `examples/sample-target/server.py` (Chrome `158.0.8127.38`, `ev_785a...`), followed by `carea parity-report` outputting `partial` (preserving REA's `index.html` inline script coverage note).
+- **`airlock-lint` adversarial hardening:** Verified detection of inline code snippets (`if(x>>3&1){y=z^0x5A3C}`), 4+ hex constants/offsets (`0x5A3C`, `0x1F40`), obfuscated emails (`j.smith [at] corp [dot] com`), spaced/prefixed keys (`sk_live_ ...`), and high-entropy alphanumeric tokens via `tests/fixtures/airlock/tp_adversarial_leaks.md` while keeping clean specs `PASS`.
+- **Standalone packaging:** Verified `carea-cli` wheel build and clean Python `3.12` venv install + `carea` CLI execution outside the repo checkout.
+- **Pinned upstream sources inspected:** `morluto/rea` (`rea-agents-6.10.1`) and `storytold/craft-anything` (`v0.6.1`).
 
 ---
 
-## 3. Unverified Items & Environmental Gaps
+## 3. Still Unverified Items & Environmental Gaps
 
-1. **Local `rea` CLI execution (`rea --version`, `rea --help`, `rea doctor`):** **UNVERIFIED** on build host. Host lacks Node.js (`^22.23.4 || ^24.22.1 || >=26.12.1`) and bundled plugin lacked compiled `dist/` runtime. Verified from `rea-agents-6.10.1` upstream source/docs instead.
-2. **Local `craft-anything-cli` `0.6.1` binary:** **UNVERIFIED** via local execution (host binary is `0.6.0`; `0.6.1` docs/tools verified remotely).
-3. **Linux & macOS CI runners:** Workflows `.github/workflows/ci.yml` and `.github/workflows/verify-upstream-weekly.yml` are validated structurally locally, **not executed** on GitHub-hosted Linux/macOS runners yet (local host lacked `PyYAML` for third-party YAML parsing; structural checks ran cleanly).
-4. **Live Android hardware `adb` & end-to-end joint rebuild run:** Mode 5 (`--build-with godot/unity`) and Mode 6 (`adb_screenshot_take`) were not executed against live device/game engines (`adb` binary not installed on host, noted by `craft-anything-cli capabilities`).
+1. **Local `rea` CLI execution (`rea --version`, `rea --help`, `rea doctor`):** **UNVERIFIED** on build host. Host lacks Node.js (`^22.23.4 || ^24.22.1 || >=26.12.1`) and bundled plugin lacked compiled `dist/` runtime. Verified via `rea-agents-6.10.1` upstream source/docs and live `rea_rea` MCP instead.
+2. **Local `craft-anything-cli` `0.6.1` binary:** **UNVERIFIED** via local execution (host binary is `0.6.0`; `0.6.1` release docs/tools verified remotely).
+3. **Live Mode 5 (Game engine build) & Mode 6 (Android physical/emulator `adb` capture):** Documented with verified command/tool names (`0.6.0` / `6.10.1`), **not executed** end-to-end against live Godot/Unity or an attached `adb` device (`adb` absent on host).
+4. **Weekly scheduled cron workflow (`.github/workflows/verify-upstream-weekly.yml`):** YAML validated in CI; scheduled weekly run awaits Monday cron or manual `workflow_dispatch`.
 
 ---
 
