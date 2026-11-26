@@ -1,21 +1,21 @@
 {
   "name": "carea",
-  "version": "0.1.0",
-  "description": "Craft And Reverse Engineer Everything — Level-1 agent skill and orchestration layer coordinating external REA and Craft Anything engines.",
+  "version": "1.0.0",
+  "description": "Independent Level-1 orchestration skills (/carea, /rea, /ca), airlock CLI checks, two-team clean-room workflow, and handoff schemas coordinating external REA and Craft Anything engines.",
   "author": {
     "name": "Ahmed Ishtiaque Zarir",
     "url": "https://github.com/ImAhmedZarir"
   },
+  "repository": "https://github.com/ImAhmedZarir/carea",
   "license": "MIT",
   "keywords": [
-    "reverse-engineering",
-    "clean-room",
-    "reconstruction",
-    "verification",
-    "agent-skills",
-    "mcp-orchestration",
+    "carea",
     "rea",
-    "craft-anything"
+    "craft-anything",
+    "clean-room",
+    "reverse-engineering",
+    "orchestration",
+    "parity-verification"
   ],
   "skills": "./skills",
   "icon": "./docs/brand/carea.png"

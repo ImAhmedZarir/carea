@@ -1,0 +1,41 @@
+{
+  "name": "carea",
+  "version": "1.0.0",
+  "description": "Independent Level-1 orchestration pack coordinating external REA (deep reverse engineering and evidence ledgers) and Craft Anything (clean-room rebuild and pixel/walkthrough verification).",
+  "author": {
+    "name": "Ahmed Ishtiaque Zarir",
+    "url": "https://github.com/ImAhmedZarir"
+  },
+  "homepage": "https://github.com/ImAhmedZarir/carea",
+  "repository": "https://github.com/ImAhmedZarir/carea",
+  "license": "MIT",
+  "keywords": [
+    "carea",
+    "rea",
+    "craft-anything",
+    "clean-room",
+    "reverse-engineering",
+    "orchestration"
+  ],
+  "skills": "./skills",
+  "interface": {
+    "displayName": "carea",
+    "shortDescription": "Craft And Reverse Engineer Everything",
+    "longDescription": "Unofficial Level-1 skill pack and airlock CLI coordinating external REA and Craft Anything engines across deep forensics, clean-room rebuild specs, and dual-axis parity checks.",
+    "developerName": "Ahmed Ishtiaque Zarir",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/ImAhmedZarir/carea",
+    "defaultPrompt": [
+      "Use /carea to plan a two-team clean-room specification and parity checklist.",
+      "Use /rea to inspect a binary or bundle and export an evidence bundle.",
+      "Use /ca to capture and rebuild an authorized web interface cleanly."
+    ],
+    "composerIcon": "./docs/brand/carea.png",
+    "logo": "./docs/brand/carea.png"
+  }
+}

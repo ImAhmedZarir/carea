@@ -1,0 +1,26 @@
+{
+  "name": "carea",
+  "version": "1.0.0",
+  "description": "Independent Level-1 orchestration pack (/carea, /rea, /ca) coordinating external REA and Craft Anything engines with airlock checks and dual parity schemas.",
+  "author": {
+    "name": "Ahmed Ishtiaque Zarir",
+    "url": "https://github.com/ImAhmedZarir"
+  },
+  "homepage": "https://github.com/ImAhmedZarir/carea",
+  "repository": "https://github.com/ImAhmedZarir/carea",
+  "license": "MIT",
+  "keywords": [
+    "carea",
+    "rea",
+    "craft-anything",
+    "clean-room",
+    "reverse-engineering",
+    "orchestration"
+  ],
+  "skills": [
+    "skills/carea/",
+    "skills/rea/",
+    "skills/ca/"
+  ],
+  "logo": "./docs/brand/carea.png"
+}

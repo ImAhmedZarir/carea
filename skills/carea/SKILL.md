@@ -1,76 +1,54 @@
 ---
 name: carea
-description: >
-  Orchestrate REA and Craft Anything through a phase-based workflow: Observe /
-  Reverse-engineer -> Spec + Obligation Ledger -> Clean rebuild -> Visual +
-  Behavioral + Binary parity check. Triggered by /carea or when asked to study,
-  reverse-engineer, cleanly rebuild, or parity-verify apps, websites, binaries,
-  or agent environments without flooding agent context.
-argument-hint: "<target_url_or_path> [goal]"
-metadata:
-  version: "0.1.0"
+description: Orchestrate the combined four-stage pipeline (REA deep inspection -> airlock spec/handoff -> Craft Anything rebuild -> dual behavioral + pixel parity) and route multi-engine tasks across Modes 1-6 via carea CLI gates (init, isolation-check, spec-draft, airlock-lint, airlock-sign, validate-handoff, parity-report, return-feedback). Triggered by /carea or requests needing BOTH internal analysis (REA) and clean/rebuilt output (CA), two-team airlock isolation, private deep rebuilds, game/mobile rebuilds, or automatic mode selection.
 ---
 
 # carea — Craft And Reverse Engineer Everything
 
 > *"Break It Down. Build It Better."*
 
-`carea` coordinates two independent external engines through their CLI and MCP interfaces:
+`carea` is an **independent, unofficial Level-1 orchestration layer** coordinating external **REA (`rea`)** and **Craft Anything (`craft-anything-cli`)** processes across the Study -> Spec -> Clean Rebuild -> Dual Parity pipeline. Neither engine is vendored or bundled.
 
-- **REA (`rea`)** for deep static/runtime reverse engineering, evidence/unknown tracking, parity verification, and AgentEnv export.
-- **Craft Anything (`craft-anything-cli` / `ca`)** for observable web/app capture, clean-room rebuild loops, visual pixel comparison, and original asset generation.
+> Read [`../_shared/responsible-use.md`](../_shared/responsible-use.md) before starting. `carea`'s Two-Team Clean Room protocol is an **engineering process aid — NOT legal advice and NOT a legal guarantee**.
 
-Do **not** load full tool catalogs from both servers at once. Keep active schemas minimal using the phase-based presets in [intent-router.md](references/intent-router.md).
+## 1. Mode Router & Single-Engine Delegation
 
----
+Pick the right mode for the task using [`references/intent-router.md`](references/intent-router.md):
 
-## 1. Responsible Use & Clean-Room Notice
+1. **Mode 1 — Clean-Room UI / Web Rebuild -> delegate to `/ca`:** Only observable UI/web/window behavior is needed (`craft-anything-cli` `--clean-room` only).
+2. **Mode 2 — Two-Team Clean Room Process (Full `/carea` Pipeline):** Internal protocols, API shapes, state machines, or binary/JS logic must inform a fresh clean rebuild. Enforce separate directories (`analyst-evidence/`, `airlock/`, `builder-workspace/`, `verification/`), Topology B recommended (separate fresh agent session driving `craft-anything-cli mcp --clean-room`).
+3. **Mode 3 — Deep Investigation / Verification / AgentEnv -> delegate to `/rea`:** Forensics, binary/JS comparison, `verify_reconstruction`, or `AgentEnv` export without rebuilding UI.
+4. **Mode 4 — Private Deep Rebuild (`deep_private: true`):** User owns or holds explicit written permission to combine REA deep inspection with Craft Anything `--deep`. **NOT CLEAN-ROOM**: display the mandatory non-clean-room banner in every spec/output and never set clean-room assertions in `carea-handoff.json`.
+5. **Mode 5 — Game Rebuild Path:** Building/recreating game mechanics in Unity/Unreal/Godot via CA (`--build-with`), enforcing the authorization gate, no-asset-copy rule, and noting that CA `game_*` inspection/extraction tools are **Deep-only**.
+6. **Mode 6 — Android / Mobile App Path:** Hybrid REA mobile logic analysis (`android`, `apktool`, `jeb`, `flutter`, `frida`, `application`, `session`) paired with CA observable UI checks (`adb`, `adb_screenshot_take`, `adb_window_show`, `runtime_captures_compare`) across the Airlock (when clean-room) or Private Deep (when authorized Mode 4).
 
-Before inspecting any target, confirm the user owns or has explicit authorization to examine it (see [DISCLAIMER.md](../../DISCLAIMER.md)).
+## 2. CLI Gates & Four-Stage Execution
 
-- **Refuse outright:** DRM, license, authentication, anti-cheat, or CAPTCHA/bot-check circumvention; game cheats; tampering with live services; or copying logos, photos, illustrations, or copyrighted prose without permission.
-- **Clean-room disclaimer:** `carea`'s Two-Team Clean Room protocol is an **engineering process aid — NOT legal advice and NOT a legal clean-room guarantee**. Craft Anything's `--clean-room` flag is a **tool-level rule, not an OS sandbox**, and **a single person or agent acting as both Analyst and Builder does not create a true legal clean room**.
+Replace honor-system isolation with executable `carea` CLI checks at each boundary:
 
----
+1. **Initialize & Isolate:**
+   - Run `carea doctor` to check upstream binaries against `compat/matrix.json`.
+   - Run `carea init <project-dir> --mode <mode>` to create `.carea/config.json`, `analyst-evidence/`, `airlock/`, `builder-workspace/`, `verification/`.
+   - Run `carea isolation-check <project-dir>` before starting Lane B.
+2. **Lane A (Analyst via REA -> `analyst-evidence/`):**
+   - Load lean REA schemas (`REA_MCP_TOOL_CATALOG_PROFILE=hot-cold` or target-scoped `REA_MCP_TOOL_FAMILIES` + `compact` input + `off` output).
+   - Export REA bundle (`export_evidence_bundle`) into `analyst-evidence/`. Never pass raw source or payloads directly to Lane B.
+3. **Airlock Gate (`airlock/`):**
+   - Generate draft skeleton: `carea spec-draft analyst-evidence/bundle.json --out airlock/clean-room-spec.md`.
+   - Refine `airlock/clean-room-spec.md` and `airlock/carea-handoff.json` (`1.1.0` schema).
+   - Run heuristic scan + schema validation + explicit human review sign-off:
+     - `carea airlock-lint airlock/` *(heuristic gate only; human review still required)*
+     - `carea validate-handoff airlock/carea-handoff.json`
+     - `carea airlock-sign airlock/carea-handoff.json --reviewer "<name>"`
+4. **Lane B (Builder via CA -> `builder-workspace/`) & Dual Parity (`verification/`):**
+   - Run Craft Anything `--clean-room` (without `--all-tools`, verifying `clean_room: true` via `core_session_show`) — or `--deep` only for authorized Mode 4 (`deep_private: true`) / explicitly authorized Deep game asset workflows.
+   - Merge CA checks and REA verification with `carea parity-report` into `verification/parity-checklist.md`.
+   - Pass remediation via `carea return-feedback` (failing vectors & pixel diff descriptions only).
 
-## 2. Select Operating Mode
+## References
 
-Choose one mode before running any tool:
-
-1. **Pure Clean-Room UI / Web Rebuild (`ca`-first):**
-   Target is a website or visible UI where layout, style, and public behavior suffice. Run `craft-anything-cli` in `--clean-room` mode only; do not invoke REA deep inspection tools.
-2. **Two-Team Clean Room Process (REA Analyst -> Airlock -> CA Builder):**
-   Target requires understanding internal protocols, logic, state machines, or binary/JS structures before rebuilding cleanly. Enforce the workspace and context split in [clean-room-protocol.md](references/clean-room-protocol.md).
-3. **Deep Investigation / Reconstruction Verification / AgentEnv (`rea`-first):**
-   User wants binary forensics, runtime tracing, security/compatibility auditing, exact functional parity verification, or an AgentEnv RL bundle (no clean-room rebuild claim).
-
----
-
-## 3. Four-Stage Workflow
-
-### Stage 1: Observe / Reverse-Engineer
-- Route by target type using [intent-router.md](references/intent-router.md).
-- Start narrow: use summary-first calls (`detail: "summary"` + `inspect_analysis_view` in REA; `core_session_show` / clean-room captures in CA) rather than dumping full payloads.
-- Close opened native REA sessions (`close_binary`) once observations are exported (`export_evidence_bundle`).
-
-### Stage 2: Spec + Obligation Ledger
-- For rebuild workflows, draft the sanitized functional spec from [clean-room-spec.template.md](../../templates/clean-room-spec.template.md) and record the handoff mapping against [carea-handoff.schema.json](../../schemas/carea-handoff.schema.json).
-- Follow [evidence-handoff.md](references/evidence-handoff.md) so REA `ev_...` IDs and `unknown` IDs map to verifiable obligations (`obl_...`) without exposing raw source code, pseudocode, or original media assets across the Airlock.
-
-### Stage 3: Clean Rebuild
-- In Two-Team mode, open a **fresh agent conversation** and clean `builder-workspace/` strictly bounded to the sanitized spec, handoff JSON, and observable CA captures.
-- Run `craft-anything-cli` with `--clean-room` (and without `--all-tools`). Verify via `core_session_show` that Clean Room is active.
-- Build original code and replacement assets (`assets_image_generate` or original SVGs/styles) via CA's Study -> Build -> Check -> Refine loop (`rebuild_start`, `build_*`, `rebuild_check`).
-
-### Stage 4: Visual + Behavioral + Binary Parity Check
-- Verify rebuild parity using [parity-verification.md](references/parity-verification.md) and record results in [parity-checklist.template.md](../../templates/parity-checklist.template.md).
-- **Evidence discipline:** Clearly separate direct observations, inferences, and unresolved `unknown`s. Never present static inspection as runtime execution, and never present partial coverage as complete equivalence.
-
----
-
-## 4. Reference Map
-
-- **Routing & context-budget rules:** [references/intent-router.md](references/intent-router.md)
-- **Two-Team Airlock rules:** [references/clean-room-protocol.md](references/clean-room-protocol.md)
-- **Evidence ID & schema mapping:** [references/evidence-handoff.md](references/evidence-handoff.md)
-- **Dual-axis parity verification:** [references/parity-verification.md](references/parity-verification.md)
+- Tool routing & context-budget table: [`references/intent-router.md`](references/intent-router.md)
+- Shared Two-Team Clean Room protocol: [`../_shared/clean-room-protocol.md`](../_shared/clean-room-protocol.md)
+- Shared Evidence & Handoff schema guide: [`../_shared/evidence-handoff.md`](../_shared/evidence-handoff.md)
+- Shared Dual Parity guide: [`../_shared/parity-verification.md`](../_shared/parity-verification.md)
+- Responsible use & non-circumvention rules: [`../_shared/responsible-use.md`](../_shared/responsible-use.md)

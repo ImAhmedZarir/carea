@@ -3,7 +3,7 @@
 Use **Mode 2 (Two-Team Clean Room Process)** when recreating an application whose behavior depends on internal client/server contracts, Electron IPC channels, state machines, or algorithms that observable screenshots alone cannot reveal.
 
 > [!IMPORTANT]
-> **Process Aid — Not a Legal Guarantee:** This workflow is an engineering process aid, **not legal advice and not a legal clean-room guarantee**. Craft Anything's `--clean-room` mode is a tool-level rule rather than an OS sandbox, and **a single person or continuous agent session acting as both Analyst and Builder does not constitute a true legal clean room**. See [`../../DISCLAIMER.md`](../../DISCLAIMER.md) and [`../../skills/carea/references/clean-room-protocol.md`](../../skills/carea/references/clean-room-protocol.md).
+> **Process Aid — Not a Legal Guarantee:** This workflow is an engineering process aid, **not legal advice and not a legal clean-room guarantee**. Craft Anything's `--clean-room` mode is a tool-level rule rather than an OS sandbox, and **a single person or continuous agent session acting as both Analyst and Builder does not constitute a true legal clean room**. See [`../../DISCLAIMER.md`](../../DISCLAIMER.md) and [`../../skills/_shared/clean-room-protocol.md`](../../skills/_shared/clean-room-protocol.md).
 
 See worked example files produced by this workflow:
 - Sanitized spec: [`../../examples/clean-room-spec.example.md`](../../examples/clean-room-spec.example.md)
