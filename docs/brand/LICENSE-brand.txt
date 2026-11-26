@@ -1,0 +1,52 @@
+carea Brand & Trademark Notice
+
+1. Ownership and Scope
+The name "carea", the full project title "Craft And Reverse Engineer Everything",
+the tagline "Break It Down. Build It Better.", and the original logo artwork
+stored at docs/brand/carea.png (in every size, color, format, and rendition,
+collectively the "carea Marks") are trademarks and original brand assets of
+Ahmed Ishtiaque Zarir.
+
+The carea Marks are NOT open source and are NOT licensed under the MIT License
+in LICENSE, the attribution summary in NOTICE, or THIRD_PARTY_NOTICES.md. All
+open-source permissions in LICENSE apply solely to carea's original code,
+documentation, schemas, templates, and skill files, and do not extend to the
+carea Marks.
+
+2. Permitted Unmodified Use
+Ahmed Ishtiaque Zarir grants a limited, revocable, non-exclusive,
+non-transferable, royalty-free permission to reproduce the carea Marks solely:
+  (a) within verbatim copies or clones of this official repository; and
+  (b) in unmodified references or links pointing directly to this official
+      repository to identify carea as created by Ahmed Ishtiaque Zarir.
+
+3. Restrictions
+Any permitted use above requires that:
+  - the carea Marks remain completely unaltered (no recoloring, cropping,
+    stretching, distortion, overlays, derivative mashups, or partial glyph
+    extraction);
+  - the carea Marks are never used in a way that implies Ahmed Ishtiaque Zarir
+    authored, sponsors, certifies, endorses, or supports any fork, derivative
+    project, external service, or commercial product; and
+  - the carea Marks do not appear in the product name, package name, icon,
+    logo, domain name, social handle, or promotional material of any other
+    software or organization.
+
+4. Forks and Modified Versions
+You are free to fork, modify, and redistribute carea's MIT-licensed files
+under the terms of LICENSE, provided that before publishing or distributing any
+fork, modified version, or derivative project you:
+  - remove or replace docs/brand/carea.png and every other carea Mark;
+  - rename the distributed fork or derivative so it does not use "carea",
+    "Craft And Reverse Engineer Everything", or "Break It Down. Build It Better."
+    as its own branding; and
+  - retain LICENSE, NOTICE, THIRD_PARTY_NOTICES.md, and DISCLAIMER.md as
+    required by MIT and upstream notices.
+
+You may state truthfully in plain text that your project is forked from or
+inspired by carea by Ahmed Ishtiaque Zarir, as long as no endorsement is implied.
+
+5. Reservation of Rights
+Any use of the carea Marks outside this notice requires prior written
+permission from Ahmed Ishtiaque Zarir. Permission terminates automatically upon
+breach of these terms. All rights not expressly granted here are reserved.
