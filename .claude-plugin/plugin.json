@@ -1,6 +1,6 @@
 {
   "name": "carea",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Autonomous reverse engineering orchestrator (/carea <target>) executing /rea -> /ca study-only -> full breakdown (architecture.md, design-system.md, full-breakdown.md), plus optional clean-room airlock CLI gates and schemas.",
   "author": {
     "name": "Ahmed Ishtiaque Zarir",

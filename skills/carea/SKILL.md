@@ -9,8 +9,6 @@ description: Autonomous reverse engineering orchestrator (/carea <target>) execu
 
 `carea` is an **independent, unofficial Level-1 orchestration layer** coordinating external **REA (`rea`)** and **Craft Anything (`craft-anything-cli`)**. Neither engine is vendored or bundled.
 
-> Read [`../_shared/responsible-use.md`](../_shared/responsible-use.md) before starting: **authorized targets only**. Never bypass DRM, licenses, auth, paywalls, anti-cheat, or CAPTCHAs, and never copy proprietary brand logos, photos, or copy verbatim.
-
 ---
 
 ## HARD RULE: Analysis & Breakdown ONLY — NEVER Auto-Build an App
@@ -29,9 +27,9 @@ Auto-classify `<target>` immediately from its path, URL, or extension (see [`ref
 ### Stage 1 — First `/rea` (Internal Architecture & Logic Extraction)
 1. Initialize REA cleanly with lean schema budgets (`REA_MCP_TOOL_CATALOG_PROFILE=hot-cold` or target-scoped `REA_MCP_TOOL_FAMILIES` + `compact` input + `off` output).
 2. Inspect internals using REA tools suited to `<target>`:
-   - Web / Electron (`https://...`, `*.asar`, JS): `analyze_javascript_application`, `inspect_web_page`, `inspect_web_network_capture`, `trace_application_feature`, `inspect_electron_fuses`.
-   - Android (`*.apk`, `*.aab`): `inspect_android_package`, `decode_android_resources`, `search_android_classes`, `inspect_android_class`, `inspect_android_jni_bindings`, `identify_flutter_build`, `inspect_dart_aot`, `project_android_application_graph`.
-   - Native / Managed / Firmware (`*.exe`, `*.dll`, ELF, Mach-O, `.nupkg`, `.bin`): `open_binary`, `binary_overview`, `inspect_artifact`, `analyze_function`, `inspect_managed_artifact`, `inspect_pe_imports`, `inspect_uefi_firmware`.
+   - Web / Electron (`https://...`, `*.asar`, JS): `analyze_javascript_application`, `inspect_web_page`, `inspect_web_network_capture`, `trace_application_feature`, `inspect_electron_fuses`, `recover_javascript_sources`, `analyze_web_bundle`, `list_electron_targets`.
+   - Android (`*.apk`, `*.aab`): `inspect_android_package`, `decode_android_resources`, `search_android_classes`, `inspect_android_class`, `inspect_android_method`, `inspect_android_jni_bindings`, `identify_flutter_build`, `inspect_dart_aot`, `inspect_apk_signature`, `project_android_application_graph`.
+   - Native / Managed / Firmware (`*.exe`, `*.dll`, ELF, Mach-O, `.nupkg`, `.bin`): `open_binary`, `binary_overview`, `inspect_artifact`, `analyze_function`, `inspect_managed_artifact`, `inspect_pe_imports`, `inspect_pe_certificates`, `inspect_pe_load_config`, `inspect_pe_resources`, `inspect_native_exports`, `inspect_binary_hardening`, `inspect_elf_notes`, `inspect_go_binary`, `inspect_rust_binary`, `inspect_il2cpp_metadata`, `inspect_model_artifact`, `inspect_wasm_artifact`, `inspect_evm_interface`, `inspect_sqlite_database`, `inspect_python_pyc`, `inspect_erlang_beam`, `inspect_kernel_module`, `inspect_kernel_build_config`, `inspect_apple_ips`, `inspect_recorded_crash`, `inspect_binary_layout`, `inspect_pcap_capture`, `decode_signal_recording`, `inspect_uefi_firmware`.
 3. Record incomplete or unanalyzed paths with `record_unknown` (`unk_...`), preserve exact `ev_...` IDs, and close native/debugger sessions cleanly (`close_binary`).
 
 ### Stage 2 — Second `/ca` (Observable Study & Capture ONLY — NO Rebuild)
@@ -64,4 +62,4 @@ Only switch out of Reverse-Engineer-Only mode if the user explicitly requests bu
 - Auto-intake routing & CA study-only guards: [`references/intent-router.md`](references/intent-router.md)
 - Opt-in Modes 1–6 & Lane B Topologies A/B: [`references/modes.md`](references/modes.md)
 - Breakdown templates: [`../../templates/full-breakdown.template.md`](../../templates/full-breakdown.template.md) · [`../../templates/architecture-report.template.md`](../../templates/architecture-report.template.md) · [`../../templates/design-system.template.md`](../../templates/design-system.template.md)
-- Shared protocols: [`../_shared/clean-room-protocol.md`](../_shared/clean-room-protocol.md) · [`../_shared/evidence-handoff.md`](../_shared/evidence-handoff.md) · [`../_shared/parity-verification.md`](../_shared/parity-verification.md) · [`../_shared/responsible-use.md`](../_shared/responsible-use.md)
+- Shared protocols: [`../_shared/clean-room-protocol.md`](../_shared/clean-room-protocol.md) · [`../_shared/evidence-handoff.md`](../_shared/evidence-handoff.md) · [`../_shared/parity-verification.md`](../_shared/parity-verification.md)

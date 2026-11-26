@@ -1,6 +1,6 @@
 {
   "name": "carea",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Autonomous reverse engineering orchestrator running Stage 1 (/rea) -> Stage 2 (/ca study-only, zero auto-build) -> Stage 3 (architecture, design-system, and full breakdown), with optional two-team clean-room airlock CLI gates.",
   "author": {
     "name": "Ahmed Ishtiaque Zarir",

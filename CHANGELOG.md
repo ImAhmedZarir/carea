@@ -6,6 +6,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-27
+
+### Added
+- `skills/rea/SKILL.md`: Complete rewrite with full 230+ REA tool catalog routing — zero-engine built-in parsers (Go, Rust, PE suite, ELF suite, IL2CPP, WASM, EVM, SQLite, ML models, Apple IPS, kernel module, kernel build config, Python pyc, Erlang BEAM, Windows shortcut, GPU code objects, ELF core dump, signal recordings, PCAP), container/runtime detection (PyInstaller, Bun compile, Deno compile, NativeAOT, ESP32), full provider rules (IDA: never use .idb/.i64; Kuna: raw_result.source for cached .c/.asm; Ghidra: startup_timeout_ms), SPA cross-origin API detection, summary-first + parent_evidence_id paging, transport truncation recovery, AgentEnv/export_environment_bundle workflow, Fiddler Everywhere .saz, 7-step broader investigation planning, npx -y rea-agents@latest CLI fallback, multi-worker parallelism.
+- `skills/ca/SKILL.md`: Complete rewrite with full CA tool catalog — deep mode (--deep) routing, ca triage entry point, core_target_open routing, multi-width capture (375px/768px/1440px), rebuild_start --build-with game mechanics, pixel-perfect verification (web_pixels_compare, web_walkthrough_check, runtime_captures_compare), complete MCP tool reference (120+ tools), Study → Build → Check → Refine production workflow.
+- `skills/rea/references/tool-families.md`: Expanded with new families: signals, sqlite, wasm, evm, model, il2cpp, kernel, desktop-build, environments; added zero-engine built-in parsers table.
+- `skills/carea/SKILL.md`: Stage 1 REA tool list expanded to full 230+ catalog; responsible-use pre-flight block removed from SKILL.md (doc remains in _shared/responsible-use.md for reference).
+- CI fix: replaced `pip install --no-deps --no-build-isolation` with `pip install .` to fix BackendUnavailable on macOS/Windows runners.
+
+### Changed
+- Version bumped to `1.2.0` across `pyproject.toml`, `src/carea/__init__.py`, `compat/matrix.json`, `src/carea/data/matrix.json`, all plugin manifests.
+
 ## [1.1.0] - 2026-11-27
 
 ### Added

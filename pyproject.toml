@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "carea-cli"
-version = "1.1.0"
+version = "1.2.0"
 description = "Independent Level-1 orchestration CLI and airlock checks for carea (Craft And Reverse Engineer Everything)"
 readme = "README.md"
 license = { text = "MIT" }

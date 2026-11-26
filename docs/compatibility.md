@@ -2,7 +2,7 @@
 
 <!-- GENERATED FROM compat/matrix.json via `python scripts/render-compatibility.py`. DO NOT HAND-EDIT. -->
 
-`carea` target release **`1.1.0`** supports handoff schema versions `1.0.0`, `1.1.0` (current: `1.1.0`).
+`carea` target release **`1.2.0`** supports handoff schema versions `1.0.0`, `1.1.0` (current: `1.1.0`).
 All version bounds in `carea` (`carea doctor`, `scripts/verify-upstream.sh`, and `scripts/verify-upstream.ps1`) read [`compat/matrix.json`](../compat/matrix.json) as the single source of truth.
 
 ## Engine Version Matrix
