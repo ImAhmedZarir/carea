@@ -1,204 +1,120 @@
 ---
 name: rea
 description: >
-  Run REA-first deep reverse engineering via REA MCP tools to analyze native binaries,
-  JS/Electron bundles, .NET/Java/Android/Flutter packages, UEFI/firmware, or
-  PCAP/SQLite artifacts — without binary decompilation shortcuts. Full 230+ tool catalog
-  coverage. Triggered by /rea or when carea Stage 1 reverse engineering is needed.
+  Run REA-first deep reverse engineering via REA MCP tools and CLI to dissect
+  native binaries, JS/Electron/V8 bundles, .NET/Java/Android/Flutter/Apple packages,
+  UEFI/firmware, PCAP/signals, SQLite/WASM/EVM, and live runtimes at atomic
+  instruction, data-flow, and memory level — without unverified heuristics or demo
+  shortcuts. Full 230+ tool catalog coverage across all 19 tool families. Triggered
+  by /rea or when carea Stage 1 internal reverse engineering is needed.
 argument-hint: "<target> [goal/options]"
 metadata:
-  version: "1.2.0-carea"
+  version: "1.3.0-carea"
 ---
 
-# REA — Full-Power Reverse Engineering
+# REA — Full-Power Atomic Reverse Engineering (`/rea`)
 
-This is the carea-bundled REA instruction layer. It routes to ALL available REA MCP
-tools with no capability filtering and no pre-flight gatekeeping. Work like a
-professional security researcher and binary analyst: atomic-level static inspection,
-runtime observation, full provider support, pixel-perfect analysis.
+Execute exhaustive, evidence-backed static and runtime reverse engineering across every supported binary, package, runtime, capture, and protocol format using the complete `rea` MCP tool catalog and `rea` CLI — **zero pre-flight filters, zero watered-down heuristics, zero guesswork**.
 
-## Connect and start
+## 0. Connect & Activate Full Tool Surface (MCP + CLI)
 
-REA tools arrive through the `rea` MCP server registered in the host client. No
-diagnostics before every job. If tools are absent, use the CLI fallback:
-
-```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
-```
-
-or for native targets:
-```bash
-npx -y rea-agents@latest mcp   # then call tools via stdio
-```
+1. **Recommended Full-Power MCP Profile (`carea mcp-profile rea-master`):**
+   - `REA_MCP_TOOL_CATALOG_PROFILE=hot-cold` (initial 5 core tools + on-demand `discover_tools` across all 19 tool families without bloating schemas)
+   - `REA_MCP_INPUT_SCHEMA_PROFILE=compact` and `REA_MCP_OUTPUT_SCHEMA_PROFILE=off` *(required on REA `>=6.10.0`; `full` is rejected)*
+   - High-ceiling limits: `REA_ASAR_MAX_HEADER_BYTES=268435456` (256 MiB), `REA_NATIVE_MATCHING_REPRESENTATION_BYTES=1073741824` (1 GiB), `REA_CAPTURE_DECODER_OLD_GENERATION_MIB=2048` (2 GiB)
+   - Or explicit full-family profile (`carea mcp-profile rea-all-families`) loading `direct,enhanced,native,artifact,managed,firmware,uefi,android,pcap,flutter,frida,apktool,jeb,adb,browser,electron,javascript-runtime,application,session`.
+2. **Dynamic Tool Discovery (`>=6.10.0`):** Call `binary_session` (`{}` for availability summary; `{"detail": "complete"}` for diagnostics/paths) and `discover_tools` to unlock any needed family cleanly inside your session.
+3. **Zero-MCP CLI Fallback (if MCP server is disconnected):**
+   - `rea <command> <target> --json` or `npx -y rea-agents@latest analyze-javascript-application /abs/path/to/app --json`
+   - Inspection flags: `--detail summary --evidence_output /abs/path/bundle.json`
+   - Complete runtime config & engine health: `rea doctor --json`
 
 ---
 
-## Route the target — full tool map
+## 1. 5-Layer Atomic Reverse-Engineering Protocol
 
-Pick the first tool from this complete routing table. No tool is off-limits.
+Work top-to-bottom until every control path, struct layout, dispatch table, state machine, crypto routine, and network/IPC schema is pinned to exact offsets, addresses, and `ev_...` IDs:
 
-### Archive / Package entry points
-| Target type | First tool |
-|---|---|
-| Any ZIP, APK, IPA, MSIX, AppX, DMG, PyInstaller exe | `open_binary` → `inspect_artifact` |
-| PyInstaller CArchive (bootloader + app layer) | `open_binary` → `inspect_artifact` (app layer, not bootloader prefix) |
-| Bun `--compile` standalone | `open_binary` → `inspect_artifact` → extract modules → JavaScript tools |
-| Deno `deno compile` | `open_binary` → `inspect_artifact` → extract virtual FS → JavaScript tools |
-| Apple resource-only bundle (plist/IB/assets/keyed-archive) | `open_bundle_resources` → resource tools |
-| Android APK — code, DEX classes, methods, refs | `inspect_android_package` → Android focused tools |
-| Managed PE/CLI assembly (.NET) | `inspect_managed_artifact` → managed tools |
-| Firmware image | `inspect_firmware_regions` → `extract_firmware` |
-| ESP32 app/bootloader (`0xE9` magic) | `inspect_artifact` (no provider needed) |
-| .NET NativeAOT PE/ELF | `open_binary` with Ghidra provider, NativeAOT workflow |
+### Layer 0 — Entropy, Container Peeling & Signature Verification
+- **Compression / Packing / Encryption Check:** Call `inspect_byte_entropy` immediately on unknown binaries or firmware slices to isolate high-entropy packed/encrypted sections (>7.2 bits/byte) vs code/rodata vs padding.
+- **Archive & Installer Peeling:** `open_binary` -> `inspect_artifact` (extract with `extract_artifact`) for ZIP, APK, IPA, MSIX, AppX, DMG, **PyInstaller CArchive** (application layer vs native bootloader), **Bun `--compile`** (embedded module graph), **Deno `deno compile`** (embedded virtual FS), **Android/iOS/Desktop installs** (`inspect_desktop_application`).
+- **Firmware & Device Trees:** `inspect_firmware_regions` -> `extract_firmware` (Binwalk/Unblob), `inspect_uefi_firmware` / `inspect_uefi_nvram` / `extract_uefi_firmware`, `inspect_devicetree`, ESP32 (`0xE9` magic via `inspect_artifact`).
+- **Signatures & Mitigations:** `inspect_binary_hardening` (ASLR/PIE, NX, RELRO, canary, fortify, CFG/XFG), `inspect_pe_certificates`, `inspect_apk_signature` (v1 JAR, v2, v3, v3.1 key-rotation + digest match), `inspect_signature` (Mach-O code signing & hardened runtime), `inspect_electron_fuses`.
 
-### Native binary tools (zero-engine built-in parsers)
-| Target type | Tool |
-|---|---|
-| Go compiler/module/build metadata/static strings | `inspect_go_binary` (pass `include_string_literals: true`, page with `inspect_analysis_view` kind `go`) |
-| Rust cargo-auditable dependency metadata | `inspect_rust_binary` (ELF/PE/thin Mach-O; select views with `view: {collection: "packages"}`) |
-| PE Authenticode certificates | `inspect_pe_certificates` |
-| PE import + delay-load tables | `inspect_pe_imports` |
-| PE TLS callbacks + load configuration | `inspect_pe_load_config` |
-| PE resource tree (icons, strings, manifests) | `inspect_pe_resources` |
-| PE/ELF dynamic exports | `inspect_native_exports` |
-| ELF/PE/Mach-O hardening flags | `inspect_binary_hardening` |
-| ELF note tables (build-id, ABI-tag) | `inspect_elf_notes` |
-| ELF unwind function ranges (`.eh_frame`) | `inspect_elf_unwind_ranges` |
-| ELF/Mach-O pre-main initializers | `inspect_native_initializers` |
-| ELF offline layout, symbols, relocs, mitigations | `inspect_binary_layout` (pwntools; no disassembler) |
-| Linux ELF core dump (threads, registers, notes) | `inspect_recorded_crash` |
-| Linux kernel module metadata | `inspect_kernel_module` |
-| Linux kernel build config (`CONFIG_*`) | `inspect_kernel_build_config` |
-| Apple `.ips` crash report | `inspect_apple_ips` |
-| CPython 3.7-3.13 `.pyc` headers + bytecode identity | `inspect_python_pyc` |
-| Erlang BEAM IFF container | `inspect_erlang_beam` |
-| Unity IL2CPP `global-metadata.dat` | `inspect_il2cpp_metadata` (page with `inspect_analysis_view`) |
-| CUDA/HIP embedded code objects | `inspect_gpu_code_objects` |
-| GGUF/safetensors ML model declarations | `inspect_model_artifact` |
-| Windows Shell Link `.lnk` shortcut | `inspect_windows_shortcut` |
-| Native exe/lib (IDA/Ghidra/Kuna deep analysis) | `open_binary` → focused analysis tools → `binary_overview` |
+### Layer 1 — Zero-Engine Format & Compiler Dissection (Instant, No Disassembler Required)
+Run built-in binary/artifact parsers first to extract compiler provenance, symbol tables, dependencies, and hidden entrypoints:
+- **PE Internals:** `inspect_pe_imports` (DLL/API/ordinal/ILT/IAT RVAs + imphash), `inspect_pe_load_config` (**TLS callbacks executing before `main`**, security cookie, SafeSEH, CFG, XFG, EH-continuation), `inspect_pe_resources`, `inspect_native_exports`, `inspect_windows_shortcut` (`.lnk` FILETIMEs, IDList, Tracker droid).
+- **ELF / Mach-O Internals:** `inspect_elf_notes` (GNU build-id, ABI-tag), `inspect_elf_unwind_ranges` (`.eh_frame` FDE bounds surviving `strip`, LSDA, personality), `inspect_native_initializers` (`DT_PREINIT_ARRAY`, `DT_INIT`, `DT_INIT_ARRAY`, `DT_FINI*`, `.ctors`/`.dtors`, `__mod_init_func`, `__init_offsets`), `inspect_native_exports`, `inspect_binary_layout` (pwntools symbols/relocs/segments without loading a DB), `inspect_native_load_image`.
+- **Language & Engine Metadata:**
+  - **Go:** `inspect_go_binary` (`include_string_literals: true` recovers packed `(ptr, len)` non-NUL UTF-8 slices + compiler/module build settings).
+  - **Rust:** `inspect_rust_binary` (`.dep-v0` / `__DATA,.dep-v0` cargo-auditable dependency graph + `/rustc/<40-hex>/` commit inference).
+  - **Unity IL2CPP:** `inspect_il2cpp_metadata` (v24/27/29/31/39 types, methods, fields, properties, events, `method_indices` parameters, string literals; optional `binary_path` links to `GameAssembly`/`UnityFramework` RVAs).
+  - **V8 / Node / Bytenode:** `inspect_v8_code_cache` (`.jsc` cached script metadata).
+  - **Python / Erlang / WASM / EVM / AI / SQLite:** `inspect_python_pyc` (CPython 3.7–3.13 marshal + bytecode hashes), `inspect_erlang_beam` (atoms, exports, imports, lambdas, Code chunk), `inspect_wasm_artifact` (WABT WAT + imports/exports), `inspect_evm_interface` (function selectors & mutability), `inspect_model_artifact` (GGUF v2/v3 & safetensors tensors/metadata; `hash: "full"`), `inspect_sqlite_database` (`schema_scope: "database"` + WAL state + row sampling).
+  - **Crashes / Kernels / GPU:** `inspect_recorded_crash` (Linux x86-64 ELF core threads & registers), `inspect_apple_ips` (`bug_type` `"309"` lossless registers & `usedImages` UUIDs), `inspect_kernel_module` (`.modinfo`, `__versions` CRCs, PKCS#7 trailer), `inspect_kernel_build_config` (`CONFIG_*` options), `inspect_gpu_code_objects` (CUDA/HIP code objects), `.NET` `inspect_managed_artifact` + `inspect_nuget_nupkg`, JVM `inspect_maven_gradle_metadata`.
 
-### Web / JS / Electron targets
-| Target type | Tool |
-|---|---|
-| ASAR or extracted JS/Electron tree | `analyze_javascript_application` |
-| Electron fuse settings (before Inspector attach) | `inspect_electron_fuses` |
-| Live Electron runtime | `list_electron_targets` → attach |
-| User-owned live browser page | `list_browser_targets` → browser tools |
-| Browser scenario (click, type, navigate) | `capture_browser_scenario` |
-| AgentEnv bundle (web app environment) | `capture_browser_scenario` → `export_environment_bundle` |
-| HAR / SAZ (Fiddler) / mitmproxy / qlog capture | `inspect_web_network_capture` (Fiddler: `format: "saz"`) |
-| SPA passive capture (multi-origin) | `inspect_web_network_capture` with `allowed_origins` covering both page + API origins |
-| Feature tracing / version comparison | `trace_application_feature`, `compare_application_versions` |
-| JavaScript source recovery, bundle analysis | `recover_javascript_sources`, `analyze_web_bundle` |
-| Web event listeners, network capture | `inspect_web_event_listeners`, `inspect_web_network_capture` |
+### Layer 2 — Deep Disassembly, Decompilation, Data-Flow & Annotation
+Open with `open_binary` (Ghidra, IDA `provider_id: "ida"`, Kuna `provider_id: "kuna"`, Rizin, Cutter, objdump) and trace to instruction/register level:
+- **Program Map:** `binary_overview`, `list_segments`, `list_procedures`, `list_names`, `list_strings`, `list_documents`, `search_procedures`, `search_strings`, `search_bytes`, `read_bytes`, `address_to_file_offset`.
+- **Procedure Dissection & Graph:** `procedure_info`, `procedure_address`, `procedure_pseudo_code`, `procedure_assembly`, `read_function_instructions`, `inspect_native_instruction`, `inspect_native_data_type`, `inspect_native_dispatch_metadata` (vtables/jump tables/callbacks), `inspect_native_api`, `resolve_native_call_targets`, `resolve_containing_procedure`, `analyze_function` (summary-first -> `parent_evidence_id`), `batch_decompile`, `decompile_all`.
+- **Cross-References & Call Paths:** `xrefs`, `find_xrefs_to_name`, `procedure_callers`, `procedure_callees`, `procedure_references`, `get_call_graph`, `build_call_path`, `trace_call_path`, `trace_feature`, `trace_native_values` (static taint/data-flow slice).
+- **Cursor, Navigation & Semantic Recovery:** `current_address`, `current_procedure`, `current_document`, `goto_address`, `next_address`, `prev_address`, `get_navigation_context`, `inspect_address_context`, `address_name`, `comment`, `inline_comment`, `list_bookmarks`.
+- **Rename & Annotate Live DB:** `set_address_name`, `set_addresses_names`, `set_comment`, `set_inline_comment`, `set_bookmark`, `unset_bookmark`, `annotate_native_function` *(checkpoint editable Ghidra Program when persistence across processes is required)*.
+- **Direct Low-Level Engines:** `inspect_with_objdump`, `execute_rizin_command`, `list_cutter_sessions`, `cutter_command`.
+- **Apple / Swift / ObjC:** `open_bundle_resources` (or `open_binary`), `inspect_macho`, `list_architectures`, `inspect_plist`, `get_objc_classes`, `get_objc_protocols`, `analyze_swift_types`, `demangle_swift`, `decode_interface_builder`, `inspect_keyed_archive`, `inspect_asset_catalog`, `trace_dylib_resolution`, `project_apple_application_graph`, `project_harmony_application_graph`.
+- **Managed (.NET) & Android (JADX / JEB / Apktool / Flutter):**
+  - `.NET`: `inspect_managed_artifact` -> `inspect_managed_members` -> `inspect_managed_native_boundaries` (P/Invoke/reverse-P/Invoke) -> `project_managed_application_graph` -> `import_managed_reconstruction`.
+  - Android: `inspect_android_package` -> `decode_android_resources` (`inspect_apktool_client`) -> `search_android_classes` -> `inspect_android_class` -> `inspect_android_method` (pass R8/ProGuard `mapping_path` when available) -> `trace_android_references` -> `inspect_android_jni_bindings` (links DEX native decls to `.so` ELF slots) -> `project_android_application_graph`.
+  - JEB & Flutter: `inspect_jeb_client` -> `open_jeb_project` -> `list_jeb_units` -> `decompile_jeb_item`; `identify_flutter_build` -> `inspect_dart_aot`.
 
-### Mobile / Android
-| Target type | Tool |
-|---|---|
-| APK class/method/reference search | `search_android_classes`, `inspect_android_class`, `inspect_android_method` |
-| APK signing verification (v1/v2/v3/v3.1) | `inspect_apk_signature` |
-| ADB live device (list, pull, screen, logcat) | `list_adb_devices`, `inspect_adb_device`, `inspect_adb_package`, `read_adb_logcat` |
-| Flutter/Dart AOT | `identify_flutter_build`, `inspect_dart_aot` |
+### Layer 3 — Live Runtime Hooking, Debugging, Network & Signal Forensics
+Use when static analysis meets runtime packing, dynamic dispatch, encrypted payloads, or state machines:
+- **Frida Dynamic Instrumentation (`frida`):** `list_frida_devices` / `list_frida_processes` -> `start_frida_session` (attach PID or paused spawn) -> `load_frida_script` -> `resume_frida_session` -> `instrument_with_frida` -> `frida_session_status` -> `unload_frida_script` -> `close_frida_session`.
+- **GDB & Rizin Debuggers:** `start_gdb_session` -> `gdb_console` -> `gdb_session_status` -> `close_gdb_session`; `start_rizin_debug_session` -> `rizin_debug_command` -> `rizin_debug_session_status` -> `close_rizin_debug_session`. *(Close active Ghidra session before interactive debugger runs that alter memory/files, then reopen after.)*
+- **Process PTY & macOS Live Observation:** `prepare_bounded_process_capture` -> `capture_process_scenario` -> `compare_process_captures`; macOS LLDB/UI: `observe_native_calls`, `observe_native_ui`, `capture_native_ui_scenario`, `trace_native_ui_action`.
+- **Live Android Device (`adb`):** `inspect_adb_client` -> `list_adb_devices` -> `inspect_adb_device` -> `list_adb_packages` / `resolve_adb_packages` -> `pull_adb_package` / `pull_adb_file` / `push_adb_file` -> `inspect_adb_package` -> `start_adb_app` / `start_adb_activity` / `stop_adb_app` -> `read_adb_logcat` -> `capture_adb_screen` -> `inspect_adb_display` / `inspect_adb_window` -> `read_adb_setting` -> `list_adb_processes` / `list_adb_directory` / `list_adb_features` / `list_adb_services` -> `install_adb_package` / `uninstall_adb_package` -> `collect_adb_bugreport`.
+- **Web / Browser / Electron Live Runtime:** `inspect_electron_fuses` -> `list_electron_targets` -> `inspect_electron_page` / `capture_electron_scenario`; `list_browser_targets` -> `inspect_web_page` / `observe_web_session` / `capture_browser_scenario` -> `capture_web_screenshot` -> `observe_web_execution` -> `inspect_web_event_listeners` -> `discover_webmcp_tools`; `list_javascript_runtime_targets` -> `observe_javascript_runtime` -> `reconcile_javascript_runtime`.
+- **Network Captures & Signal Decoding:**
+  - Web captures (HAR / Fiddler `.saz` / mitmproxy / aioquic qlog): `inspect_web_network_capture` (`format: "saz"` for Fiddler).
+  - **SPA Cross-Origin API Capture Rule:** Default scope captures only page origin. Extract external API origins from loaded JS bundles first, then pass ALL origins in `allowed_origins` (`[page_origin, api_origin_1, ...]`) and inspect `completeness.excluded`.
+  - Packet captures (TShark 4.x): `inspect_packet_fields` -> `inspect_packet_capture` (`match_offset`/`match_limit` or `null`); DNS/SNI/protocol summaries: `inspect_pcap_client` -> `inspect_pcap_capture`.
+  - Logic/RF Signal Recordings (sigrok-cli): `inspect_signal_decoders` -> `decode_signal_recording` (`line_offset`/`line_limit`).
 
-### Data / Capture formats
-| Target type | Tool |
-|---|---|
-| SQLite database schema + rows | `inspect_sqlite_database` (Node >=24.15; `schema_scope: "database"` for full schema) |
-| WebAssembly artifact | `inspect_wasm_artifact` (supply WABT via `REA_WABT_BIN_DIRECTORY`) |
-| EVM bytecode | `inspect_evm_interface` (`raw` or `hex` encoding) |
-| PCAP packet-field discovery | `inspect_packet_fields` → `inspect_packet_capture` (TShark 4.x, Linux prlimit) |
-| PCAP DNS/SNI/protocol summaries | `inspect_pcap_capture` → kind pcap pages |
-| Logic/signal recordings | `inspect_signal_decoders` → `decode_signal_recording` (sigrok-cli via `REA_SIGROK_COMMAND`) |
+### Layer 4 — Web / JavaScript Bundle Deobfuscation & API Contract Recovery
+- `analyze_javascript_application` (`detail: "summary"` for large trees/ASARs; select exact `source_paths` when targeted; request `view: {kind: "javascript-routes", collection: "routes"}` for route inventories).
+- `recover_javascript_sources` (Wakaru deobfuscation/unbundling; pass related lazy/runtime chunks in `additional_paths`).
+- `analyze_web_bundle` (`view: {kind: "web-bundle", collection: "endpoints"}`), `export_web_scripts`, `trace_web_module_imports`, `trace_web_source_location`, `trace_application_feature`, `trace_javascript_semantics`, `inspect_api_contract`, `compare_static_and_observed_endpoints`.
 
-### Native runtime observation
-| Task | Tool |
-|---|---|
-| Static value flow, taint, native trace | `trace_native_values` |
-| Native instrumentation (Frida) | `list_frida_devices` → `start_frida_session` → `load_frida_script` → `instrument_with_frida` |
-| GDB debug session | `start_gdb_session` → `gdb_console` |
-| Rizin debug session | `start_rizin_debug_session` → `rizin_debug_command` |
-| Cross-reference search | `xrefs`, `procedure_references`, `find_xrefs_to_name` |
-| Process scenario capture | `capture_process_scenario`, `compare_process_captures` |
-| Swift type analysis | `analyze_swift_types` |
-| Objective-C classes/protocols | `get_objc_classes`, `get_objc_protocols` |
+### Layer 5 — Cross-Build Diffing, Formal Parity Verification & AgentEnv
+- **Cross-Version / Diffing:** `match_native_functions` (`left_observations`/`right_observations` via `retained-evidence` refs), `compare_functions`, `find_changed_behavior`, `compare_artifacts`, `compare_bundles`, `compare_application_versions`, `compare_source_to_bundle`, `compare_javascript_export_shapes`, `compare_managed_members`, `verify_managed_native_boundaries`, `compare_wasm_interfaces`, `compare_web_captures`, `compare_web_screenshots`, `correlate_static_and_runtime`.
+- **Reconstruction Verification:** `build_reconstruction_obligation_ledger` -> `evaluate_reconstruction_coverage` -> `verify_reconstruction` -> `audit_residual_unknowns`.
+- **Unknowns & Evidence Lifecycle:** `record_unknown` -> `list_unknowns` -> `update_unknown` -> `verify_unknown_resolution`; `get_evidence_bundle` (`detail: "summary"` with filters) -> `export_evidence_bundle` / `import_evidence_bundle`.
+- **AgentEnv Bundle Export:** Record replayable app state/writes via `capture_browser_scenario` -> verify coverage -> `export_environment_bundle`.
 
 ---
 
-## Provider-specific rules
+## 2. Provider Rules & Operational Guardrails
 
-### IDA Pro
-- Open with `open_binary` + `provider_id: "ida"` on the **original input binary**.
-- **Never** pass an `.idb` or `.i64` database as the binary path.
-- IDA does **not** supply `binary_overview`; go straight to `analyze_function`, pseudocode, or search.
-- Modern headless profile: creates and closes a private database (no GUI save).
-- Legacy attached profile: binds the already-open GUI session by SHA-256.
-
-### Kuna
-- Requires `REA_KUNA_COMMAND` env var configured.
-- `provider_id: "kuna"` for procedure lists, pseudocode, assembly, `analyze_function`.
-- For pseudocode/assembly, `raw_result.source` names the cached `.c`/`.asm` file and byte span. Search it directly instead of calling per-function.
-- Callers/callees use a separate body-free graph; `xrefs` returns exact-address incoming sites.
-- Cold first answer can come from a single-function run; assembly waits for the C export.
-
-### Ghidra
-- For large native targets, set `ghidra.startup_timeout_ms` via `update_analysis_settings` before the cold import.
-- For editable analysis that must survive later agent processes, use the owned Program checkpoint workflow.
-- Default timeout: 330 seconds; increase for cold imports on slow machines.
+- **IDA Pro (`provider_id: "ida"`):** Pass the **original input binary** to `open_binary` — NEVER pass an `.idb` or `.i64` database. IDA does NOT supply `binary_overview`; proceed directly to `analyze_function`, `procedure_pseudo_code`, or search tools.
+- **Kuna (`REA_KUNA_COMMAND`, `provider_id: "kuna"`):** Search the cached `.c`/`.asm` file spans in `raw_result.source` directly rather than making redundant per-function RPC calls.
+- **Ghidra:** Raise `ghidra.startup_timeout_ms` via `update_analysis_settings` before retrying cold imports on huge native binaries; use owned Program checkpoints when edits must persist across processes.
+- **Summary-First & Transport Recovery:** Always pass `detail: "summary"` on unknown-size JS trees, layouts, artifacts, or `batch_decompile`. Use `inspect_analysis_view` with `parent_evidence_id` to page `modules`, `items`, `pseudocode`, `endpoints`, `routes`, `go`, `il2cpp`, `model-artifact`, `native-inventory`, `pcap`, `apk-signature`, `browser-scenario`. On `resource_constraint` (`details.resource: "transport"`), page the retained parent ID via `inspect_analysis_view` — never repeat the producer blindly.
+- **Parallel Decomposition:** Split independent subsystems (e.g., native `.so` crypto vs DEX Java UI logic vs network endpoints) across parallel workers sharing retained `ev_...` IDs.
+- **Evidence Rigor:** Separate `[OBSERVED ev_...]` from `[INFERRED]` and `[UNKNOWN unk_...]`. Never report static code inspection as runtime proof.
 
 ---
 
-## Operational rules
+## 3. Reference Playbooks (`skills/rea/references/`)
 
-### Summary-first + paging
-- Always start with `detail: "summary"` for large targets.
-- Use `inspect_analysis_view` with the returned `parent_evidence_id` for follow-up pages.
-- `analyze_function` default reply is the summary; complete dossier stays retained under `parent_evidence_id`.
-- For transport truncation (`resource_constraint` with `details.resource: "transport"`): call `inspect_analysis_view` with the same-session Evidence reference. Do NOT repeat the original call.
+- Native, managed, archives, zero-engine parsers, Ghidra/IDA/Kuna: [`references/native-and-artifacts.md`](references/native-and-artifacts.md)
+- Tool families & preset scopes: [`references/tool-families.md`](references/tool-families.md)
+- JS, Electron, ASAR, Wakaru recovery, V8 cache, routes: [`references/javascript-applications.md`](references/javascript-applications.md)
+- Android APKs, DEX, R8 mapping, JNI, JEB, Flutter/Dart: [`references/android-applications.md`](references/android-applications.md)
+- Frida, GDB, Rizin, PTY capture, Browser/Electron CDP, PCAP, Sigrok: [`references/runtime-observation.md`](references/runtime-observation.md)
+- Evidence paging, retained refs, diffing & verification: [`references/evidence-workflows.md`](references/evidence-workflows.md)
+- AgentEnv recording & desktop build environments: [`references/environments.md`](references/environments.md)
+- MCP connection, hot-cold discovery, deadline recovery & CLI fallback: [`references/connection-and-recovery.md`](references/connection-and-recovery.md)
 
-### SPA cross-origin API detection
-- Default passive capture scope = page's own origin only.
-- Discover API origins from absolute URLs in loaded bundles/scripts first.
-- Then re-capture with `allowed_origins: [page_origin, api_origin1, ...]` — the list replaces the default scope.
-- Check `completeness.excluded` before claiming an API is absent.
+## 4. Clean Teardown
 
-### Evidence workflow
-- Every conclusion must distinguish: **observations** (tool returned), **inferences** (analyst reasoned), **unknowns** (not reachable).
-- Cite `ev_...` Evidence IDs for every claim.
-- Use `get_evidence_bundle` with `detail: "summary"` and exact filters to recover a lost `parent_evidence_id`.
-- End investigation with `reset_investigation`; supply `save_path` to checkpoint.
-
-### Multi-worker parallelism
-- Independent questions (no data dependency) → assign to separate workers.
-- Point each worker at existing retained Evidence IDs to avoid re-running analysis.
-
-### Broader investigation (7 steps)
-1. Turn request into checklist of questions + evidence each needs.
-2. Check existing session state, bookmarks, prior Evidence; reuse matching state.
-3. Start with smallest useful overview/inventory; expand only where returned evidence leaves a concrete gap.
-4. Inspect packaged resources + config alongside code when they affect the question.
-5. Corroborate conclusions with the evidence type they require (runtime only when static can't answer).
-6. Decompose into independent questions; parallelize when possible.
-7. Keep a finding ledger linking conclusions to Evidence IDs, confidence, boundaries, and unknowns.
-
----
-
-## Read the relevant reference
-
-| Topic | Reference |
-|---|---|
-| Native binaries, managed, archives, extraction | `references/native-and-artifacts.md` |
-| ASARs, extracted JS, feature tracing, version compare | `references/javascript-applications.md` |
-| Android APK, classes, methods, refs | `references/android-applications.md` |
-| Native instrumentation, debugger, process capture | `references/runtime-observation.md` |
-| Evidence paging, comparisons, unknowns, verification | `references/evidence-workflows.md` |
-| AgentEnv bundles of web apps | `references/environments.md` |
-| REA connection, recovery, plugin install | `references/connection-and-recovery.md` |
-
----
-
-## Finish
-
-Explain findings in plain language tied to Evidence. Close opened native sessions
-with `close_binary`. End with `reset_investigation`; `save_path` checkpoints the
-full bundle for restoration in a new process.
+Close active binary/debugger/Frida sessions (`close_binary`, `close_frida_session`, `close_gdb_session`, `close_rizin_debug_session`), checkpoint state with `reset_investigation` (`save_path` if resuming later), and export final Evidence via `export_evidence_bundle`.

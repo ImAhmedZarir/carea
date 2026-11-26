@@ -102,8 +102,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_fb.add_argument("--json", action="store_true")
 
     # mcp-profile
-    p_mcp = sub.add_parser("mcp-profile", help="Print (or safely merge with diff confirmation) lean MCP profile snippets")
-    p_mcp.add_argument("preset", help="Preset name (e.g. rea-hot-cold, rea-web, ca-clean-room, two-team-lane-b)")
+    p_mcp = sub.add_parser("mcp-profile", help="Print (or safely merge with diff confirmation) MCP profile snippets")
+    p_mcp.add_argument("preset", help="Preset name (e.g. carea-master, rea-master, rea-all-families, rea-hot-cold, ca-deep-full, ca-clean-room)")
     p_mcp.add_argument("--apply", type=Path, default=None, help="Target JSON config file to patch after showing diff")
     p_mcp.add_argument("--server-name", default=None)
     p_mcp.add_argument("--yes", action="store_true", help="Apply printed diff non-interactively")

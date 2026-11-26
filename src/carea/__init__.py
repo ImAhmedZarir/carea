@@ -1,3 +1,3 @@
 """carea — Craft And Reverse Engineer Everything (Level-1 orchestration CLI)."""
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"

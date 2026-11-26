@@ -31,8 +31,7 @@ See [carea modes guide](../carea/references/modes.md#lane-b-topologies-a-vs-b) f
 
 ### Stage 1 — Lane A (Analyst using REA)
 
-1. Verify authorization per [responsible-use.md](responsible-use.md).
-2. Run REA in an isolated session (`REA_MCP_TOOL_CATALOG_PROFILE=hot-cold` or target-scoped `REA_MCP_TOOL_FAMILIES`, with `REA_MCP_INPUT_SCHEMA_PROFILE=compact` and `REA_MCP_OUTPUT_SCHEMA_PROFILE=off`).
+1. Run REA in an isolated session (`REA_MCP_TOOL_CATALOG_PROFILE=hot-cold` or target-scoped `REA_MCP_TOOL_FAMILIES`, with `REA_MCP_INPUT_SCHEMA_PROFILE=compact` and `REA_MCP_OUTPUT_SCHEMA_PROFILE=off`).
 3. Gather evidence (`ev_...`), track gaps (`record_unknown` -> `unk_...`), and build an obligation ledger (`build_reconstruction_obligation_ledger` where applicable).
 4. Save raw bundles (`export_evidence_bundle`) inside `analyst-evidence/` only, then close native/debugger sessions (`close_binary`, `close_frida_session`, `close_gdb_session`, `close_rizin_session` if active).
 

@@ -1,7 +1,7 @@
 {
   "name": "carea",
-  "version": "1.2.0",
-  "description": "Autonomous reverse engineering orchestrator running Stage 1 (/rea) -> Stage 2 (/ca study-only, zero auto-build) -> Stage 3 (architecture, design-system, and full breakdown), with optional two-team clean-room airlock CLI gates.",
+  "version": "1.3.0",
+  "description": "Master reverse engineering orchestrator running full 237-tool /rea atomic analysis -> 322-tool /ca 1:1 UI & deep study -> full breakdown (architecture, design-system), plus carea-master MCP profiles and clean-room airlock CLI.",
   "author": {
     "name": "Ahmed Ishtiaque Zarir",
     "url": "https://github.com/ImAhmedZarir"
@@ -34,10 +34,10 @@
     ],
     "websiteURL": "https://imahmedzarir.github.io/carea/",
     "defaultPrompt": [
-      "Use /carea on this authorized APK, website, or binary to extract architecture.md, design-system.md, and build plan.",
-      "Use /carea in clean-room two-team mode with airlock lint/sign and parity verification.",
-      "Use /rea to inspect a binary or bundle and export an evidence bundle.",
-      "Use /ca to capture and rebuild an authorized web interface cleanly."
+      "Use /carea on this APK, website, or binary to run full /rea + /ca extraction into architecture.md, design-system.md, and full-breakdown.md.",
+      "Use /rea for atomic instruction, data-flow, Frida/GDB, and container dissection with full 237-tool coverage.",
+      "Use /ca for 1:1 multi-viewport UI forensics or --deep 322-tool internal inspection and clean rebuilds.",
+      "Run carea mcp-profile carea-master to configure both full-power REA and Craft Anything MCP servers."
     ],
     "composerIcon": "./docs/brand/carea.png",
     "logo": "./docs/brand/carea.png"

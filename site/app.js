@@ -586,9 +586,9 @@ note: index.html inline script coverage gap preserved`,
         sample: `Wrote verification/lane-b-feedback.md (sanitized input/output test vectors only).`
       },
       "mcp-profile": {
-        cmd: "carea mcp-profile rea-hot-cold [--apply ~/.claude.json]",
-        summary: "Outputs minimal lean MCP configs (rea-hot-cold, rea-web, ca-clean-room, two-team-lane-b) and prints an explicit diff before modifying config files.",
-        sample: `{"REA_MCP_TOOL_CATALOG_PROFILE":"hot-cold","REA_MCP_INPUT_SCHEMA_PROFILE":"compact","REA_MCP_OUTPUT_SCHEMA_PROFILE":"off"}`
+        cmd: "carea mcp-profile carea-master [--apply ~/.claude.json]",
+        summary: "Outputs lean or full-power MCP configs (carea-master, rea-master, rea-all-families, ca-deep-full, rea-hot-cold, ca-clean-room, two-team-lane-b) and prints an explicit diff before modifying config files.",
+        sample: `{"mcpServers":{"rea":{"env":{"REA_MCP_TOOL_CATALOG_PROFILE":"hot-cold"}},"craft-anything":{"args":["mcp","--deep","--all-tools"]}}}`
       }
     };
 

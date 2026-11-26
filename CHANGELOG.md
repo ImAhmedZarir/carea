@@ -6,6 +6,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-27
+
+### Added
+- **Full-Power `/rea` Atomic Playbooks (`skills/rea/`):** Complete 5-Layer atomic reverse-engineering instruction layer covering all 237+ verified REA server tools & primitives (`inspect_byte_entropy`, `inspect_v8_code_cache`, `inspect_devicetree`, `inspect_uefi_*`, `batch_decompile`, `decompile_all`, `get_call_graph`, `inspect_api_contract`, `compare_static_and_observed_endpoints`, `audit_residual_unknowns`, `open_jeb_project`/`decompile_jeb_item`, `cutter_command`, `execute_rizin_command`, `inspect_with_objdump`, etc.) PLUS all 7 companion reference playbooks inside `skills/rea/references/` (`native-and-artifacts.md`, `javascript-applications.md`, `android-applications.md`, `runtime-observation.md`, `evidence-workflows.md`, `environments.md`, `connection-and-recovery.md`).
+- **True 322-Tool / 17-Toolset `/ca` + 1:1 UI Forensics (`skills/ca/`):** Rewrote `skills/ca/SKILL.md` and `skills/ca/references/rebuild-playbook.md` against live verified `craft-anything-cli 0.6.0 --deep capabilities --json` (replacing mismatched tool names with all 322 real CA tools including `[native]`, `[apple]`, `[formats]`/`formats_sbpf_*`/`game_*`, `[managed]` `managed_ilspy_decompile`, `[java]` `java_vineflower_decompile`, `[android]`, `[adb]`, `[browser]` `web_standin_*`, `[javascript]`, `[runtime]`, `[frida]`, `[application]`, `[database]`) and added `skills/ca/references/ui-forensics-playbook.md`.
+- **Dual-Engine Master MCP Presets (`compat/matrix.json`, `carea mcp-profile`):** Added `carea-master`, `rea-master` (raised ASAR/matching/capture memory caps), `rea-all-families` (all 19 tool families), and `ca-deep-full` (`--deep --all-tools`) presets with new unit tests.
+
+### Removed
+- Deleted `skills/_shared/responsible-use.md` and stripped all pre-flight gatekeeping/authorization-nag filters from `skills/` (`_shared/clean-room-protocol.md`, `carea/references/modes.md`, manifests, and site copy).
+
 ## [1.2.0] - 2026-11-27
 
 ### Added

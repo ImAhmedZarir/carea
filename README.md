@@ -67,23 +67,26 @@ See [`docs/compatibility.md`](docs/compatibility.md) (generated from [`compat/ma
 
 ## 5-Minute Quickstarts
 
-### Quickstart A — `/rea` (Mode 3: Deep Inspection & Verification)
-Use when investigating a self-owned or authorized package, firmware image, or JS bundle without running a UI rebuild:
+### Quickstart A — `/rea` (Mode 3: Atomic Analysis & Verification)
+Use when dissecting a binary, APK/Flutter app, firmware image, PCAP, or JS/Electron/V8 bundle without running a UI rebuild:
 ```bash
-# Inspect lean REA hot-cold MCP config before adding to your client
-carea mcp-profile rea-hot-cold
+# Inspect full-power REA MCP config (hot-cold + raised ASAR/matching limits across all 19 families)
+carea mcp-profile rea-master
+# Or configure BOTH full-power REA (237+ tools) and Craft Anything Deep (322 tools) at once:
+carea mcp-profile carea-master
 ```
-In your agent prompt, invoke `/rea`: inspect target artifacts (`open_binary`, `analyze_javascript_application`, `inspect_artifact`), record unresolved gaps with `record_unknown`, and verify declared obligations with `verify_reconstruction` or export via `export_environment_bundle`.  
+In your agent prompt, invoke `/rea`: run 5-Layer atomic dissection (`inspect_byte_entropy`, `open_binary`, `analyze_javascript_application`, `inspect_artifact`, `inspect_android_package`), track gaps with `record_unknown`, and verify or export via `verify_reconstruction` / `export_environment_bundle`.  
 Guide: [`docs/workflows/binary-parity-rebuild.md`](docs/workflows/binary-parity-rebuild.md).
 
-### Quickstart B — `/ca` (Mode 1: Clean-Room UI Rebuild)
-Use when recreating an observable web or desktop UI using Craft Anything `--clean-room` only:
+### Quickstart B — `/ca` (Mode 1: Clean-Room UI Rebuild or `--deep` 322-Tool Inspection)
+Use when extracting 1:1 design systems / recreating UIs cleanly or running full 17-toolset Craft Anything analysis (`ca-deep-full`):
 ```bash
-# Serve the self-owned sample target locally
+# Serve the sample target locally
 python examples/sample-target/server.py --port 4173
 
-# Inspect minimal Craft Anything MCP profile (no --all-tools)
+# Inspect Craft Anything Clean-Room profile (30 tools) or full 322-tool Deep profile:
 carea mcp-profile ca-clean-room
+carea mcp-profile ca-deep-full
 ```
 In your agent prompt, invoke `/ca` against `http://127.0.0.1:4173/`: verify `core_session_show` reports `clean_room: true`, capture views with `web_site_open` -> `web_site_capture` -> `web_page_states_capture`, rebuild cleanly, and check UI likeness with `rebuild_check` and `web_pixels_compare`.  
 Guide: [`docs/workflows/clean-room-ui-rebuild.md`](docs/workflows/clean-room-ui-rebuild.md).

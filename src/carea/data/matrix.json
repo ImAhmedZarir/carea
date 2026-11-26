@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "carea_version": "1.2.0",
+  "carea_version": "1.3.0",
   "handoff_schema_version": "1.1.0",
   "handoff_schema_supported": [
     "1.0.0",
@@ -119,6 +119,25 @@
           "REA_MCP_OUTPUT_SCHEMA_PROFILE": "off"
         }
       },
+      "master": {
+        "min_rea_version": "6.10.0",
+        "env": {
+          "REA_MCP_TOOL_CATALOG_PROFILE": "hot-cold",
+          "REA_MCP_INPUT_SCHEMA_PROFILE": "compact",
+          "REA_MCP_OUTPUT_SCHEMA_PROFILE": "off",
+          "REA_ASAR_MAX_HEADER_BYTES": "268435456",
+          "REA_NATIVE_MATCHING_REPRESENTATION_BYTES": "1073741824",
+          "REA_CAPTURE_DECODER_OLD_GENERATION_MIB": "2048"
+        }
+      },
+      "all_families": {
+        "min_rea_version": "6.10.0",
+        "env": {
+          "REA_MCP_TOOL_FAMILIES": "direct,enhanced,native,artifact,managed,firmware,uefi,android,pcap,flutter,frida,apktool,jeb,adb,browser,electron,javascript-runtime,application,session",
+          "REA_MCP_INPUT_SCHEMA_PROFILE": "compact",
+          "REA_MCP_OUTPUT_SCHEMA_PROFILE": "off"
+        }
+      },
       "native": {
         "env": {
           "REA_MCP_TOOL_FAMILIES": "native,enhanced,application,session",
@@ -179,6 +198,14 @@
         "args": [
           "mcp",
           "--deep"
+        ]
+      },
+      "deep_full": {
+        "command": "craft-anything-cli",
+        "args": [
+          "mcp",
+          "--deep",
+          "--all-tools"
         ]
       }
     }

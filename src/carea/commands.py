@@ -654,6 +654,8 @@ def build_mcp_profile(preset: str, *, server_name: str | None = None) -> dict[st
 
     mapping: dict[str, dict[str, Any]] = {
         "rea-hot-cold": {"rea": {"command": "npx", "args": ["-y", f"rea-agents@{rea_rec}", "mcp"], "env": rea_profiles["hot_cold"]["env"]}},
+        "rea-master": {"rea": {"command": "npx", "args": ["-y", f"rea-agents@{rea_rec}", "mcp"], "env": rea_profiles["master"]["env"]}},
+        "rea-all-families": {"rea": {"command": "npx", "args": ["-y", f"rea-agents@{rea_rec}", "mcp"], "env": rea_profiles["all_families"]["env"]}},
         "rea-native": {"rea": {"command": "npx", "args": ["-y", f"rea-agents@{rea_rec}", "mcp"], "env": rea_profiles["native"]["env"]}},
         "rea-web": {"rea": {"command": "npx", "args": ["-y", f"rea-agents@{rea_rec}", "mcp"], "env": rea_profiles["web_js_electron"]["env"]}},
         "rea-android": {"rea": {"command": "npx", "args": ["-y", f"rea-agents@{rea_rec}", "mcp"], "env": rea_profiles["android_mobile"]["env"]}},
@@ -662,6 +664,11 @@ def build_mcp_profile(preset: str, *, server_name: str | None = None) -> dict[st
         "ca-clean-room": {"craft-anything": ca_profiles["clean_room_default"]},
         "ca-restricted-web": {"craft-anything": ca_profiles["clean_room_restricted_web"]},
         "ca-deep-private": {"craft-anything": ca_profiles["private_deep_rebuild"]},
+        "ca-deep-full": {"craft-anything": ca_profiles["deep_full"]},
+        "carea-master": {
+            "rea": {"command": "npx", "args": ["-y", f"rea-agents@{rea_rec}", "mcp"], "env": rea_profiles["master"]["env"]},
+            "craft-anything": ca_profiles["deep_full"],
+        },
         "two-team-lane-a": {"rea": {"command": "npx", "args": ["-y", f"rea-agents@{rea_rec}", "mcp"], "env": rea_profiles["hot_cold"]["env"]}},
         "two-team-lane-b": {"craft-anything": ca_profiles["clean_room_default"]},
     }

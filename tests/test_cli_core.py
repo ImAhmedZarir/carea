@@ -145,6 +145,15 @@ class TestCareaCliCore(unittest.TestCase):
             snippet = build_mcp_profile("rea-hot-cold")
             self.assertEqual(snippet["mcpServers"]["rea"]["env"]["REA_MCP_TOOL_CATALOG_PROFILE"], "hot-cold")
 
+            master = build_mcp_profile("carea-master")
+            self.assertIn("rea", master["mcpServers"])
+            self.assertIn("craft-anything", master["mcpServers"])
+            self.assertEqual(master["mcpServers"]["rea"]["env"]["REA_ASAR_MAX_HEADER_BYTES"], "268435456")
+            self.assertIn("--deep", master["mcpServers"]["craft-anything"]["args"])
+            self.assertIn("--all-tools", master["mcpServers"]["craft-anything"]["args"])
+            self.assertIn("uefi", build_mcp_profile("rea-all-families")["mcpServers"]["rea"]["env"]["REA_MCP_TOOL_FAMILIES"])
+            self.assertEqual(build_mcp_profile("ca-deep-full")["mcpServers"]["craft-anything"]["args"], ["mcp", "--deep", "--all-tools"])
+
             cfg = Path(td) / "client.json"
             with self.assertRaises(PermissionError):
                 apply_mcp_profile("ca-clean-room", cfg, assume_yes=False)

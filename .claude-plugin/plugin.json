@@ -1,7 +1,7 @@
 {
   "name": "carea",
-  "version": "1.2.0",
-  "description": "Autonomous reverse engineering orchestrator (/carea <target>) executing /rea -> /ca study-only -> full breakdown (architecture.md, design-system.md, full-breakdown.md), plus optional clean-room airlock CLI gates and schemas.",
+  "version": "1.3.0",
+  "description": "Master reverse engineering orchestrator (/carea <target>) uniting full 237-tool REA atomic analysis -> 322-tool Craft Anything 1:1 UI & deep study -> architecture.md, design-system.md, and full-breakdown.md, plus dual MCP profiles and clean-room airlock CLI.",
   "author": {
     "name": "Ahmed Ishtiaque Zarir",
     "url": "https://github.com/ImAhmedZarir"
