@@ -56,14 +56,12 @@ See [`docs/architecture/architecture.md`](docs/architecture/architecture.md) and
 
 ---
 
-## Tested Versions & Compatibility
+## Compatibility & Verification
 
-`carea` expects you to install both upstream tools separately from their official sources.
+`carea` tracks supported upstream engine ranges, runtime prerequisites, and verified vs unverified host facts in [`compat/matrix.json`](compat/matrix.json) and renders them into [`docs/compatibility.md`](docs/compatibility.md). Run `scripts/verify-upstream.sh` (or `scripts/verify-upstream.ps1` on Windows) to inspect your locally installed binaries against the matrix.
 
-| Upstream Dependency | Tested With (Latest Verified) | Minimum Compatible | Status & Notes |
-|---|---|---|---|
-| **REA** (`rea-agents`) | `6.10.1` | `6.8.0+` | Requires Node.js `^22.23.4 \|\| ^24.22.1 \|\| >=26.12.1`. `6.10.x` uses `evidence_format: 2`, adds offline `uefi` tools and `hot-cold` MCP catalog discovery, and rejects `full` schema profiles (`compact`/`off` only). |
-| **Craft Anything** (`craft-anything-cli`) | `0.6.1` *(GitHub release verified)* / `0.6.0` *(local binary tested)* | `0.6.0+` | **Early alpha.** Rust `1.97+` if building from source; prebuilt installers available on upstream GitHub Releases. |
+- **Verified claim ledger:** [`docs/upstream-facts.md`](docs/upstream-facts.md)
+- **Generated compatibility matrix:** [`docs/compatibility.md`](docs/compatibility.md) *(single source: [`compat/matrix.json`](compat/matrix.json))*
 
 ---
 

@@ -4,15 +4,12 @@
 
 ---
 
-## 1. Compatibility & Version Pinning
+## 1. Compatibility Matrix
 
-| Engine | Tested With | Minimum Compatible | Runtime / Toolchain Notes |
-|---|---|---|---|
-| **REA** (`rea-agents`) | `6.10.1` | `6.8.0+` | Node.js `^22.23.4 \|\| ^24.22.1 \|\| >=26.12.1` and `npm`. Optional native backends (Ghidra `12.2` with JDK `25+`, Hopper, IDA Pro, Kuna `1.1000`, JADX, Frida, etc.) are bring-your-own. |
-| **Craft Anything** (`craft-anything-cli`) | `0.6.1` *(upstream release)* / `0.6.0` *(local binary)* | `0.6.0+` | **Early alpha.** Prebuilt installers/portable archives from GitHub Releases, or Rust `1.97+` to build from source. Optional external engines include Ghidra, JADX, Apktool, adb, Frida, and a Chromium browser. |
+Version support ranges, runtime prerequisites, and verified vs unverified upstream facts are maintained in [`compat/matrix.json`](../compat/matrix.json) and rendered in [`docs/compatibility.md`](compatibility.md). Run `scripts/verify-upstream.sh` (or `scripts/verify-upstream.ps1` on Windows) to verify your installed binaries against the matrix.
 
 > [!NOTE]
-> **Version Pinning Advice:** Pin exact versions when reproducibility matters across team workflows. In `REA >= 6.10.0`, `evidence_format: 2` is required (`6.8.x` bundles cannot be re-imported directly without regenerating observations) and `REA_MCP_INPUT_SCHEMA_PROFILE=full` / `REA_MCP_OUTPUT_SCHEMA_PROFILE=full` are rejected at startup.
+> **Version Pinning Advice:** Pin exact versions when reproducibility matters across team workflows. In `REA >= 6.10.0`, `evidence_format: 2` is required (`6.8.x` bundles cannot be re-imported directly without regenerating observations) and `REA_MCP_INPUT_SCHEMA_PROFILE=full` / `REA_MCP_OUTPUT_SCHEMA_PROFILE=full` are rejected at startup. Craft Anything is early alpha; tool counts and flags may evolve between minor versions.
 
 ---
 
@@ -51,13 +48,13 @@ craft-anything-cli doctor
 craft-anything-cli capabilities
 ```
 
-*(Note: Craft Anything's `ca` command shortcut may also be created depending on your install method; run `craft-anything-cli doctor` to confirm.)*
+*(Note: `craft-anything-cli` is the canonical executable name; a `ca` shortcut is only created by some setups and is not guaranteed by standalone archives.)*
 
 ---
 
 ## 3. Lean MCP Profile Presets (Preventing Tool Bloat)
 
-Loading every tool from both servers exposes **500+ tools** at once (`309` engine tools plus AI/setup tools in Craft Anything, plus `200+` tools in REA), which degrades model tool selection and consumes excessive context tokens.
+Loading every tool from both servers exposes **580+ tools** at once (`303` engine tools / `320` total in Craft Anything `0.6.1`, `322` commands in `0.6.0`; plus `264` advertised tools in REA `6.10.1`), which degrades model tool selection and consumes excessive context tokens.
 
 `carea` does **not** ship a hardcoded `mcp_config.json` with machine-specific paths. Instead, merge the preset snippets below into your MCP client configuration using your own local executables.
 

@@ -28,7 +28,7 @@ Both engines cover areas such as Ghidra, JADX, Apktool, adb, Frida, browser capt
 | **Live runtime tracing & debugging** | **REA** | Dedicated Frida, GDB/pwndbg, Rizin debug, LLDB call observation, PTY process scenarios, and static/runtime correlation. |
 | **JavaScript / Electron forensics** | **REA** | Semantic tracing, route/IPC recovery, source-to-bundle checks, and `recover_javascript_sources`. |
 | **Observable website capture & visual pixel diff** | **CA** | Multi-width capture (`web_site_capture`, `web_page_states_capture`), `web_pixels_compare`, `web_walkthrough_check`, and `rebuild_check`. |
-| **Rebuild workspace, pins, previews & asset gen** | **CA** | `rebuild_start`, `project_preview`, `project_pin_*`, `build_*`, `assets_image_generate`, `assets_model_generate`. |
+| **Rebuild workspace, pins, previews & asset gen** | **CA** | `rebuild_start`, `project_preview`, `project_pin_create`, `project_pin_open`, `project_pin_stop`, `build_files_list`, `build_file_write`, `build_file_edit`, `build_command_run`, `assets_image_generate`, `assets_model_generate`. |
 | **Evidence & Unknown ledgers** | **Both (lane-scoped)** | REA owns `ev_...` and `unknown` records in Analyst/Verification lanes; CA owns `core_evidence_*`, `core_unknown_*`, and `core_finding_*` in Clean-Room Builder lane, bridged by `carea-handoff.json`. |
 
 ---
@@ -37,7 +37,7 @@ Both engines cover areas such as Ghidra, JADX, Apktool, adb, Frida, browser capt
 
 | Task Type | Engine | Verified Tool Group / Family / CLI | Mode / Notes |
 |---|---|---|---|
-| **Observable Website / UI Study & Rebuild** | **CA** | Toolsets `browser`, `projects`, `build` (`web_site_open`, `web_site_capture`, `web_page_states_capture`, `web_page_screenshot_take`, `rebuild_start`, `build_*`, or CLI `craft-anything-cli rebuild <url>`) | Clean-Room default (`--clean-room`). Reads zero HTML/JS source. |
+| **Observable Website / UI Study & Rebuild** | **CA** | Toolsets `browser`, `projects`, `build` (`web_site_open`, `web_site_capture`, `web_page_states_capture`, `web_page_screenshot_take`, `rebuild_start`, `build_files_list`, `build_file_write`, `build_file_edit`, `build_command_run`, or CLI `craft-anything-cli rebuild <url>`) | Clean-Room default (`--clean-room`). Reads zero HTML/JS source. |
 | **Visual & Responsive Pixel Parity** | **CA** | Toolsets `browser`, `core`, `runtime` (`web_pixels_compare`, `web_walkthrough_check`, `rebuild_check`, `native_window_capture`, `runtime_captures_compare`) | Clean-Room. Compares screenshots, walkthroughs, and layout metrics. |
 | **Original Replacement Images & 3D Assets** | **CA** | Toolsets `core`, `setup` (`assets_image_generate`, `assets_model_generate`, `assets_key_status`, `project_assets_budget`, `project_assets_allow`) | Clean-Room safe replacement assets (requires user's `fal.ai` key). |
 | **Deep Native Decompilation & Value Tracing** | **REA** | Families `native`, `enhanced`, `session`, `application` (`open_binary`, `binary_overview`, `analyze_function`, `procedure_pseudo_code`, `procedure_assembly`, `get_call_graph`, `trace_feature`, `trace_call_path`, `trace_native_values`, `batch_decompile`, `decompile_all`, `close_binary`) | Analyst / Deep Lane. Add `direct` only when needed. |

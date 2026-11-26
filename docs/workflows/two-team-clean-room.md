@@ -68,7 +68,7 @@ craft-anything-cli mcp --clean-room
 
 1. Confirm Clean Room via `core_session_show`.
 2. Read **only** `airlock/clean-room-spec.md`, the obligations/test vectors in `airlock/carea-handoff.json`, and optional observable UI captures (`web_site_capture`, `native_window_capture`).
-3. Build fresh code via `rebuild_start` / `build_*`, generating original replacement assets (`assets_image_generate`) rather than reusing original media.
+3. Build fresh code via `rebuild_start`, `build_files_list`, `build_file_write`, `build_file_edit`, and `build_command_run`, generating original replacement assets (`assets_image_generate`) rather than reusing original media.
 4. Run `rebuild_check` and `web_pixels_compare` / `web_walkthrough_check` to refine UI likeness.
 
 ---
