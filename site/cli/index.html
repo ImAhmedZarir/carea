@@ -1,193 +1,194 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" suppressHydrationWarning>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>CLI &amp; Handoff Schema v1.1.0 — carea Documentation</title>
-  <meta name="description" content="Complete reference for all 10 carea Python stdlib CLI commands, MCP profile presets, airlock-lint rules, and carea-handoff.json schema 1.0.0/1.1.0.">
-  <meta name="keywords" content="carea CLI, airlock-lint, airlock-sign, spec-draft, parity-report, isolation-check, mcp-profile, carea-handoff.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+  <title>CLI Reference, Schema 1.1.0 &amp; Parity States | carea</title>
+  <meta name="description" content="Explore all 10 Python 3.10+ stdlib commands in carea CLI, inspect Schema 1.1.0 validation rules, and preview all five dual-axis parity states.">
+  <meta name="keywords" content="carea cli, carea init, carea doctor, airlock-lint, airlock-sign, validate-handoff, parity-report, carea-handoff schema 1.1.0">
   <meta name="author" content="Ahmed Ishtiaque Zarir">
-  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://imahmedzarir.github.io/carea/cli/">
   <link rel="icon" type="image/png" href="../assets/carea.png">
-
+  <link rel="manifest" href="../site.webmanifest">
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="carea">
-  <meta property="og:title" content="carea CLI Commands &amp; Handoff Schema v1.1.0">
-  <meta property="og:description" content="Zero-dependency Python 3.10+ CLI checks replacing honor-system clean-room claims with real validation.">
+  <meta property="og:title" content="CLI Reference &amp; Schema 1.1.0 — carea">
+  <meta property="og:description" content="Zero-dependency Python 3.10+ stdlib CLI replacing honor-system airlock workflows with executable checks.">
   <meta property="og:url" content="https://imahmedzarir.github.io/carea/cli/">
   <meta property="og:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
-
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="carea CLI &amp; Schema v1.1.0">
-  <meta name="twitter:description" content="Reference for init, doctor, validate-handoff, airlock-lint, airlock-sign, isolation-check, spec-draft, parity-report, return-feedback, mcp-profile.">
-  <meta name="twitter:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+  <script>(function(){try{var t=localStorage.getItem("theme")||"dark";var d=t==="dark"||(t==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.toggle("dark",d);}catch(e){document.documentElement.classList.add("dark");}})();</script>
   <link rel="stylesheet" href="../styles.css">
-
-  <script>
-    (function () {
-      try {
-        var s = localStorage.getItem("carea-theme");
-        var d = s ? s === "dark" : true;
-        document.documentElement.classList.toggle("dark", d);
-      } catch (_) {}
-    })();
-  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "carea CLI and Handoff Schema v1.1.0 Reference",
+    "headline": "carea CLI Reference and Schema 1.1.0 Specification",
     "url": "https://imahmedzarir.github.io/carea/cli/",
     "author": { "@type": "Person", "name": "Ahmed Ishtiaque Zarir" }
   }
   </script>
 </head>
-<body class="bg-grid">
-  <header class="site-header">
-    <div class="container nav-bar">
-      <a class="brand-link" href="../"><img src="../assets/carea.png" alt="carea logo" width="30" height="30"><span>carea</span></a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a class="nav-link" href="../">Overview</a>
-        <a class="nav-link" href="../modes/">Modes</a>
-        <a class="nav-link" href="./" aria-current="page">CLI &amp; Schema</a>
-        <a class="nav-link" href="../docs/">Docs &amp; Coexistence</a>
-        <a class="nav-link" href="../portfolio/">Portfolio</a>
-      </nav>
-      <div class="nav-actions">
-        <a class="btn btn-secondary" href="https://github.com/ImAhmedZarir/carea" rel="noopener">GitHub</a>
-        <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle color theme" aria-pressed="true"><span data-theme-label>Dark</span></button>
-        <button id="mobile-menu-toggle" class="icon-btn mobile-menu-btn" type="button" aria-expanded="false" aria-controls="mobile-drawer">Menu</button>
+<body data-root-prefix="../">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header glass">
+    <div class="container header-inner">
+      <div class="flex items-center gap-4 min-w-0">
+        <a class="brand-link" href="../">
+          <span class="brand-mark"><img src="../assets/carea.png" alt="carea emblem" width="18" height="18"></span>
+          <span>carea</span>
+          <span class="brand-sep">/</span>
+          <span class="brand-ver">cli</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a class="nav-link" href="../">Overview</a>
+          <a class="nav-link" href="../modes/">Modes</a>
+          <a class="nav-link" href="./" aria-current="page">CLI &amp; Schema</a>
+          <a class="nav-link" href="../docs/">Docs</a>
+          <a class="nav-link" href="../portfolio/">Portfolio</a>
+        </nav>
+      </div>
+      <div class="header-actions">
+        <button class="cmd-trigger" type="button" data-cmd-open aria-label="Open command search (Ctrl+K)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span class="cmd-label">Search docs…</span>
+          <kbd class="kbd cmd-label">⌘K</kbd>
+        </button>
+        <a class="btn btn-ghost btn-icon" href="https://github.com/ImAhmedZarir/carea" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        </a>
+        <button class="btn btn-ghost btn-icon" type="button" data-theme-toggle aria-label="Switch color theme">
+          <svg data-icon-sun width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-15.07 1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2m-15.07 7.07 1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg data-icon-moon width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true" style="display:none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+        <button class="btn btn-ghost btn-icon mobile-menu-btn" type="button" data-mobile-menu-open aria-label="Open navigation menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><line x1="4" x2="20" y1="7" y2="7"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="17" y2="17"/></svg>
+        </button>
       </div>
     </div>
-    <nav id="mobile-drawer" class="mobile-drawer" hidden>
-      <a href="../">Overview</a>
-      <a href="../modes/">Modes (1–6)</a>
-      <a href="./" aria-current="page">CLI &amp; Schema</a>
-      <a href="../docs/">Docs &amp; Coexistence</a>
-      <a href="../portfolio/">Portfolio</a>
-    </nav>
   </header>
 
-  <main class="container section">
-    <span class="eyebrow">Python 3.10+ Stdlib Only</span>
-    <h1 class="hero-title" style="font-size:clamp(2rem,4vw,3rem);">CLI Reference &amp; Schema v1.1.0</h1>
-    <p class="hero-lead" style="margin-bottom:1.5rem;">
-      Install cleanly via <code>pip install --no-deps .</code> or run directly through <code>scripts/carea</code> and <code>scripts/carea.ps1</code>.
-    </p>
-
-    <div style="margin-bottom:1.5rem;">
-      <label for="filter-search" class="sr-only">Filter CLI commands</label>
-      <input id="filter-search" class="search-input" type="search" placeholder="Filter CLI commands (e.g., airlock-lint, parity, mcp-profile)...">
-    </div>
-
-    <div class="bento-grid" style="margin-bottom:3rem;">
-      <article class="card col-span-3" data-filter-item>
-        <h3><code>carea init &lt;dir&gt;</code></h3>
-        <p>Creates 4 separated lanes (<code>analyst-evidence/</code>, <code>airlock/</code>, <code>builder-workspace/</code>, <code>verification/</code>) and <code>.carea/config.json</code>. Mode 4 adds loud <code>NOT CLEAN-ROOM</code> banners.</p>
-      </article>
-      <article class="card col-span-3" data-filter-item>
-        <h3><code>carea doctor</code></h3>
-        <p>Checks <code>rea</code>, Node.js, and <code>craft-anything-cli</code> against <code>compat/matrix.json</code>; warns on REA <code>full</code> schemas (&gt;=6.10.0) and CA <code>--all-tools</code>.</p>
-      </article>
-      <article class="card col-span-3" data-filter-item>
-        <h3><code>carea validate-handoff &lt;file&gt;</code></h3>
-        <p>Validates <code>1.0.0</code> and <code>1.1.0</code> handoffs without third-party dependencies and blocks <code>deep_private: true</code> alongside clean-room flags.</p>
-      </article>
-      <article class="card col-span-3" data-filter-item>
-        <h3><code>carea airlock-lint &lt;dir&gt;</code></h3>
-        <p>Heuristic leak scanner catching fenced code, inline bitwise/branch snippets, asm, hex dumps, 4+ hex constants, minified JS, base64, assets, secrets, obfuscated emails, and long prose.</p>
-      </article>
-      <article class="card col-span-3" data-filter-item>
-        <h3><code>carea airlock-sign &lt;handoff&gt;</code></h3>
-        <p>Refuses unless <code>airlock-lint</code> is strictly <code>PASS</code>, <code>deep_private</code> is false, and both <code>--reviewer</code> and <code>--confirm-human-review</code> are passed.</p>
-      </article>
-      <article class="card col-span-3" data-filter-item>
-        <h3><code>carea isolation-check [dir]</code></h3>
-        <p>Checks symlink/junction overlap between <code>builder-workspace</code> and <code>analyst-evidence</code> and prints recommended host-agent deny snippets.</p>
-      </article>
-      <article class="card col-span-3" data-filter-item>
-        <h3><code>carea spec-draft &lt;bundle&gt;</code></h3>
-        <p>Extracts opaque <code>ev_...</code>, <code>unk_...</code>, and <code>obl_...</code> IDs cleanly from REA bundles without copying raw code or payloads; always stamped <code>DRAFT</code>.</p>
-      </article>
-      <article class="card col-span-3" data-filter-item>
-        <h3><code>carea parity-report</code></h3>
-        <p>Merges CA observable results and REA verification outputs; marks obligations <code>passed</code> only when both axes complete with zero partial limitations.</p>
-      </article>
-      <article class="card col-span-3" data-filter-item>
-        <h3><code>carea return-feedback</code></h3>
-        <p>Outputs failing test vectors and observable UI/pixel differences for Lane B, running self-lint to prevent accidental code leakage.</p>
-      </article>
-      <article class="card col-span-3" data-filter-item>
-        <h3><code>carea mcp-profile &lt;preset&gt;</code></h3>
-        <p>Prints lean JSON configs for REA and CA; <code>--apply</code> renders a unified diff and asks interactive confirmation before writing.</p>
-      </article>
-    </div>
-
-    <section aria-label="Interactive MCP Profile Viewer" style="margin-bottom:3rem;">
-      <h2 style="font-size:1.75rem;margin-bottom:0.75rem;">Interactive MCP Profile Generator</h2>
-      <div class="tab-bar" role="tablist">
-        <button class="tab-btn active" type="button" data-mcp-preset="rea-hot-cold" aria-selected="true">rea-hot-cold</button>
-        <button class="tab-btn" type="button" data-mcp-preset="rea-web" aria-selected="false">rea-web</button>
-        <button class="tab-btn" type="button" data-mcp-preset="rea-android" aria-selected="false">rea-android</button>
-        <button class="tab-btn" type="button" data-mcp-preset="ca-clean-room" aria-selected="false">ca-clean-room</button>
-        <button class="tab-btn" type="button" data-mcp-preset="ca-restricted-web" aria-selected="false">ca-restricted-web</button>
-        <button class="tab-btn" type="button" data-mcp-preset="ca-deep-private" aria-selected="false">ca-deep-private</button>
-      </div>
-      <div class="code-box">
-        <button class="copy-btn" type="button">Copy</button>
-        <pre id="mcp-profile-output">{}</pre>
+  <main id="main-content">
+    <section class="hero-wrap">
+      <div class="hero-bg bg-grid" aria-hidden="true"></div>
+      <div class="hero-bg glow-primary" aria-hidden="true"></div>
+      <div class="container hero-content" style="padding-block:3rem;">
+        <div class="eyebrow">Python 3.10+ Stdlib Only</div>
+        <h1 class="page-h1 mt-2">CLI Gates &amp; Schema <code style="font-size:0.85em;">1.1.0</code></h1>
+        <p class="lead mt-3">
+          Ten deterministic subcommands enforcing workspace initialization, heuristic leak checks, human sign-off gates, and dual-axis parity merging with zero third-party pip dependencies.
+        </p>
       </div>
     </section>
 
-    <section aria-label="Schema 1.1.0 Migration Summary">
-      <h2 style="font-size:1.75rem;margin-bottom:0.75rem;">Handoff Schema <code>1.0.0</code> &rarr; <code>1.1.0</code> Additions</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Field / Rule</th>
-              <th>Type / Allowed</th>
-              <th>Purpose</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>topology</code></td>
-              <td><code>"a" | "b"</code></td>
-              <td>Records CA rebuild child agent (<code>a</code>) vs fresh MCP session (<code>b</code>).</td>
-            </tr>
-            <tr>
-              <td><code>deep_private</code></td>
-              <td><code>boolean</code></td>
-              <td>Marks Mode 4 authorized deep rebuilds; mutually exclusive with clean-room status.</td>
-            </tr>
-            <tr>
-              <td><code>airlock.audit</code></td>
-              <td><code>{lint_status, lint_hash, human_reviewer, signed_at}</code></td>
-              <td>Cryptographic lint report digest + human sign-off metadata written by <code>airlock-sign</code>.</td>
-            </tr>
-            <tr>
-              <td><code>obligations[].coverage</code> &amp; <code>limitations</code></td>
-              <td><code>{scope, notes}</code>, <code>string[]</code></td>
-              <td>Prevents overclaiming full equivalence on static-only or partial runs.</td>
-            </tr>
-          </tbody>
-        </table>
+    <section id="cli-workbench" class="section">
+      <div class="container">
+        <div class="grid-bento">
+          <div class="card hairline-top span-4 stack">
+            <div class="eyebrow">Subcommands (10)</div>
+            <div class="stack" role="tablist" aria-label="CLI commands">
+              <button class="tab-btn" style="width:100%; justify-content:space-between;" type="button" role="tab" data-cli-cmd="init" aria-selected="true"><code>init</code><span class="muted" style="font-size:0.75rem;">layout</span></button>
+              <button class="tab-btn" style="width:100%; justify-content:space-between;" type="button" role="tab" data-cli-cmd="doctor" aria-selected="false"><code>doctor</code><span class="muted" style="font-size:0.75rem;">matrix</span></button>
+              <button class="tab-btn" style="width:100%; justify-content:space-between;" type="button" role="tab" data-cli-cmd="validate-handoff" aria-selected="false"><code>validate-handoff</code><span class="muted" style="font-size:0.75rem;">schema</span></button>
+              <button class="tab-btn" style="width:100%; justify-content:space-between;" type="button" role="tab" data-cli-cmd="airlock-lint" aria-selected="false"><code>airlock-lint</code><span class="muted" style="font-size:0.75rem;">scanner</span></button>
+              <button class="tab-btn" style="width:100%; justify-content:space-between;" type="button" role="tab" data-cli-cmd="airlock-sign" aria-selected="false"><code>airlock-sign</code><span class="muted" style="font-size:0.75rem;">stamp</span></button>
+              <button class="tab-btn" style="width:100%; justify-content:space-between;" type="button" role="tab" data-cli-cmd="isolation-check" aria-selected="false"><code>isolation-check</code><span class="muted" style="font-size:0.75rem;">fence</span></button>
+              <button class="tab-btn" style="width:100%; justify-content:space-between;" type="button" role="tab" data-cli-cmd="spec-draft" aria-selected="false"><code>spec-draft</code><span class="muted" style="font-size:0.75rem;">skeleton</span></button>
+              <button class="tab-btn" style="width:100%; justify-content:space-between;" type="button" role="tab" data-cli-cmd="parity-report" aria-selected="false"><code>parity-report</code><span class="muted" style="font-size:0.75rem;">merge</span></button>
+              <button class="tab-btn" style="width:100%; justify-content:space-between;" type="button" role="tab" data-cli-cmd="return-feedback" aria-selected="false"><code>return-feedback</code><span class="muted" style="font-size:0.75rem;">vectors</span></button>
+              <button class="tab-btn" style="width:100%; justify-content:space-between;" type="button" role="tab" data-cli-cmd="mcp-profile" aria-selected="false"><code>mcp-profile</code><span class="muted" style="font-size:0.75rem;">profiles</span></button>
+            </div>
+          </div>
+
+          <div id="cli-inspector-output" class="card hairline-top span-8"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tight" style="border-top:1px solid var(--border);">
+      <div class="container">
+        <div class="grid-bento">
+          <!-- 5-State Parity UI Inspector -->
+          <div id="parity-state-inspector" class="card hairline-top span-7 stack">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div class="eyebrow">Five-State Data Contract</div>
+                <h2 class="h3 mt-2">Dual-Axis Parity State Inspector</h2>
+              </div>
+              <span id="parity-state-badge" class="tag tag--warning">partial</span>
+            </div>
+            <div class="tabs" role="tablist" aria-label="Parity view states">
+              <button class="tab-btn" type="button" role="tab" data-ui-state="partial" aria-selected="true">Partial</button>
+              <button class="tab-btn" type="button" role="tab" data-ui-state="success" aria-selected="false">Passed</button>
+              <button class="tab-btn" type="button" role="tab" data-ui-state="loading" aria-selected="false">Skeleton</button>
+              <button class="tab-btn" type="button" role="tab" data-ui-state="empty" aria-selected="false">Empty</button>
+              <button class="tab-btn" type="button" role="tab" data-ui-state="error" aria-selected="false">Sign Error</button>
+            </div>
+            <div id="parity-state-render" class="surface-sub" style="padding:1rem; min-height:7.5rem;"></div>
+          </div>
+
+          <!-- Schema 1.1.0 Invariants -->
+          <div class="card hairline-top span-5 stack">
+            <div class="eyebrow">Handoff Schema 1.1.0</div>
+            <h2 class="h3">Enforced Validation Invariants</h2>
+            <div class="code-box">
+              <div class="code-head"><span>schemas/carea-handoff.schema.json</span></div>
+              <pre class="code-pre"><code>schema_version: "1.0.0" | "1.1.0"
+if deep_private == true:
+  mode ∉ {"clean-room-ui", "two-team-process"}
+  airlock.status != "passed"
+  builder_lane.clean_room_verified == false
+if airlock.status == "passed":
+  no_source_code &amp;&amp; no_proprietary_assets
+  separate_builder_context == true</code></pre>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
-      <div><strong>carea</strong> · Copyright (c) 2026 Ahmed Ishtiaque Zarir · MIT License.</div>
-      <div><a href="../">Home</a> · <a href="../modes/">Modes</a> · <a href="../docs/">Docs</a></div>
+      <div><strong>carea</strong> · Author: Ahmed Ishtiaque Zarir · Python 3.10+ Stdlib CLI</div>
+      <div class="flex flex-wrap gap-4"><a href="../">Overview</a><a href="../modes/">Modes</a><a href="../docs/">Docs</a><a href="../portfolio/">Portfolio</a></div>
     </div>
   </footer>
-  <script src="../app.js" defer></script>
+
+  <div id="cmd-dialog-backdrop" class="overlay-backdrop" data-open="false" aria-hidden="true">
+    <div class="cmd-dialog" role="dialog" aria-modal="true" aria-label="Command palette">
+      <div class="flex items-center gap-2" style="padding:0.75rem 1rem; border-bottom:1px solid var(--border);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" class="muted" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="cmd-search-input" class="input" type="search" style="border:none; background:transparent; padding:0; min-height:2rem;" placeholder="Jump to routes, modes, CLI commands, or actions…">
+        <kbd class="kbd">ESC</kbd>
+      </div>
+      <div id="cmd-results-list" class="cmd-list" role="listbox" aria-label="Command results"></div>
+    </div>
+  </div>
+
+  <div id="mobile-sheet-backdrop" class="mobile-sheet-backdrop" data-open="false" aria-hidden="true">
+    <div class="mobile-sheet pb-safe" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+      <div class="flex items-center justify-between" style="padding-bottom:0.75rem; border-bottom:1px solid var(--border);">
+        <span style="font-weight:600;">carea navigation</span>
+        <button id="mobile-sheet-close" class="btn btn-ghost btn-icon" type="button" aria-label="Close navigation menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <nav class="stack mt-4" aria-label="Mobile links">
+        <a class="btn btn-ghost" style="justify-content:flex-start; width:100%; color:var(--foreground);" href="../">Overview</a>
+        <a class="btn btn-ghost" style="justify-content:flex-start; width:100%; color:var(--foreground);" href="../modes/">Modes 1–6</a>
+        <a class="btn btn-secondary" style="justify-content:flex-start; width:100%;" href="./">CLI &amp; Schema</a>
+        <a class="btn btn-ghost" style="justify-content:flex-start; width:100%; color:var(--foreground);" href="../docs/">Docs &amp; Coexistence</a>
+        <a class="btn btn-ghost" style="justify-content:flex-start; width:100%; color:var(--foreground);" href="../portfolio/">Portfolio &amp; Case Study</a>
+      </nav>
+    </div>
+  </div>
+
+  <script src="../app.js"></script>
 </body>
 </html>

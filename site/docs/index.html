@@ -1,152 +1,247 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" suppressHydrationWarning>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Docs, Compatibility &amp; Threat Model — carea</title>
-  <meta name="description" content="Official upstream setup, REA and Craft Anything compatibility matrix, client skill coexistence guide, threat model, and FAQ for carea.">
-  <meta name="keywords" content="carea docs, upstream compatibility, rea setup skill=false, craft-anything-cli no-skill, threat model, clean room coexistence">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+  <title>Compatibility Matrix &amp; Coexistence | carea Docs</title>
+  <meta name="description" content="Verified compatibility matrix for REA 6.8.0–6.10.1 and Craft Anything 0.6.0–0.6.1, MCP schema profile guidance, and Claude/Codex/Cursor coexistence rules.">
+  <meta name="keywords" content="carea compatibility, upstream-facts, rea-agents 6.10.1, craft-anything-cli 0.6.0, hot-cold MCP profile, Claude Codex Cursor coexistence">
   <meta name="author" content="Ahmed Ishtiaque Zarir">
-  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://imahmedzarir.github.io/carea/docs/">
   <link rel="icon" type="image/png" href="../assets/carea.png">
-
+  <link rel="manifest" href="../site.webmanifest">
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="carea">
-  <meta property="og:title" content="carea Documentation, Compatibility &amp; Threat Model">
-  <meta property="og:description" content="Version bounds from compat/matrix.json, coexistence across Claude/Codex/Cursor, and 7 analyzed leakage paths.">
+  <meta property="og:title" content="Compatibility &amp; Coexistence — carea">
+  <meta property="og:description" content="Lean MCP schema budgets, verified upstream runtime checks, and non-conflicting multi-client setup for REA and Craft Anything.">
   <meta property="og:url" content="https://imahmedzarir.github.io/carea/docs/">
   <meta property="og:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
-
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="carea Docs &amp; Compatibility">
-  <meta name="twitter:description" content="Setup, coexistence, threat model, and verified upstream compatibility facts.">
-  <meta name="twitter:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+  <script>(function(){try{var t=localStorage.getItem("theme")||"dark";var d=t==="dark"||(t==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.toggle("dark",d);}catch(e){document.documentElement.classList.add("dark");}})();</script>
   <link rel="stylesheet" href="../styles.css">
-
-  <script>
-    (function () {
-      try {
-        var s = localStorage.getItem("carea-theme");
-        var d = s ? s === "dark" : true;
-        document.documentElement.classList.toggle("dark", d);
-      } catch (_) {}
-    })();
-  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "carea Installation, Coexistence, and Threat Model",
+    "headline": "carea Compatibility Matrix, MCP Budgets, and Client Coexistence",
     "url": "https://imahmedzarir.github.io/carea/docs/",
     "author": { "@type": "Person", "name": "Ahmed Ishtiaque Zarir" }
   }
   </script>
 </head>
-<body class="bg-grid">
-  <header class="site-header">
-    <div class="container nav-bar">
-      <a class="brand-link" href="../"><img src="../assets/carea.png" alt="carea logo" width="30" height="30"><span>carea</span></a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a class="nav-link" href="../">Overview</a>
-        <a class="nav-link" href="../modes/">Modes</a>
-        <a class="nav-link" href="../cli/">CLI &amp; Schema</a>
-        <a class="nav-link" href="./" aria-current="page">Docs &amp; Coexistence</a>
-        <a class="nav-link" href="../portfolio/">Portfolio</a>
-      </nav>
-      <div class="nav-actions">
-        <a class="btn btn-secondary" href="https://github.com/ImAhmedZarir/carea" rel="noopener">GitHub</a>
-        <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle color theme" aria-pressed="true"><span data-theme-label>Dark</span></button>
-        <button id="mobile-menu-toggle" class="icon-btn mobile-menu-btn" type="button" aria-expanded="false" aria-controls="mobile-drawer">Menu</button>
+<body data-root-prefix="../">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header glass">
+    <div class="container header-inner">
+      <div class="flex items-center gap-4 min-w-0">
+        <a class="brand-link" href="../">
+          <span class="brand-mark"><img src="../assets/carea.png" alt="carea emblem" width="18" height="18"></span>
+          <span>carea</span>
+          <span class="brand-sep">/</span>
+          <span class="brand-ver">docs</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a class="nav-link" href="../">Overview</a>
+          <a class="nav-link" href="../modes/">Modes</a>
+          <a class="nav-link" href="../cli/">CLI &amp; Schema</a>
+          <a class="nav-link" href="./" aria-current="page">Docs</a>
+          <a class="nav-link" href="../portfolio/">Portfolio</a>
+        </nav>
+      </div>
+      <div class="header-actions">
+        <button class="cmd-trigger" type="button" data-cmd-open aria-label="Open command search (Ctrl+K)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span class="cmd-label">Search docs…</span>
+          <kbd class="kbd cmd-label">⌘K</kbd>
+        </button>
+        <a class="btn btn-ghost btn-icon" href="https://github.com/ImAhmedZarir/carea" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        </a>
+        <button class="btn btn-ghost btn-icon" type="button" data-theme-toggle aria-label="Switch color theme">
+          <svg data-icon-sun width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-15.07 1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2m-15.07 7.07 1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg data-icon-moon width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true" style="display:none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+        <button class="btn btn-ghost btn-icon mobile-menu-btn" type="button" data-mobile-menu-open aria-label="Open navigation menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><line x1="4" x2="20" y1="7" y2="7"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="17" y2="17"/></svg>
+        </button>
       </div>
     </div>
-    <nav id="mobile-drawer" class="mobile-drawer" hidden>
-      <a href="../">Overview</a>
-      <a href="../modes/">Modes (1–6)</a>
-      <a href="../cli/">CLI &amp; Schema</a>
-      <a href="./" aria-current="page">Docs &amp; Coexistence</a>
-      <a href="../portfolio/">Portfolio</a>
-    </nav>
   </header>
 
-  <main class="container section">
-    <span class="eyebrow">Operations &amp; Security</span>
-    <h1 class="hero-title" style="font-size:clamp(2rem,4vw,3rem);">Documentation Hub &amp; Compatibility</h1>
-    <p class="hero-lead" style="margin-bottom:2rem;">
-      Install upstream engines from their official distributions, keep MCP catalogs lean, and avoid duplicate prompt skills.
-    </p>
+  <main id="main-content">
+    <section class="hero-wrap">
+      <div class="hero-bg bg-grid" aria-hidden="true"></div>
+      <div class="hero-bg glow-primary" aria-hidden="true"></div>
+      <div class="container hero-content" style="padding-block:3rem;">
+        <div class="eyebrow">Upstream Verification Ledger</div>
+        <h1 class="page-h1 mt-2">Compatibility &amp; Coexistence</h1>
+        <p class="lead mt-3">
+          Generated from <code>compat/matrix.json</code> with transparent separation between verified local binaries, live MCP calls, and remote upstream source checks.
+        </p>
+      </div>
+    </section>
 
-    <h2 style="font-size:1.65rem;margin-bottom:0.85rem;">Upstream Engine Compatibility (<code>compat/matrix.json</code>)</h2>
-    <div class="table-wrap" style="margin-bottom:2.5rem;">
-      <table>
-        <thead>
-          <tr>
-            <th>Engine</th>
-            <th>Recommended</th>
-            <th>Minimum</th>
-            <th>Runtime Notes &amp; Host Verification Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><a href="https://github.com/morluto/rea" rel="noopener"><strong>REA</strong> (<code>rea-agents</code>)</a></td>
-            <td><code>6.10.1</code></td>
-            <td><code>6.8.0</code></td>
-            <td>Requires Node.js <code>^22.23.4 || ^24.22.1 || &gt;=26.12.1</code>. <code>6.10.x</code> uses <code>evidence_format: 2</code> and rejects <code>full</code> schemas. Verified via upstream <code>6.10.1</code> source + live <code>rea_rea</code> MCP; standalone host CLI unrun where Node &gt;=22 absent.</td>
-          </tr>
-          <tr>
-            <td><a href="https://github.com/storytold/craft-anything" rel="noopener"><strong>Craft Anything</strong> (<code>craft-anything-cli</code>)</a></td>
-            <td><code>0.6.1</code></td>
-            <td><code>0.6.0</code></td>
-            <td><strong>Early alpha.</strong> <code>0.6.0</code> CLI + MCP verified directly (<code>322</code> commands, <code>30</code> default MCP tools); <code>0.6.1</code> upstream docs verified remotely (<code>303</code> engine / <code>320</code> total).</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="bento-grid" style="margin-bottom:2.5rem;">
-      <article class="card col-span-3">
-        <h3>Coexistence Without Duplicate Schemas</h3>
-        <p>Keep upstream MCP servers active while skipping redundant prompt copies when running <code>carea</code> as a Claude Code, Codex, or Cursor plugin:</p>
-        <div class="code-box">
-          <button class="copy-btn" type="button">Copy</button>
-          <pre>npx rea-agents@6.10.1 setup --client codex --skill=false --dry-run
-craft-anything-cli setup --client codex --clean-room --no-skill --dry-run</pre>
+    <section class="section">
+      <div class="container stack-lg">
+        <div class="table-desktop">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Engine</th>
+                <th>Observed Version</th>
+                <th>Verification Channel</th>
+                <th>Key Observations</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>REA</strong><div class="muted tabular" style="font-size:0.75rem;">rea-agents · MIT</div></td>
+                <td class="tabular">6.10.1</td>
+                <td><span class="tag">upstream source &amp; docs</span></td>
+                <td>264 advertised tool schemas, 19 families, <code>hot-cold</code> + <code>compact</code>/<code>off</code> profiles. <em>Local Node &gt;=22 CLI exec unrun on host.</em></td>
+              </tr>
+              <tr>
+                <td><strong>REA</strong><div class="muted tabular" style="font-size:0.75rem;">session runtime</div></td>
+                <td class="tabular">6.8.0</td>
+                <td><span class="tag tag--success">live MCP server</span></td>
+                <td>Executed <code>binary_session</code>, <code>analyze_javascript_application</code>, and <code>export_evidence_bundle</code> live.</td>
+              </tr>
+              <tr>
+                <td><strong>Craft Anything</strong><div class="muted tabular" style="font-size:0.75rem;">craft-anything-cli</div></td>
+                <td class="tabular">0.6.0</td>
+                <td><span class="tag tag--success">local CLI + live MCP</span></td>
+                <td>322 CLI commands, 17 toolsets, 30 MCP tools on default clean-room profile; drove Chrome 158 live.</td>
+              </tr>
+              <tr>
+                <td><strong>Craft Anything</strong><div class="muted tabular" style="font-size:0.75rem;">v0.6.1</div></td>
+                <td class="tabular">0.6.1</td>
+                <td><span class="tag">GitHub release docs</span></td>
+                <td>303 engine tools / 320 total in upstream docs; early alpha maturity notice.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </article>
 
-      <article class="card col-span-3">
-        <h3>Threat &amp; Leakage Vectors Mitigated</h3>
-        <p><code>docs/threat-model.md</code> documents 7 concrete leak vectors: host-agent Read/Bash tools, shared LLM context memory, OS clipboard, IDE logs/shell history, CA's spawned rebuild agent, REA bundles on disk, and mixed <code>deep_private</code> metadata.</p>
-        <p style="margin-top:0.65rem;font-size:0.86rem;">Recommendation: pair Topology <code>(b)</code> with container/OS user separation whenever strict IP isolation matters.</p>
-      </article>
-    </div>
+        <div class="table-mobile">
+          <div class="mobile-row-card">
+            <div class="flex items-center justify-between"><strong>REA 6.10.1</strong><span class="tag">source &amp; docs</span></div>
+            <p class="muted mt-2" style="font-size:0.8125rem; margin-bottom:0;">264 schemas, 19 families, Node &gt;=22 required (CLI unrun on host).</p>
+          </div>
+          <div class="mobile-row-card">
+            <div class="flex items-center justify-between"><strong>REA 6.8.0 MCP</strong><span class="tag tag--success">live MCP</span></div>
+            <p class="muted mt-2" style="font-size:0.8125rem; margin-bottom:0;">Verified live in-session with JS analysis and 149 KB export.</p>
+          </div>
+          <div class="mobile-row-card">
+            <div class="flex items-center justify-between"><strong>Craft Anything 0.6.0</strong><span class="tag tag--success">local + MCP</span></div>
+            <p class="muted mt-2" style="font-size:0.8125rem; margin-bottom:0;">322 CLI cmds, 30 MCP tools clean-room, Chrome 158 capture.</p>
+          </div>
+          <div class="mobile-row-card">
+            <div class="flex items-center justify-between"><strong>Craft Anything 0.6.1</strong><span class="tag">release docs</span></div>
+            <p class="muted mt-2" style="font-size:0.8125rem; margin-bottom:0;">303 engine tools / 320 total; early alpha.</p>
+          </div>
+        </div>
 
-    <h2 style="font-size:1.65rem;margin-bottom:0.85rem;">Frequently Asked Questions</h2>
-    <details>
-      <summary>Does carea create a legal clean-room guarantee?</summary>
-      <p>No. <code>carea</code> is an engineering process aid. <code>craft-anything-cli --clean-room</code> is a tool-level guard, and a single developer operating both Analyst and Builder cannot achieve legal clean-room separation.</p>
-    </details>
-    <details>
-      <summary>Why does carea parity-report return partial when rebuild_check passes?</summary>
-      <p>By rule, <code>passed</code> requires both Axis 1 (CA observable check) and Axis 2 (REA behavioral verification) to finish completely with zero partial coverage or unresolved limitations.</p>
-    </details>
-    <details>
-      <summary>Why did REA fail startup with full schema profile errors?</summary>
-      <p>Starting in <code>rea-agents</code> <code>6.10.0</code>, REA rejects <code>full</code> input/output schema profiles. Switch to <code>compact</code> input and <code>off</code> output via <code>carea mcp-profile rea-hot-cold</code>.</p>
-    </details>
+        <div class="grid-bento">
+          <!-- Lean MCP Footprint Comparison Chart -->
+          <div class="card hairline-top span-6 stack">
+            <div>
+              <div class="eyebrow">Context Budget Discipline</div>
+              <h2 class="h3 mt-2">Advertised Initial Tool Schemas</h2>
+            </div>
+            <div class="stack" style="font-size:0.8125rem;">
+              <div>
+                <div class="flex justify-between"><span><code>REA hot-cold</code> (recommended)</span><span class="tabular">5 initial</span></div>
+                <div style="height:0.5rem; border-radius:9999px; background:var(--muted); margin-top:0.35rem; overflow:hidden;"><div style="width:4%; height:100%; background:var(--chart-2);"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between"><span><code>CA --clean-room</code> (default)</span><span class="tabular">30 tools</span></div>
+                <div style="height:0.5rem; border-radius:9999px; background:var(--muted); margin-top:0.35rem; overflow:hidden;"><div style="width:12%; height:100%; background:var(--chart-1);"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between"><span><code>REA unfiltered full</code> (rejected &gt;=6.10)</span><span class="tabular">264 tools</span></div>
+                <div style="height:0.5rem; border-radius:9999px; background:var(--muted); margin-top:0.35rem; overflow:hidden;"><div style="width:100%; height:100%; background:var(--chart-5);"></div></div>
+              </div>
+            </div>
+            <p class="muted" style="margin-bottom:0; font-size:0.8125rem;">
+              <code>carea doctor</code> inspects local client configs and flags heavy schema profiles before context windows degrade.
+            </p>
+          </div>
+
+          <!-- Client Manifest & Upstream Coexistence Tabs -->
+          <div class="card hairline-top span-6 stack" data-tab-group>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h2 class="h3">Client Setup &amp; Coexistence</h2>
+              <div class="tabs" role="tablist" aria-label="Agent clients">
+                <button class="tab-btn" type="button" role="tab" data-tab-target="claude" aria-selected="true">Claude</button>
+                <button class="tab-btn" type="button" role="tab" data-tab-target="codex" aria-selected="false">Codex</button>
+                <button class="tab-btn" type="button" role="tab" data-tab-target="cursor" aria-selected="false">Cursor</button>
+              </div>
+            </div>
+            <div class="code-box" data-tab-panel="claude">
+              <div class="code-head"><span>.claude-plugin/plugin.json · prevent duplicate skills</span></div>
+              <pre class="code-pre"><code>npx rea-agents setup --client claude --skill=false --dry-run
+craft-anything-cli setup --client claude_code --clean-room --no-skill --dry-run</code></pre>
+            </div>
+            <div class="code-box" data-tab-panel="codex" hidden>
+              <div class="code-head"><span>.codex-plugin/plugin.json · skill routing</span></div>
+              <pre class="code-pre"><code>npx rea-agents setup --client codex --skill=false --dry-run
+craft-anything-cli setup --client codex --clean-room --no-skill --dry-run</code></pre>
+            </div>
+            <div class="code-box" data-tab-panel="cursor" hidden>
+              <div class="code-head"><span>.cursor-plugin/plugin.json · MCP separation</span></div>
+              <pre class="code-pre"><code>npx rea-agents setup --client cursor --skill=false --dry-run
+craft-anything-cli setup --client cursor --clean-room --no-skill --dry-run</code></pre>
+            </div>
+            <p class="muted" style="margin-bottom:0; font-size:0.8125rem;">
+              Passing <code>--skill=false</code> and <code>--no-skill</code> lets upstream engines register their binaries while keeping <code>carea</code> as your clean non-colliding skill layer.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
-      <div><strong>carea</strong> · Copyright (c) 2026 Ahmed Ishtiaque Zarir · Unofficial Level-1 layer.</div>
-      <div><a href="../">Home</a> · <a href="../modes/">Modes</a> · <a href="../portfolio/">Portfolio</a></div>
+      <div><strong>carea</strong> · Author: Ahmed Ishtiaque Zarir · Independent Level-1 Orchestration</div>
+      <div class="flex flex-wrap gap-4"><a href="../">Overview</a><a href="../modes/">Modes</a><a href="../cli/">CLI</a><a href="../portfolio/">Portfolio</a></div>
     </div>
   </footer>
-  <script src="../app.js" defer></script>
+
+  <div id="cmd-dialog-backdrop" class="overlay-backdrop" data-open="false" aria-hidden="true">
+    <div class="cmd-dialog" role="dialog" aria-modal="true" aria-label="Command palette">
+      <div class="flex items-center gap-2" style="padding:0.75rem 1rem; border-bottom:1px solid var(--border);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" class="muted" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="cmd-search-input" class="input" type="search" style="border:none; background:transparent; padding:0; min-height:2rem;" placeholder="Jump to routes, modes, CLI commands, or actions…">
+        <kbd class="kbd">ESC</kbd>
+      </div>
+      <div id="cmd-results-list" class="cmd-list" role="listbox" aria-label="Command results"></div>
+    </div>
+  </div>
+
+  <div id="mobile-sheet-backdrop" class="mobile-sheet-backdrop" data-open="false" aria-hidden="true">
+    <div class="mobile-sheet pb-safe" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+      <div class="flex items-center justify-between" style="padding-bottom:0.75rem; border-bottom:1px solid var(--border);">
+        <span style="font-weight:600;">carea navigation</span>
+        <button id="mobile-sheet-close" class="btn btn-ghost btn-icon" type="button" aria-label="Close navigation menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <nav class="stack mt-4" aria-label="Mobile links">
+        <a class="btn btn-ghost" style="justify-content:flex-start; width:100%; color:var(--foreground);" href="../">Overview</a>
+        <a class="btn btn-ghost" style="justify-content:flex-start; width:100%; color:var(--foreground);" href="../modes/">Modes 1–6</a>
+        <a class="btn btn-ghost" style="justify-content:flex-start; width:100%; color:var(--foreground);" href="../cli/">CLI &amp; Schema</a>
+        <a class="btn btn-secondary" style="justify-content:flex-start; width:100%;" href="./">Docs &amp; Coexistence</a>
+        <a class="btn btn-ghost" style="justify-content:flex-start; width:100%; color:var(--foreground);" href="../portfolio/">Portfolio &amp; Case Study</a>
+      </nav>
+    </div>
+  </div>
+
+  <script src="../app.js"></script>
 </body>
 </html>

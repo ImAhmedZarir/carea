@@ -1,174 +1,259 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" suppressHydrationWarning>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Modes 1–6 &amp; Topologies — carea Orchestration Architecture</title>
-  <meta name="description" content="Explore all 6 carea operational modes: Clean-Room UI, Two-Team Clean Room, Deep Verification/AgentEnv, Private Deep Rebuild, Game Rebuild, and Android Mobile.">
-  <meta name="keywords" content="carea modes, two-team clean room, private deep rebuild, game rebuild parity, android apk reverse engineering, Lane B topology">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+  <title>Modes 1–6 &amp; Topologies | carea Orchestration Architecture</title>
+  <meta name="description" content="Explore carea Modes 1–6 (clean-room UI, two-team airlock, REA deep investigation, private deep rebuild, game mechanics, and Android/Flutter ADB) plus Topology a vs b.">
+  <meta name="keywords" content="carea modes, two-team clean room, private deep rebuild, game-rebuild clean room, android-mobile apktool adb, topology b MCP isolation">
   <meta name="author" content="Ahmed Ishtiaque Zarir">
-  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://imahmedzarir.github.io/carea/modes/">
   <link rel="icon" type="image/png" href="../assets/carea.png">
-
+  <link rel="manifest" href="../site.webmanifest">
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="carea">
-  <meta property="og:title" content="Operational Modes 1–6 &amp; Isolation Topologies — carea">
-  <meta property="og:description" content="Choose the right workflow across Clean-Room UI, Two-Team Airlock, Deep Forensics, Private Deep, Game Rebuild, and Android Mobile.">
+  <meta property="og:title" content="Modes 1–6 &amp; Topologies — carea Architecture">
+  <meta property="og:description" content="Interactive explorer covering all 6 carea workflows and Lane B isolation guarantees across REA and Craft Anything.">
   <meta property="og:url" content="https://imahmedzarir.github.io/carea/modes/">
   <meta property="og:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
-
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="carea Modes 1–6 &amp; Lane B Topologies">
-  <meta name="twitter:description" content="Exact tools, authorization gates, and isolation tradeoffs across all 6 carea modes.">
-  <meta name="twitter:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+  <script>(function(){try{var t=localStorage.getItem("theme")||"dark";var d=t==="dark"||(t==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.toggle("dark",d);}catch(e){document.documentElement.classList.add("dark");}})();</script>
   <link rel="stylesheet" href="../styles.css">
-
-  <script>
-    (function () {
-      try {
-        var s = localStorage.getItem("carea-theme");
-        var d = s ? s === "dark" : true;
-        document.documentElement.classList.toggle("dark", d);
-      } catch (_) {}
-    })();
-  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "carea Modes 1-6 and Lane B Isolation Topologies",
+    "headline": "carea Modes 1–6 & Isolation Topologies",
     "url": "https://imahmedzarir.github.io/carea/modes/",
     "author": { "@type": "Person", "name": "Ahmed Ishtiaque Zarir" }
   }
   </script>
 </head>
-<body class="bg-grid">
-  <header class="site-header">
-    <div class="container nav-bar">
-      <a class="brand-link" href="../"><img src="../assets/carea.png" alt="carea logo" width="30" height="30"><span>carea</span></a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a class="nav-link" href="../">Overview</a>
-        <a class="nav-link" href="./" aria-current="page">Modes</a>
-        <a class="nav-link" href="../cli/">CLI &amp; Schema</a>
-        <a class="nav-link" href="../docs/">Docs &amp; Coexistence</a>
-        <a class="nav-link" href="../portfolio/">Portfolio</a>
-      </nav>
-      <div class="nav-actions">
-        <a class="btn btn-secondary" href="https://github.com/ImAhmedZarir/carea" rel="noopener">GitHub</a>
-        <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle color theme" aria-pressed="true"><span data-theme-label>Dark</span></button>
-        <button id="mobile-menu-toggle" class="icon-btn mobile-menu-btn" type="button" aria-expanded="false" aria-controls="mobile-drawer">Menu</button>
+<body data-root-prefix="../">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header glass">
+    <div class="container header-inner">
+      <div class="flex items-center gap-4 min-w-0">
+        <a class="brand-link" href="../">
+          <span class="brand-mark"><img src="../assets/carea.png" alt="carea emblem" width="18" height="18"></span>
+          <span>carea</span>
+          <span class="brand-sep">/</span>
+          <span class="brand-ver">modes</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a class="nav-link" href="../">Overview</a>
+          <a class="nav-link" href="./" aria-current="page">Modes</a>
+          <a class="nav-link" href="../cli/">CLI &amp; Schema</a>
+          <a class="nav-link" href="../docs/">Docs</a>
+          <a class="nav-link" href="../portfolio/">Portfolio</a>
+        </nav>
+      </div>
+      <div class="header-actions">
+        <button class="cmd-trigger" type="button" data-cmd-open aria-label="Open command search (Ctrl+K)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span class="cmd-label">Search docs…</span>
+          <kbd class="kbd cmd-label">⌘K</kbd>
+        </button>
+        <a class="btn btn-ghost btn-icon" href="https://github.com/ImAhmedZarir/carea" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        </a>
+        <button class="btn btn-ghost btn-icon" type="button" data-theme-toggle aria-label="Switch color theme">
+          <svg data-icon-sun width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-15.07 1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2m-15.07 7.07 1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg data-icon-moon width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true" style="display:none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+        <button class="btn btn-ghost btn-icon mobile-menu-btn" type="button" data-mobile-menu-open aria-label="Open navigation menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><line x1="4" x2="20" y1="7" y2="7"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="17" y2="17"/></svg>
+        </button>
       </div>
     </div>
-    <nav id="mobile-drawer" class="mobile-drawer" hidden>
-      <a href="../">Overview</a>
-      <a href="./" aria-current="page">Modes (1–6)</a>
-      <a href="../cli/">CLI &amp; Schema</a>
-      <a href="../docs/">Docs &amp; Coexistence</a>
-      <a href="../portfolio/">Portfolio</a>
-    </nav>
   </header>
 
-  <main class="container section">
-    <span class="eyebrow">Orchestration Matrix</span>
-    <h1 class="hero-title" style="font-size:clamp(2rem,4vw,3rem);">Six Modes &amp; Two Lane B Topologies</h1>
-    <p class="hero-lead" style="margin-bottom:2rem;">
-      Every workflow states its entry point, exact verified upstream tools, authorization gates, and honest parity boundaries.
-    </p>
+  <main id="main-content">
+    <section class="hero-wrap">
+      <div class="hero-bg bg-grid" aria-hidden="true"></div>
+      <div class="hero-bg glow-primary" aria-hidden="true"></div>
+      <div class="container hero-content" style="padding-block:3rem;">
+        <div class="eyebrow">Operational Routing</div>
+        <h1 class="page-h1 mt-2">Modes 1–6 &amp; Lane B Topologies</h1>
+        <p class="lead mt-3">
+          Select a workflow by clean-room strictness, engine availability, and target platform. Click any mode row below to inspect its exact tool chain, boundary gates, and honest verification limits.
+        </p>
+      </div>
+    </section>
 
-    <div class="tab-bar" role="tablist" aria-label="Filter modes">
-      <button class="tab-btn active" type="button" data-mode-filter="all" aria-selected="true">All 6 Modes</button>
-      <button class="tab-btn" type="button" data-mode-filter="clean" aria-selected="false">Clean-Room / Airlock</button>
-      <button class="tab-btn" type="button" data-mode-filter="rea" aria-selected="false">REA Deep</button>
-      <button class="tab-btn" type="button" data-mode-filter="specialized" aria-selected="false">Game &amp; Mobile</button>
-    </div>
-
-    <div class="bento-grid">
-      <article class="card col-span-3" data-mode-tags="clean">
-        <span class="badge badge-info">Mode 1 · /ca · clean-room-ui</span>
-        <h3 style="margin-top:0.65rem;">Clean-Room UI / Web Rebuild</h3>
-        <p>Use when visible screens, CSS responsiveness, and public interactions are sufficient. Runs <code>craft-anything-cli --clean-room</code> without <code>--all-tools</code>.</p>
-        <p style="margin-top:0.65rem;font-size:0.85rem;"><strong>Tools:</strong> <code>core_session_show</code>, <code>web_site_open</code>, <code>web_site_capture</code>, <code>rebuild_start</code>, <code>rebuild_check</code>, <code>web_pixels_compare</code>.</p>
-        <p style="margin-top:0.4rem;font-size:0.85rem;"><strong>Limit:</strong> Observable UI checks only; internal algorithms stay out of scope.</p>
-      </article>
-
-      <article class="card col-span-3" data-mode-tags="clean,rea">
-        <span class="badge badge-success">Mode 2 · /carea · two-team-process</span>
-        <h3 style="margin-top:0.65rem;">Two-Team Clean Room Process</h3>
-        <p>REA Lane A exports evidence to <code>analyst-evidence/</code>; <code>spec-draft</code> + <code>airlock-lint</code> + human <code>airlock-sign</code> gate <code>airlock/</code>; fresh CA <code>--clean-room</code> Lane B builds.</p>
-        <p style="margin-top:0.65rem;font-size:0.85rem;"><strong>Verdict Rule:</strong> <code>carea parity-report</code> marks <code>passed</code> only when both CA and REA axes finish completely.</p>
-      </article>
-
-      <article class="card col-span-3" data-mode-tags="rea">
-        <span class="badge badge-info">Mode 3 · /rea · deep-verification</span>
-        <h3 style="margin-top:0.65rem;">Deep Investigation &amp; AgentEnv</h3>
-        <p>REA-first binary, ELF/PE/Mach-O, JS/Electron, managed .NET, or UEFI inspection with formal <code>verify_reconstruction</code> and <code>AgentEnv</code> export.</p>
-        <p style="margin-top:0.65rem;font-size:0.85rem;"><strong>Tools:</strong> <code>open_binary</code>, <code>analyze_function</code>, <code>inspect_uefi_firmware</code>, <code>export_environment_bundle</code>.</p>
-      </article>
-
-      <article class="card col-span-3" data-mode-tags="rea">
-        <span class="badge badge-danger">Mode 4 · /carea · private-deep-rebuild</span>
-        <h3 style="margin-top:0.65rem;">Private Deep Rebuild (NOT CLEAN-ROOM)</h3>
-        <div class="banner-caution" style="margin-block:0.65rem;">
-          <strong>WARNING:</strong> Combines REA Deep + CA <code>--deep</code> for owned/authorized codebases only. Sets <code>deep_private: true</code> and prints mandatory <code>NOT CLEAN-ROOM</code> banners.
+    <section id="mode-list" class="section">
+      <div id="modes-explorer" class="container stack-lg">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="tabs" role="tablist" aria-label="Filter modes">
+            <button class="tab-btn" type="button" role="tab" data-mode-filter="all" aria-selected="true">All (6)</button>
+            <button class="tab-btn" type="button" role="tab" data-mode-filter="clean" aria-selected="false">Clean-Room</button>
+            <button class="tab-btn" type="button" role="tab" data-mode-filter="rea" aria-selected="false">REA Only</button>
+            <button class="tab-btn" type="button" role="tab" data-mode-filter="deep" aria-selected="false">Hybrid &amp; Deep</button>
+          </div>
+          <div style="width: min(100%, 19rem);">
+            <input id="modes-search" class="input" type="search" placeholder="Filter by ID, engine, or skill…">
+          </div>
         </div>
-        <p style="font-size:0.85rem;">Schema validation strictly forbids combining <code>deep_private: true</code> with clean-room modes or <code>airlock.status = "passed"</code>.</p>
-      </article>
 
-      <article class="card col-span-3" data-mode-tags="specialized,clean">
-        <span class="badge badge-warning">Mode 5 · /carea · game-rebuild</span>
-        <h3 style="margin-top:0.65rem;">Game Rebuild Path (Unity / Unreal / Godot)</h3>
-        <p>Rebuilds gameplay loops using <code>--build-with</code> and original generated assets (<code>assets_image_generate</code>, <code>assets_model_generate</code>).</p>
-        <p style="margin-top:0.65rem;font-size:0.85rem;"><strong>Strict Gate:</strong> Zero anti-cheat bypass and zero copied sprites/meshes. Note CA <code>game_*</code> extraction tools are blocked in <code>--clean-room</code> (Deep-only).</p>
-      </article>
+        <div class="grid-bento">
+          <!-- Responsive DataTable (Desktop) + Mobile Card List (<768px) -->
+          <div class="span-7">
+            <div class="table-desktop">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Mode</th>
+                    <th>ID &amp; Name</th>
+                    <th>Skill</th>
+                    <th>Clean-Room</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-mode-row="clean-room-ui" data-interactive="true">
+                    <td class="tabular">01</td>
+                    <td><strong>Clean-Room UI Rebuild</strong><div class="muted tabular" style="font-size:0.75rem;">clean-room-ui</div></td>
+                    <td><code>/ca</code></td>
+                    <td><span class="tag tag--primary">Tool-level</span></td>
+                  </tr>
+                  <tr data-mode-row="two-team-process" data-interactive="true" data-selected="true">
+                    <td class="tabular">02</td>
+                    <td><strong>Two-Team Clean Room</strong><div class="muted tabular" style="font-size:0.75rem;">two-team-process</div></td>
+                    <td><code>/carea</code></td>
+                    <td><span class="tag tag--success">Airlock + Topo b</span></td>
+                  </tr>
+                  <tr data-mode-row="deep-verification" data-interactive="true">
+                    <td class="tabular">03</td>
+                    <td><strong>Deep Investigation / AgentEnv</strong><div class="muted tabular" style="font-size:0.75rem;">deep-verification</div></td>
+                    <td><code>/rea</code></td>
+                    <td><span class="tag">Analysis only</span></td>
+                  </tr>
+                  <tr data-mode-row="private-deep-rebuild" data-interactive="true">
+                    <td class="tabular">04</td>
+                    <td><strong>Private Deep Rebuild</strong><div class="muted tabular" style="font-size:0.75rem;">private-deep-rebuild</div></td>
+                    <td><code>/carea</code></td>
+                    <td><span class="tag tag--warning">NO · deep_private</span></td>
+                  </tr>
+                  <tr data-mode-row="game-rebuild" data-interactive="true">
+                    <td class="tabular">05</td>
+                    <td><strong>Game Rebuild Path</strong><div class="muted tabular" style="font-size:0.75rem;">game-rebuild</div></td>
+                    <td><code>/carea · /ca</code></td>
+                    <td><span class="tag">Unless game_*</span></td>
+                  </tr>
+                  <tr data-mode-row="android-mobile" data-interactive="true">
+                    <td class="tabular">06</td>
+                    <td><strong>Android / Mobile App Path</strong><div class="muted tabular" style="font-size:0.75rem;">android-mobile</div></td>
+                    <td><code>/carea</code></td>
+                    <td><span class="tag">Across Airlock</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-      <article class="card col-span-3" data-mode-tags="specialized,rea">
-        <span class="badge badge-warning">Mode 6 · /carea · android-mobile</span>
-        <h3 style="margin-top:0.65rem;">Android / Mobile App Path</h3>
-        <p>Pairs REA APK/DEX/JNI/Flutter inspection (<code>inspect_android_package</code>, <code>inspect_dart_aot</code>) with CA observable <code>adb</code> UI capture (<code>adb_screenshot_take</code>, <code>adb_window_show</code>).</p>
-        <p style="margin-top:0.65rem;font-size:0.85rem;"><strong>Limit:</strong> Requires authorized APK/test device and Android Platform Tools (<code>adb</code>).</p>
-      </article>
-    </div>
+            <div class="table-mobile">
+              <button class="mobile-row-card" type="button" data-mode-row="clean-room-ui" style="text-align:left; cursor:pointer;">
+                <div class="flex items-center justify-between gap-2"><strong>01 · Clean-Room UI Rebuild</strong><span class="tag tag--primary">/ca</span></div>
+                <div class="muted tabular mt-2" style="font-size:0.78rem;">clean-room-ui · CA --clean-room</div>
+              </button>
+              <button class="mobile-row-card" type="button" data-mode-row="two-team-process" data-selected="true" style="text-align:left; cursor:pointer;">
+                <div class="flex items-center justify-between gap-2"><strong>02 · Two-Team Clean Room</strong><span class="tag tag--success">/carea</span></div>
+                <div class="muted tabular mt-2" style="font-size:0.78rem;">two-team-process · REA + Airlock + CA</div>
+              </button>
+              <button class="mobile-row-card" type="button" data-mode-row="deep-verification" style="text-align:left; cursor:pointer;">
+                <div class="flex items-center justify-between gap-2"><strong>03 · Deep Investigation / AgentEnv</strong><span class="tag">/rea</span></div>
+                <div class="muted tabular mt-2" style="font-size:0.78rem;">deep-verification · REA only</div>
+              </button>
+              <button class="mobile-row-card" type="button" data-mode-row="private-deep-rebuild" style="text-align:left; cursor:pointer;">
+                <div class="flex items-center justify-between gap-2"><strong>04 · Private Deep Rebuild</strong><span class="tag tag--warning">NOT clean</span></div>
+                <div class="muted tabular mt-2" style="font-size:0.78rem;">private-deep-rebuild · deep_private: true</div>
+              </button>
+              <button class="mobile-row-card" type="button" data-mode-row="game-rebuild" style="text-align:left; cursor:pointer;">
+                <div class="flex items-center justify-between gap-2"><strong>05 · Game Rebuild Path</strong><span class="tag">Unity/Godot/UE</span></div>
+                <div class="muted tabular mt-2" style="font-size:0.78rem;">game-rebuild · game_* Deep-only caveat</div>
+              </button>
+              <button class="mobile-row-card" type="button" data-mode-row="android-mobile" style="text-align:left; cursor:pointer;">
+                <div class="flex items-center justify-between gap-2"><strong>06 · Android / Mobile Path</strong><span class="tag">JADX + ADB</span></div>
+                <div class="muted tabular mt-2" style="font-size:0.78rem;">android-mobile · REA mobile + CA adb</div>
+              </button>
+            </div>
+          </div>
 
-    <h2 style="font-size:1.75rem;margin-top:3.25rem;margin-bottom:1rem;">Lane B Topologies: Who Is the Builder?</h2>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Topology</th>
-            <th>How Lane B Runs</th>
-            <th>Isolation Strength</th>
-            <th>Key Weakness / Mitigation</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>topology: "a"</code></td>
-            <td>Orchestrator calls <code>craft-anything-cli rebuild --clean-room</code>; CA spawns child builder agent.</td>
-            <td><span class="badge badge-warning">Moderate</span></td>
-            <td>Initial prompt and parent session origin overlap; share same OS user unless containerized.</td>
-          </tr>
-          <tr>
-            <td><code>topology: "b"</code></td>
-            <td>Lane A closes completely; fresh Session 2 loads <code>craft-anything-cli mcp --clean-room</code> only (no REA MCP).</td>
-            <td><span class="badge badge-success">Stronger (Recommended)</span></td>
-            <td>Zero shared LLM context window. Enforce workspace permissions via <code>carea isolation-check</code> and see <code>docs/threat-model.md</code>.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+          <div id="mode-detail-inspector" class="card hairline-top span-5"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tight" style="border-top:1px solid var(--border);">
+      <div class="container">
+        <div class="grid-bento">
+          <div class="card hairline-top span-6 stack">
+            <div class="eyebrow">Stronger Separation</div>
+            <h2 class="h3">Topology (b) — Fresh Session MCP</h2>
+            <p class="muted" style="margin-bottom:0; font-size:0.875rem;">
+              Session 1 (REA) exits before Lane B starts. Session 2 loads only <code>craft-anything-cli mcp --clean-room</code> (no REA MCP server, empty history, read access limited to <code>airlock/</code>).
+            </p>
+            <div class="callout callout--warning" style="font-size:0.8125rem;">
+              <strong>Residual risk:</strong> Tool-level flags still do not isolate OS shell tools; inspect filesystem links via <code>carea isolation-check</code>.
+            </div>
+          </div>
+
+          <div class="card hairline-top span-6 stack">
+            <div class="eyebrow">Mode 4 &amp; Mode 5 Fence</div>
+            <h2 class="h3">Non-Clean-Room &amp; Game Extraction Safeguards</h2>
+            <div class="code-box">
+              <div class="code-head"><span>Mandatory Banner · private-deep-rebuild</span></div>
+              <pre class="code-pre"><code>WARNING: PRIVATE DEEP REBUILD MODE — NOT CLEAN-ROOM
+Set deep_private: true. airlock.status="passed" forbidden.</code></pre>
+            </div>
+            <p class="muted" style="margin-bottom:0; font-size:0.8125rem;">
+              In Mode 5, Craft Anything <code>game_pak_extract</code> and <code>game_unity_*</code> tools are blocked under <code>--clean-room</code>. Original target art and audio must never be copied; use generated replacement assets.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
-      <div><strong>carea</strong> · Copyright (c) 2026 Ahmed Ishtiaque Zarir · MIT (code/docs) + Reserved Brand Terms.</div>
-      <div><a href="../docs/">Docs</a> · <a href="../cli/">CLI</a> · <a href="../portfolio/">Portfolio</a></div>
+      <div><strong>carea</strong> · Author: Ahmed Ishtiaque Zarir · Independent Level-1 Orchestration</div>
+      <div class="flex flex-wrap gap-4"><a href="../">Overview</a><a href="../cli/">CLI</a><a href="../docs/">Docs</a><a href="../portfolio/">Portfolio</a></div>
     </div>
   </footer>
-  <script src="../app.js" defer></script>
+
+  <div id="cmd-dialog-backdrop" class="overlay-backdrop" data-open="false" aria-hidden="true">
+    <div class="cmd-dialog" role="dialog" aria-modal="true" aria-label="Command palette">
+      <div class="flex items-center gap-2" style="padding:0.75rem 1rem; border-bottom:1px solid var(--border);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" class="muted" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="cmd-search-input" class="input" type="search" style="border:none; background:transparent; padding:0; min-height:2rem;" placeholder="Jump to routes, modes, CLI commands, or actions…">
+        <kbd class="kbd">ESC</kbd>
+      </div>
+      <div id="cmd-results-list" class="cmd-list" role="listbox" aria-label="Command results"></div>
+    </div>
+  </div>
+
+  <div id="mobile-sheet-backdrop" class="mobile-sheet-backdrop" data-open="false" aria-hidden="true">
+    <div class="mobile-sheet pb-safe" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+      <div class="flex items-center justify-between" style="padding-bottom:0.75rem; border-bottom:1px solid var(--border);">
+        <span style="font-weight:600;">carea navigation</span>
+        <button id="mobile-sheet-close" class="btn btn-ghost btn-icon" type="button" aria-label="Close navigation menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <nav class="stack mt-4" aria-label="Mobile links">
+        <a class="btn btn-ghost" style="justify-content:flex-start; width:100%; color:var(--foreground);" href="../">Overview</a>
+        <a class="btn btn-secondary" style="justify-content:flex-start; width:100%;" href="./">Modes 1–6</a>
+        <a class="btn btn-ghost" style="justify-content:flex-start; width:100%; color:var(--foreground);" href="../cli/">CLI &amp; Schema</a>
+        <a class="btn btn-ghost" style="justify-content:flex-start; width:100%; color:var(--foreground);" href="../docs/">Docs &amp; Coexistence</a>
+        <a class="btn btn-ghost" style="justify-content:flex-start; width:100%; color:var(--foreground);" href="../portfolio/">Portfolio &amp; Case Study</a>
+      </nav>
+    </div>
+  </div>
+
+  <script src="../app.js"></script>
 </body>
 </html>
