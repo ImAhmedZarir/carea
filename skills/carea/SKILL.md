@@ -13,7 +13,7 @@ description: Orchestrate the combined four-stage pipeline (REA deep inspection -
 
 ## 1. Mode Router & Single-Engine Delegation
 
-Pick the right mode for the task using [`references/intent-router.md`](references/intent-router.md):
+Pick one of the six documented modes in [`references/modes.md`](references/modes.md) (and [`references/intent-router.md`](references/intent-router.md)):
 
 1. **Mode 1 — Clean-Room UI / Web Rebuild -> delegate to `/ca`:** Only observable UI/web/window behavior is needed (`craft-anything-cli` `--clean-room` only).
 2. **Mode 2 — Two-Team Clean Room Process (Full `/carea` Pipeline):** Internal protocols, API shapes, state machines, or binary/JS logic must inform a fresh clean rebuild. Enforce separate directories (`analyst-evidence/`, `airlock/`, `builder-workspace/`, `verification/`), Topology B recommended (separate fresh agent session driving `craft-anything-cli mcp --clean-room`).
@@ -47,6 +47,7 @@ Replace honor-system isolation with executable `carea` CLI checks at each bounda
 
 ## References
 
+- Modes 1–6 & Lane B Topologies A/B: [`references/modes.md`](references/modes.md)
 - Tool routing & context-budget table: [`references/intent-router.md`](references/intent-router.md)
 - Shared Two-Team Clean Room protocol: [`../_shared/clean-room-protocol.md`](../_shared/clean-room-protocol.md)
 - Shared Evidence & Handoff schema guide: [`../_shared/evidence-handoff.md`](../_shared/evidence-handoff.md)

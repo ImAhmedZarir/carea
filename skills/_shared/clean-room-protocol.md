@@ -25,7 +25,7 @@ Because `craft-anything-cli rebuild` spawns its own coding agent subprocess insi
 - **Topology A (`rebuild`-spawned agent):** One orchestrator controls Lane A and calls `craft-anything-cli rebuild --clean-room`; Craft Anything's child agent acts as Lane B. *Weaker isolation*: the orchestrator holds both Analyst and Builder visibility unless restarted cleanly, and `rebuild`'s prompt/session history originates from the same operator/workspace.
 - **Topology B (Separate fresh agent session driving CA via MCP — Recommended):** Lane A runs in Session 1 and stops after passing the Airlock. Lane B starts in a **fresh Session 2** configured solely with `craft-anything-cli mcp --clean-room` (without REA MCP, without `--all-tools`), restricted read-only to `airlock/` and read-write to `builder-workspace/`. *Stronger isolation*: context window, conversation memory, and inspection tool permissions are structurally separated from `analyst-evidence/`.
 
-See [carea intent router](../carea/references/intent-router.md) for context-budget and preset routing details.
+See [carea modes guide](../carea/references/modes.md#lane-b-topologies-a-vs-b) for full setup details.
 
 ## 3. Stage-by-Stage Workflow
 
