@@ -13,6 +13,13 @@
   An independent, unofficial Level-1 agent skill pack, airlock CLI, and dual-axis verification layer coordinating external <strong>REA</strong> and <strong>Craft Anything</strong> engines.
 </p>
 
+<p align="center">
+  <a href="https://imahmedzarir.github.io/carea/"><strong>Web Docs &amp; Portfolio</strong></a> ·
+  <a href="https://imahmedzarir.github.io/carea/modes/"><strong>Modes 1–6</strong></a> ·
+  <a href="https://imahmedzarir.github.io/carea/cli/"><strong>CLI &amp; Schema</strong></a> ·
+  <a href="https://imahmedzarir.github.io/carea/portfolio/"><strong>Case Study</strong></a>
+</p>
+
 ---
 
 ## What `carea` Is — and What It Is Not

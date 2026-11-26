@@ -1,0 +1,17 @@
+{
+  "name": "carea — Craft And Reverse Engineer Everything",
+  "short_name": "carea",
+  "description": "Independent Level-1 orchestration skills, airlock CLI checks, and dual-axis parity framework for REA and Craft Anything.",
+  "start_url": "/carea/",
+  "scope": "/carea/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#1e7cc2",
+  "icons": [
+    {
+      "src": "./assets/carea.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

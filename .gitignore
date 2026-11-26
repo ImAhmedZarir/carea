@@ -16,3 +16,4 @@ venv/
 Thumbs.db
 *.tmp
 .carea/tmp/
+_site/

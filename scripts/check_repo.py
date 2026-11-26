@@ -7,6 +7,7 @@ import hashlib
 import json
 import re
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -173,6 +174,61 @@ def check_examples_and_fixtures(errors: list[str]) -> None:
             errors.append(f"Negative fixture {nf.name} unexpectedly validated!")
 
 
+def check_site_seo_and_links(errors: list[str]) -> int:
+    site_dir = REPO_ROOT / "site"
+    if not site_dir.is_dir():
+        return 0
+    html_files = sorted(site_dir.rglob("*.html"))
+    sm_path = site_dir / "sitemap.xml"
+    sm_urls: set[str] = set()
+    if not sm_path.is_file():
+        errors.append("site/sitemap.xml missing")
+    else:
+        try:
+            root = ET.fromstring(sm_path.read_text(encoding="utf-8"))
+            ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+            for loc in root.findall(".//s:loc", ns):
+                if loc.text:
+                    sm_urls.add(loc.text.strip())
+        except Exception as exc:
+            errors.append(f"Invalid XML in site/sitemap.xml: {exc}")
+
+    if not (site_dir / "robots.txt").is_file():
+        errors.append("site/robots.txt missing")
+
+    ref_re = re.compile(r'(?:href|src)=["\']([^"\'#?]+)')
+    ld_re = re.compile(r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', re.S)
+
+    for hf in html_files:
+        rel = hf.relative_to(REPO_ROOT).as_posix()
+        txt = hf.read_text(encoding="utf-8")
+        for req_tag in ("<title>", 'name="description"', 'name="keywords"', 'rel="canonical"', 'property="og:title"', 'property="og:description"', 'property="og:image"'):
+            if req_tag not in txt:
+                errors.append(f"Missing SEO tag {req_tag} in {rel}")
+        cm = re.search(r'<link[^>]+rel="canonical"[^>]+href="([^"]+)"', txt)
+        if cm and sm_urls and cm.group(1) not in sm_urls:
+            errors.append(f"Canonical URL {cm.group(1)} missing from site/sitemap.xml ({rel})")
+        ld_matches = ld_re.findall(txt)
+        if not ld_matches:
+            errors.append(f"Missing JSON-LD structured data in {rel}")
+        for raw_ld in ld_matches:
+            try:
+                json.loads(raw_ld)
+            except Exception as exc:
+                errors.append(f"Invalid JSON-LD in {rel}: {exc}")
+        for target in ref_re.findall(txt):
+            if target.startswith(("http://", "https://", "mailto:", "data:")):
+                continue
+            if target.endswith("assets/carea.png"):
+                if not (REPO_ROOT / "docs" / "brand" / "carea.png").is_file():
+                    errors.append(f"Canonical docs/brand/carea.png missing for {rel}")
+                continue
+            dest = (hf.parent / target).resolve()
+            if not dest.exists():
+                errors.append(f"Broken relative asset/link in {rel}: {target}")
+    return len(html_files)
+
+
 def check_bundled_data_sync(errors: list[str]) -> None:
     pairs = [
         (REPO_ROOT / "compat" / "matrix.json", SRC_DIR / "carea" / "data" / "matrix.json"),
@@ -188,6 +244,7 @@ def main() -> int:
     n_json = check_json_files(errors)
     n_yaml = check_yaml_workflows_and_frontmatter(errors)
     n_md = check_markdown_links(errors)
+    n_site = check_site_seo_and_links(errors)
     n_files = check_upstream_asset_ban(errors)
     check_examples_and_fixtures(errors)
     check_bundled_data_sync(errors)
@@ -199,7 +256,7 @@ def main() -> int:
 
     print(
         f"ALL REPO CHECKS PASSED: {n_json} JSON, {n_yaml} YAML/frontmatter, "
-        f"{n_md} markdown link checks, {n_files} files asset-ban clean."
+        f"{n_md} markdown link checks, {n_site} site HTML/SEO checks, {n_files} files asset-ban clean."
     )
     return 0
 

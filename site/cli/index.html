@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>CLI &amp; Handoff Schema v1.1.0 — carea Documentation</title>
+  <meta name="description" content="Complete reference for all 10 carea Python stdlib CLI commands, MCP profile presets, airlock-lint rules, and carea-handoff.json schema 1.0.0/1.1.0.">
+  <meta name="keywords" content="carea CLI, airlock-lint, airlock-sign, spec-draft, parity-report, isolation-check, mcp-profile, carea-handoff.json">
+  <meta name="author" content="Ahmed Ishtiaque Zarir">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://imahmedzarir.github.io/carea/cli/">
+  <link rel="icon" type="image/png" href="../assets/carea.png">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="carea">
+  <meta property="og:title" content="carea CLI Commands &amp; Handoff Schema v1.1.0">
+  <meta property="og:description" content="Zero-dependency Python 3.10+ CLI checks replacing honor-system clean-room claims with real validation.">
+  <meta property="og:url" content="https://imahmedzarir.github.io/carea/cli/">
+  <meta property="og:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="carea CLI &amp; Schema v1.1.0">
+  <meta name="twitter:description" content="Reference for init, doctor, validate-handoff, airlock-lint, airlock-sign, isolation-check, spec-draft, parity-report, return-feedback, mcp-profile.">
+  <meta name="twitter:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../styles.css">
+
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem("carea-theme");
+        var d = s ? s === "dark" : true;
+        document.documentElement.classList.toggle("dark", d);
+      } catch (_) {}
+    })();
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "carea CLI and Handoff Schema v1.1.0 Reference",
+    "url": "https://imahmedzarir.github.io/carea/cli/",
+    "author": { "@type": "Person", "name": "Ahmed Ishtiaque Zarir" }
+  }
+  </script>
+</head>
+<body class="bg-grid">
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand-link" href="../"><img src="../assets/carea.png" alt="carea logo" width="30" height="30"><span>carea</span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a class="nav-link" href="../">Overview</a>
+        <a class="nav-link" href="../modes/">Modes</a>
+        <a class="nav-link" href="./" aria-current="page">CLI &amp; Schema</a>
+        <a class="nav-link" href="../docs/">Docs &amp; Coexistence</a>
+        <a class="nav-link" href="../portfolio/">Portfolio</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn-secondary" href="https://github.com/ImAhmedZarir/carea" rel="noopener">GitHub</a>
+        <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle color theme" aria-pressed="true"><span data-theme-label>Dark</span></button>
+        <button id="mobile-menu-toggle" class="icon-btn mobile-menu-btn" type="button" aria-expanded="false" aria-controls="mobile-drawer">Menu</button>
+      </div>
+    </div>
+    <nav id="mobile-drawer" class="mobile-drawer" hidden>
+      <a href="../">Overview</a>
+      <a href="../modes/">Modes (1–6)</a>
+      <a href="./" aria-current="page">CLI &amp; Schema</a>
+      <a href="../docs/">Docs &amp; Coexistence</a>
+      <a href="../portfolio/">Portfolio</a>
+    </nav>
+  </header>
+
+  <main class="container section">
+    <span class="eyebrow">Python 3.10+ Stdlib Only</span>
+    <h1 class="hero-title" style="font-size:clamp(2rem,4vw,3rem);">CLI Reference &amp; Schema v1.1.0</h1>
+    <p class="hero-lead" style="margin-bottom:1.5rem;">
+      Install cleanly via <code>pip install --no-deps .</code> or run directly through <code>scripts/carea</code> and <code>scripts/carea.ps1</code>.
+    </p>
+
+    <div style="margin-bottom:1.5rem;">
+      <label for="filter-search" class="sr-only">Filter CLI commands</label>
+      <input id="filter-search" class="search-input" type="search" placeholder="Filter CLI commands (e.g., airlock-lint, parity, mcp-profile)...">
+    </div>
+
+    <div class="bento-grid" style="margin-bottom:3rem;">
+      <article class="card col-span-3" data-filter-item>
+        <h3><code>carea init &lt;dir&gt;</code></h3>
+        <p>Creates 4 separated lanes (<code>analyst-evidence/</code>, <code>airlock/</code>, <code>builder-workspace/</code>, <code>verification/</code>) and <code>.carea/config.json</code>. Mode 4 adds loud <code>NOT CLEAN-ROOM</code> banners.</p>
+      </article>
+      <article class="card col-span-3" data-filter-item>
+        <h3><code>carea doctor</code></h3>
+        <p>Checks <code>rea</code>, Node.js, and <code>craft-anything-cli</code> against <code>compat/matrix.json</code>; warns on REA <code>full</code> schemas (&gt;=6.10.0) and CA <code>--all-tools</code>.</p>
+      </article>
+      <article class="card col-span-3" data-filter-item>
+        <h3><code>carea validate-handoff &lt;file&gt;</code></h3>
+        <p>Validates <code>1.0.0</code> and <code>1.1.0</code> handoffs without third-party dependencies and blocks <code>deep_private: true</code> alongside clean-room flags.</p>
+      </article>
+      <article class="card col-span-3" data-filter-item>
+        <h3><code>carea airlock-lint &lt;dir&gt;</code></h3>
+        <p>Heuristic leak scanner catching fenced code, inline bitwise/branch snippets, asm, hex dumps, 4+ hex constants, minified JS, base64, assets, secrets, obfuscated emails, and long prose.</p>
+      </article>
+      <article class="card col-span-3" data-filter-item>
+        <h3><code>carea airlock-sign &lt;handoff&gt;</code></h3>
+        <p>Refuses unless <code>airlock-lint</code> is strictly <code>PASS</code>, <code>deep_private</code> is false, and both <code>--reviewer</code> and <code>--confirm-human-review</code> are passed.</p>
+      </article>
+      <article class="card col-span-3" data-filter-item>
+        <h3><code>carea isolation-check [dir]</code></h3>
+        <p>Checks symlink/junction overlap between <code>builder-workspace</code> and <code>analyst-evidence</code> and prints recommended host-agent deny snippets.</p>
+      </article>
+      <article class="card col-span-3" data-filter-item>
+        <h3><code>carea spec-draft &lt;bundle&gt;</code></h3>
+        <p>Extracts opaque <code>ev_...</code>, <code>unk_...</code>, and <code>obl_...</code> IDs cleanly from REA bundles without copying raw code or payloads; always stamped <code>DRAFT</code>.</p>
+      </article>
+      <article class="card col-span-3" data-filter-item>
+        <h3><code>carea parity-report</code></h3>
+        <p>Merges CA observable results and REA verification outputs; marks obligations <code>passed</code> only when both axes complete with zero partial limitations.</p>
+      </article>
+      <article class="card col-span-3" data-filter-item>
+        <h3><code>carea return-feedback</code></h3>
+        <p>Outputs failing test vectors and observable UI/pixel differences for Lane B, running self-lint to prevent accidental code leakage.</p>
+      </article>
+      <article class="card col-span-3" data-filter-item>
+        <h3><code>carea mcp-profile &lt;preset&gt;</code></h3>
+        <p>Prints lean JSON configs for REA and CA; <code>--apply</code> renders a unified diff and asks interactive confirmation before writing.</p>
+      </article>
+    </div>
+
+    <section aria-label="Interactive MCP Profile Viewer" style="margin-bottom:3rem;">
+      <h2 style="font-size:1.75rem;margin-bottom:0.75rem;">Interactive MCP Profile Generator</h2>
+      <div class="tab-bar" role="tablist">
+        <button class="tab-btn active" type="button" data-mcp-preset="rea-hot-cold" aria-selected="true">rea-hot-cold</button>
+        <button class="tab-btn" type="button" data-mcp-preset="rea-web" aria-selected="false">rea-web</button>
+        <button class="tab-btn" type="button" data-mcp-preset="rea-android" aria-selected="false">rea-android</button>
+        <button class="tab-btn" type="button" data-mcp-preset="ca-clean-room" aria-selected="false">ca-clean-room</button>
+        <button class="tab-btn" type="button" data-mcp-preset="ca-restricted-web" aria-selected="false">ca-restricted-web</button>
+        <button class="tab-btn" type="button" data-mcp-preset="ca-deep-private" aria-selected="false">ca-deep-private</button>
+      </div>
+      <div class="code-box">
+        <button class="copy-btn" type="button">Copy</button>
+        <pre id="mcp-profile-output">{}</pre>
+      </div>
+    </section>
+
+    <section aria-label="Schema 1.1.0 Migration Summary">
+      <h2 style="font-size:1.75rem;margin-bottom:0.75rem;">Handoff Schema <code>1.0.0</code> &rarr; <code>1.1.0</code> Additions</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Field / Rule</th>
+              <th>Type / Allowed</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>topology</code></td>
+              <td><code>"a" | "b"</code></td>
+              <td>Records CA rebuild child agent (<code>a</code>) vs fresh MCP session (<code>b</code>).</td>
+            </tr>
+            <tr>
+              <td><code>deep_private</code></td>
+              <td><code>boolean</code></td>
+              <td>Marks Mode 4 authorized deep rebuilds; mutually exclusive with clean-room status.</td>
+            </tr>
+            <tr>
+              <td><code>airlock.audit</code></td>
+              <td><code>{lint_status, lint_hash, human_reviewer, signed_at}</code></td>
+              <td>Cryptographic lint report digest + human sign-off metadata written by <code>airlock-sign</code>.</td>
+            </tr>
+            <tr>
+              <td><code>obligations[].coverage</code> &amp; <code>limitations</code></td>
+              <td><code>{scope, notes}</code>, <code>string[]</code></td>
+              <td>Prevents overclaiming full equivalence on static-only or partial runs.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>carea</strong> · Copyright (c) 2026 Ahmed Ishtiaque Zarir · MIT License.</div>
+      <div><a href="../">Home</a> · <a href="../modes/">Modes</a> · <a href="../docs/">Docs</a></div>
+    </div>
+  </footer>
+  <script src="../app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Modes 1–6 &amp; Topologies — carea Orchestration Architecture</title>
+  <meta name="description" content="Explore all 6 carea operational modes: Clean-Room UI, Two-Team Clean Room, Deep Verification/AgentEnv, Private Deep Rebuild, Game Rebuild, and Android Mobile.">
+  <meta name="keywords" content="carea modes, two-team clean room, private deep rebuild, game rebuild parity, android apk reverse engineering, Lane B topology">
+  <meta name="author" content="Ahmed Ishtiaque Zarir">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://imahmedzarir.github.io/carea/modes/">
+  <link rel="icon" type="image/png" href="../assets/carea.png">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="carea">
+  <meta property="og:title" content="Operational Modes 1–6 &amp; Isolation Topologies — carea">
+  <meta property="og:description" content="Choose the right workflow across Clean-Room UI, Two-Team Airlock, Deep Forensics, Private Deep, Game Rebuild, and Android Mobile.">
+  <meta property="og:url" content="https://imahmedzarir.github.io/carea/modes/">
+  <meta property="og:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="carea Modes 1–6 &amp; Lane B Topologies">
+  <meta name="twitter:description" content="Exact tools, authorization gates, and isolation tradeoffs across all 6 carea modes.">
+  <meta name="twitter:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../styles.css">
+
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem("carea-theme");
+        var d = s ? s === "dark" : true;
+        document.documentElement.classList.toggle("dark", d);
+      } catch (_) {}
+    })();
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "carea Modes 1-6 and Lane B Isolation Topologies",
+    "url": "https://imahmedzarir.github.io/carea/modes/",
+    "author": { "@type": "Person", "name": "Ahmed Ishtiaque Zarir" }
+  }
+  </script>
+</head>
+<body class="bg-grid">
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand-link" href="../"><img src="../assets/carea.png" alt="carea logo" width="30" height="30"><span>carea</span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a class="nav-link" href="../">Overview</a>
+        <a class="nav-link" href="./" aria-current="page">Modes</a>
+        <a class="nav-link" href="../cli/">CLI &amp; Schema</a>
+        <a class="nav-link" href="../docs/">Docs &amp; Coexistence</a>
+        <a class="nav-link" href="../portfolio/">Portfolio</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn-secondary" href="https://github.com/ImAhmedZarir/carea" rel="noopener">GitHub</a>
+        <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle color theme" aria-pressed="true"><span data-theme-label>Dark</span></button>
+        <button id="mobile-menu-toggle" class="icon-btn mobile-menu-btn" type="button" aria-expanded="false" aria-controls="mobile-drawer">Menu</button>
+      </div>
+    </div>
+    <nav id="mobile-drawer" class="mobile-drawer" hidden>
+      <a href="../">Overview</a>
+      <a href="./" aria-current="page">Modes (1–6)</a>
+      <a href="../cli/">CLI &amp; Schema</a>
+      <a href="../docs/">Docs &amp; Coexistence</a>
+      <a href="../portfolio/">Portfolio</a>
+    </nav>
+  </header>
+
+  <main class="container section">
+    <span class="eyebrow">Orchestration Matrix</span>
+    <h1 class="hero-title" style="font-size:clamp(2rem,4vw,3rem);">Six Modes &amp; Two Lane B Topologies</h1>
+    <p class="hero-lead" style="margin-bottom:2rem;">
+      Every workflow states its entry point, exact verified upstream tools, authorization gates, and honest parity boundaries.
+    </p>
+
+    <div class="tab-bar" role="tablist" aria-label="Filter modes">
+      <button class="tab-btn active" type="button" data-mode-filter="all" aria-selected="true">All 6 Modes</button>
+      <button class="tab-btn" type="button" data-mode-filter="clean" aria-selected="false">Clean-Room / Airlock</button>
+      <button class="tab-btn" type="button" data-mode-filter="rea" aria-selected="false">REA Deep</button>
+      <button class="tab-btn" type="button" data-mode-filter="specialized" aria-selected="false">Game &amp; Mobile</button>
+    </div>
+
+    <div class="bento-grid">
+      <article class="card col-span-3" data-mode-tags="clean">
+        <span class="badge badge-info">Mode 1 · /ca · clean-room-ui</span>
+        <h3 style="margin-top:0.65rem;">Clean-Room UI / Web Rebuild</h3>
+        <p>Use when visible screens, CSS responsiveness, and public interactions are sufficient. Runs <code>craft-anything-cli --clean-room</code> without <code>--all-tools</code>.</p>
+        <p style="margin-top:0.65rem;font-size:0.85rem;"><strong>Tools:</strong> <code>core_session_show</code>, <code>web_site_open</code>, <code>web_site_capture</code>, <code>rebuild_start</code>, <code>rebuild_check</code>, <code>web_pixels_compare</code>.</p>
+        <p style="margin-top:0.4rem;font-size:0.85rem;"><strong>Limit:</strong> Observable UI checks only; internal algorithms stay out of scope.</p>
+      </article>
+
+      <article class="card col-span-3" data-mode-tags="clean,rea">
+        <span class="badge badge-success">Mode 2 · /carea · two-team-process</span>
+        <h3 style="margin-top:0.65rem;">Two-Team Clean Room Process</h3>
+        <p>REA Lane A exports evidence to <code>analyst-evidence/</code>; <code>spec-draft</code> + <code>airlock-lint</code> + human <code>airlock-sign</code> gate <code>airlock/</code>; fresh CA <code>--clean-room</code> Lane B builds.</p>
+        <p style="margin-top:0.65rem;font-size:0.85rem;"><strong>Verdict Rule:</strong> <code>carea parity-report</code> marks <code>passed</code> only when both CA and REA axes finish completely.</p>
+      </article>
+
+      <article class="card col-span-3" data-mode-tags="rea">
+        <span class="badge badge-info">Mode 3 · /rea · deep-verification</span>
+        <h3 style="margin-top:0.65rem;">Deep Investigation &amp; AgentEnv</h3>
+        <p>REA-first binary, ELF/PE/Mach-O, JS/Electron, managed .NET, or UEFI inspection with formal <code>verify_reconstruction</code> and <code>AgentEnv</code> export.</p>
+        <p style="margin-top:0.65rem;font-size:0.85rem;"><strong>Tools:</strong> <code>open_binary</code>, <code>analyze_function</code>, <code>inspect_uefi_firmware</code>, <code>export_environment_bundle</code>.</p>
+      </article>
+
+      <article class="card col-span-3" data-mode-tags="rea">
+        <span class="badge badge-danger">Mode 4 · /carea · private-deep-rebuild</span>
+        <h3 style="margin-top:0.65rem;">Private Deep Rebuild (NOT CLEAN-ROOM)</h3>
+        <div class="banner-caution" style="margin-block:0.65rem;">
+          <strong>WARNING:</strong> Combines REA Deep + CA <code>--deep</code> for owned/authorized codebases only. Sets <code>deep_private: true</code> and prints mandatory <code>NOT CLEAN-ROOM</code> banners.
+        </div>
+        <p style="font-size:0.85rem;">Schema validation strictly forbids combining <code>deep_private: true</code> with clean-room modes or <code>airlock.status = "passed"</code>.</p>
+      </article>
+
+      <article class="card col-span-3" data-mode-tags="specialized,clean">
+        <span class="badge badge-warning">Mode 5 · /carea · game-rebuild</span>
+        <h3 style="margin-top:0.65rem;">Game Rebuild Path (Unity / Unreal / Godot)</h3>
+        <p>Rebuilds gameplay loops using <code>--build-with</code> and original generated assets (<code>assets_image_generate</code>, <code>assets_model_generate</code>).</p>
+        <p style="margin-top:0.65rem;font-size:0.85rem;"><strong>Strict Gate:</strong> Zero anti-cheat bypass and zero copied sprites/meshes. Note CA <code>game_*</code> extraction tools are blocked in <code>--clean-room</code> (Deep-only).</p>
+      </article>
+
+      <article class="card col-span-3" data-mode-tags="specialized,rea">
+        <span class="badge badge-warning">Mode 6 · /carea · android-mobile</span>
+        <h3 style="margin-top:0.65rem;">Android / Mobile App Path</h3>
+        <p>Pairs REA APK/DEX/JNI/Flutter inspection (<code>inspect_android_package</code>, <code>inspect_dart_aot</code>) with CA observable <code>adb</code> UI capture (<code>adb_screenshot_take</code>, <code>adb_window_show</code>).</p>
+        <p style="margin-top:0.65rem;font-size:0.85rem;"><strong>Limit:</strong> Requires authorized APK/test device and Android Platform Tools (<code>adb</code>).</p>
+      </article>
+    </div>
+
+    <h2 style="font-size:1.75rem;margin-top:3.25rem;margin-bottom:1rem;">Lane B Topologies: Who Is the Builder?</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Topology</th>
+            <th>How Lane B Runs</th>
+            <th>Isolation Strength</th>
+            <th>Key Weakness / Mitigation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>topology: "a"</code></td>
+            <td>Orchestrator calls <code>craft-anything-cli rebuild --clean-room</code>; CA spawns child builder agent.</td>
+            <td><span class="badge badge-warning">Moderate</span></td>
+            <td>Initial prompt and parent session origin overlap; share same OS user unless containerized.</td>
+          </tr>
+          <tr>
+            <td><code>topology: "b"</code></td>
+            <td>Lane A closes completely; fresh Session 2 loads <code>craft-anything-cli mcp --clean-room</code> only (no REA MCP).</td>
+            <td><span class="badge badge-success">Stronger (Recommended)</span></td>
+            <td>Zero shared LLM context window. Enforce workspace permissions via <code>carea isolation-check</code> and see <code>docs/threat-model.md</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>carea</strong> · Copyright (c) 2026 Ahmed Ishtiaque Zarir · MIT (code/docs) + Reserved Brand Terms.</div>
+      <div><a href="../docs/">Docs</a> · <a href="../cli/">CLI</a> · <a href="../portfolio/">Portfolio</a></div>
+    </div>
+  </footer>
+  <script src="../app.js" defer></script>
+</body>
+</html>

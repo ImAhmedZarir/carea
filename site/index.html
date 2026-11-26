@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>carea — Craft And Reverse Engineer Everything | Orchestration &amp; Clean-Room Airlock</title>
+  <meta name="description" content="Independent Level-1 agent skill pack, Python 3.10+ airlock CLI, and dual-axis verification framework coordinating external REA and Craft Anything engines.">
+  <meta name="keywords" content="carea, Craft And Reverse Engineer Everything, REA, rea-agents, Craft Anything, clean-room software rebuild, reverse engineering orchestration, MCP agent skills, parity verification, Ahmed Ishtiaque Zarir">
+  <meta name="author" content="Ahmed Ishtiaque Zarir">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+  <link rel="canonical" href="https://imahmedzarir.github.io/carea/">
+  <link rel="icon" type="image/png" href="./assets/carea.png">
+  <link rel="manifest" href="./site.webmanifest">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="carea — Craft And Reverse Engineer Everything">
+  <meta property="og:title" content="carea — Break It Down. Build It Better.">
+  <meta property="og:description" content="Coordinate external REA forensics and Craft Anything clean-room rebuilds across 6 operational modes with heuristic airlock gates and dual parity.">
+  <meta property="og:url" content="https://imahmedzarir.github.io/carea/">
+  <meta property="og:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
+  <meta property="og:image:alt" content="carea split cobalt arch logo">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="carea — Craft And Reverse Engineer Everything">
+  <meta name="twitter:description" content="Level-1 orchestration skills (/carea, /rea, /ca), Python stdlib airlock CLI, and dual-axis parity schema.">
+  <meta name="twitter:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="./styles.css">
+
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("carea-theme");
+        var preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var dark = saved ? saved === "dark" : (preferDark !== false);
+        document.documentElement.classList.toggle("dark", dark);
+      } catch (_) {}
+    })();
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "carea",
+        "alternateName": "Craft And Reverse Engineer Everything",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Linux, macOS, Windows",
+        "softwareVersion": "1.0.0-rc1",
+        "license": "https://opensource.org/licenses/MIT",
+        "url": "https://imahmedzarir.github.io/carea/",
+        "codeRepository": "https://github.com/ImAhmedZarir/carea",
+        "description": "Independent Level-1 agent skill pack, Python stdlib CLI, and handoff schema coordinating external REA and Craft Anything engines.",
+        "keywords": ["clean-room", "reverse engineering", "agent skills", "MCP", "parity verification"],
+        "author": {
+          "@type": "Person",
+          "name": "Ahmed Ishtiaque Zarir",
+          "url": "https://github.com/ImAhmedZarir"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "name": "carea Documentation & Portfolio",
+        "url": "https://imahmedzarir.github.io/carea/"
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="bg-grid">
+  <a href="#main-content" class="sr-only">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand-link" href="./">
+        <img src="./assets/carea.png" alt="carea logo" width="30" height="30">
+        <span>carea</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a class="nav-link" href="./" aria-current="page">Overview</a>
+        <a class="nav-link" href="./modes/">Modes</a>
+        <a class="nav-link" href="./cli/">CLI &amp; Schema</a>
+        <a class="nav-link" href="./docs/">Docs &amp; Coexistence</a>
+        <a class="nav-link" href="./portfolio/">Portfolio</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn-secondary" href="https://github.com/ImAhmedZarir/carea" rel="noopener">GitHub</a>
+        <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle color theme" aria-pressed="true">
+          <span data-theme-label>Dark</span>
+        </button>
+        <button id="mobile-menu-toggle" class="icon-btn mobile-menu-btn" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-drawer">
+          Menu
+        </button>
+      </div>
+    </div>
+    <nav id="mobile-drawer" class="mobile-drawer" aria-label="Mobile navigation" hidden>
+      <a href="./" aria-current="page">Overview</a>
+      <a href="./modes/">Modes (1–6)</a>
+      <a href="./cli/">CLI &amp; Schema</a>
+      <a href="./docs/">Docs &amp; Coexistence</a>
+      <a href="./portfolio/">Portfolio</a>
+      <a href="https://github.com/ImAhmedZarir/carea" rel="noopener">GitHub Repository</a>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="section">
+      <div class="container hero-split">
+        <div>
+          <span class="eyebrow">v1.0.0-rc1 · Independent Level-1 Orchestration</span>
+          <h1 class="hero-title">Break It Down.<br>Build It Better.</h1>
+          <p class="hero-lead">
+            <strong>carea</strong> (<em>Craft And Reverse Engineer Everything</em>) connects external <strong>REA</strong> forensics with <strong>Craft Anything</strong> clean-room rebuilds using non-conflicting agent skills, heuristic airlock CLI gates, and dual-axis parity schemas.
+          </p>
+          <div class="btn-row" style="margin-top:1.5rem;">
+            <a class="btn btn-primary" href="./docs/">Read Getting Started</a>
+            <a class="btn btn-secondary" href="./portfolio/">View Case Study &amp; Portfolio</a>
+          </div>
+          <p style="margin-top:1rem;font-size:0.86rem;color:var(--muted-foreground);">
+            Zero vendored engines · Python 3.10+ stdlib CLI · Unofficial layer over <a href="https://github.com/morluto/rea">morluto/rea</a> (MIT) and <a href="https://github.com/storytold/craft-anything">storytold/craft-anything</a> (MIT / Apache-2.0).
+          </p>
+        </div>
+
+        <aside class="card" aria-label="Interactive mode router workbench">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.85rem;">
+            <span class="mono" style="font-size:0.8rem;color:var(--muted-foreground);">Interactive Mode Router</span>
+            <span class="badge badge-info">Claude · Codex · Cursor</span>
+          </div>
+          <div class="tab-bar" role="tablist" aria-label="Select carea mode">
+            <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-preview-mode="two-team-process">Mode 2</button>
+            <button class="tab-btn" type="button" role="tab" aria-selected="false" data-preview-mode="clean-room-ui">Mode 1</button>
+            <button class="tab-btn" type="button" role="tab" aria-selected="false" data-preview-mode="deep-verification">Mode 3</button>
+            <button class="tab-btn" type="button" role="tab" aria-selected="false" data-preview-mode="private-deep-rebuild">Mode 4</button>
+            <button class="tab-btn" type="button" role="tab" aria-selected="false" data-preview-mode="game-rebuild">Mode 5</button>
+            <button class="tab-btn" type="button" role="tab" aria-selected="false" data-preview-mode="android-mobile">Mode 6</button>
+          </div>
+          <div id="mode-preview-panel">
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;margin-bottom:0.75rem;">
+              <span class="badge badge-success" data-preview-badge>Recommended · Mode 2</span>
+              <span class="badge" data-preview-skill>/carea</span>
+              <span class="badge badge-warning" data-preview-clean>Process aid (Topology b)</span>
+            </div>
+            <p data-preview-summary style="font-size:0.93rem;">
+              REA inspects internals in analyst-evidence/; carea enforces spec-draft + airlock-lint + human sign; fresh CA --clean-room session rebuilds.
+            </p>
+            <div class="code-box">
+              <button class="copy-btn" type="button">Copy</button>
+              <pre data-preview-cmd>carea init ./my-app --mode two-team-process --topology b
+carea isolation-check ./my-app
+carea airlock-lint ./my-app/airlock --strict
+carea airlock-sign ./my-app/airlock/carea-handoff.json --reviewer "Ahmed" --confirm-human-review</pre>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:1rem;">
+      <div class="container">
+        <div class="banner-info" style="margin-bottom:2rem;">
+          <strong>Scope &amp; Honest Guarantees:</strong> <code>carea</code> is not an analysis engine, operating-system sandbox, or legal clean-room defense. <code>craft-anything-cli --clean-room</code> is a tool-level policy, and <code>carea airlock-lint</code> is a heuristic scanner that always requires human sign-off.
+        </div>
+
+        <div class="stat-grid" style="margin-bottom:2.5rem;">
+          <div class="stat-card">
+            <div class="stat-value">3 / 6</div>
+            <div class="stat-label">Skills (/rea, /ca, /carea) across 6 documented modes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">10</div>
+            <div class="stat-label">Zero-dependency Python 3.10+ CLI subcommands</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">24 / 24</div>
+            <div class="stat-label">Unit, leak-fixture, schema &amp; asset-ban checks passing</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">3 OS</div>
+            <div class="stat-label">Linux, macOS &amp; Windows CI matrix verified green</div>
+          </div>
+        </div>
+
+        <div class="bento-grid">
+          <article class="card card-hover col-span-4">
+            <span class="badge badge-info" style="margin-bottom:0.75rem;">Two-Team Boundary</span>
+            <h3>Executable Airlock Gates Replace Honor System</h3>
+            <p>
+              Instead of relying on prompts alone, <code>carea</code> checks directory boundaries (<code>isolation-check</code>), drafts ID-only spec skeletons (<code>spec-draft</code>), scans heuristically for inline code, asm, hex offsets, base64, assets, secrets, and obfuscated emails (<code>airlock-lint</code>), and blocks <code>airlock.status = "passed"</code> until explicit human confirmation (<code>airlock-sign</code>).
+            </p>
+          </article>
+
+          <article class="card card-hover col-span-2">
+            <span class="badge badge-warning" style="margin-bottom:0.75rem;">Context Hygiene</span>
+            <h3>Avoid 580+ Tool Overload</h3>
+            <p>
+              Never load both complete catalogs simultaneously. Pair REA <code>hot-cold</code> or scoped <code>REA_MCP_TOOL_FAMILIES</code> with CA <code>--clean-room</code> (omitting <code>--all-tools</code>).
+            </p>
+          </article>
+
+          <article class="card card-hover col-span-3">
+            <span class="badge badge-success" style="margin-bottom:0.75rem;">Dual-Axis Parity</span>
+            <h3>Visual Likeness + Behavioral Proof</h3>
+            <p>
+              Craft Anything verifies responsive UI pixels and flows (<code>rebuild_check</code>, <code>web_pixels_compare</code>), while REA verifies obligation ledgers and capture contracts (<code>verify_reconstruction</code>). <code>carea parity-report</code> marks an obligation <code>passed</code> only when both axes finish completely.
+            </p>
+          </article>
+
+          <article class="card card-hover col-span-3">
+            <span class="badge badge-danger" style="margin-bottom:0.75rem;">Strict Invariant</span>
+            <h3>Private Deep Mode Cannot Pose as Clean-Room</h3>
+            <p>
+              Mode 4 (<code>deep_private: true</code>) prepends mandatory <code>NOT CLEAN-ROOM</code> banners across specs and parity reports, and schema validation (<code>v1.1.0</code>) rejects pairing <code>deep_private: true</code> with clean-room modes or passed airlock status.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 style="font-size:clamp(1.6rem,3vw,2.35rem);margin-bottom:0.5rem;">5-Minute Quickstarts</h2>
+        <p style="color:var(--muted-foreground);margin-bottom:1.25rem;max-width:60ch;">
+          Pick the entry point matching your task — each skill has non-overlapping triggers and keeps context lean.
+        </p>
+
+        <div class="tab-bar" role="tablist" aria-label="Skill quickstarts">
+          <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-qs-tab="carea">/carea (Pipeline)</button>
+          <button class="tab-btn" type="button" role="tab" aria-selected="false" data-qs-tab="rea">/rea (Forensics &amp; AgentEnv)</button>
+          <button class="tab-btn" type="button" role="tab" aria-selected="false" data-qs-tab="ca">/ca (Observable UI)</button>
+        </div>
+
+        <div data-qs-panel="carea" class="card">
+          <h3>Combined Two-Team Pipeline (<code>/carea</code>)</h3>
+          <p>Use when hidden state machines or API contracts require REA analysis before a fresh CA <code>--clean-room</code> rebuild.</p>
+          <div class="code-box">
+            <button class="copy-btn" type="button">Copy</button>
+            <pre>pip install --no-deps .
+carea doctor
+carea init ./pulse-rebuild --mode two-team-process --topology b --target-name pulse-timer
+carea isolation-check ./pulse-rebuild
+carea spec-draft ./pulse-rebuild/analyst-evidence/bundle.json --out ./pulse-rebuild/airlock/clean-room-spec.md
+carea airlock-lint ./pulse-rebuild/airlock --strict
+carea validate-handoff ./pulse-rebuild/airlock/carea-handoff.json</pre>
+          </div>
+        </div>
+
+        <div data-qs-panel="rea" class="card" hidden>
+          <h3>REA-First Investigation &amp; Verification (<code>/rea</code>)</h3>
+          <p>Use for binary, JS/Electron, .NET, APK/Flutter, UEFI/firmware analysis, <code>verify_reconstruction</code>, or AgentEnv export without UI rebuilds.</p>
+          <div class="code-box">
+            <button class="copy-btn" type="button">Copy</button>
+            <pre>npm install -g rea-agents@6.10.1
+carea mcp-profile rea-hot-cold
+# In session: inspect with open_binary / analyze_javascript_application -> export_evidence_bundle</pre>
+          </div>
+        </div>
+
+        <div data-qs-panel="ca" class="card" hidden>
+          <h3>Craft Anything-First Observable Rebuild (<code>/ca</code>)</h3>
+          <p>Use when visible layouts, screenshots, and public interactions provide everything needed for a <code>--clean-room</code> rebuild.</p>
+          <div class="code-box">
+            <button class="copy-btn" type="button">Copy</button>
+            <pre>python examples/sample-target/server.py --port 4173
+carea mcp-profile ca-clean-room
+craft-anything-cli rebuild http://127.0.0.1:4173/ "Build accessible countdown timer" --clean-room</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:1rem;">
+      <div class="container">
+        <div class="card" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1.5rem;">
+          <div style="max-width:62ch;">
+            <span class="eyebrow" style="margin-bottom:0.75rem;">Author &amp; Engineering Portfolio</span>
+            <h2 style="font-size:1.65rem;margin-bottom:0.5rem;">Built by Ahmed Ishtiaque Zarir</h2>
+            <p style="color:var(--muted-foreground);">
+              Explore the design tradeoffs behind <code>carea</code>, live evidence from the self-owned <code>pulse-timer</code> Mode 2 run, cross-OS GitHub Actions automation, and adversarial airlock test design.
+            </p>
+          </div>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="./portfolio/">Open Portfolio &amp; Case Study</a>
+            <a class="btn btn-secondary" href="./modes/">Explore All 6 Modes</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <strong>carea</strong> — <em>Craft And Reverse Engineer Everything</em><br>
+        Original materials: MIT License · Copyright (c) 2026 Ahmed Ishtiaque Zarir.<br>
+        Name, title, tagline, and <code>carea.png</code> mark are reserved trademarks outside MIT.
+      </div>
+      <div>
+        Independent &amp; unofficial orchestration over external
+        <a href="https://github.com/morluto/rea" rel="noopener">REA (morluto/rea)</a> and
+        <a href="https://github.com/storytold/craft-anything" rel="noopener">Craft Anything (storytold/craft-anything)</a>.<br>
+        <a href="https://github.com/ImAhmedZarir/carea/blob/main/DISCLAIMER.md" rel="noopener">Disclaimer</a> ·
+        <a href="https://github.com/ImAhmedZarir/carea/blob/main/NOTICE" rel="noopener">Notice</a> ·
+        <a href="./sitemap.xml">Sitemap</a>
+      </div>
+    </div>
+  </footer>
+  <script src="./app.js" defer></script>
+</body>
+</html>

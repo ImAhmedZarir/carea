@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Portfolio &amp; Case Study — Ahmed Ishtiaque Zarir | carea</title>
+  <meta name="description" content="Project portfolio and verified Mode 2 case study (pulse-timer) by Ahmed Ishtiaque Zarir demonstrating cross-OS CI, adversarial airlock checks, and dual-axis parity.">
+  <meta name="keywords" content="Ahmed Ishtiaque Zarir, carea portfolio, reverse engineering portfolio, clean room airlock case study, Python stdlib CLI">
+  <meta name="author" content="Ahmed Ishtiaque Zarir">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://imahmedzarir.github.io/carea/portfolio/">
+  <link rel="icon" type="image/png" href="../assets/carea.png">
+
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="carea">
+  <meta property="og:title" content="Ahmed Ishtiaque Zarir — carea Architecture &amp; Case Study">
+  <meta property="og:description" content="Engineering portfolio and verified Mode 2 pipeline case study built around self-owned pulse-timer and Python 3.10+ stdlib tooling.">
+  <meta property="og:url" content="https://imahmedzarir.github.io/carea/portfolio/">
+  <meta property="og:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="carea Portfolio — Ahmed Ishtiaque Zarir">
+  <meta name="twitter:description" content="Architecture decisions, measured CI/E2E evidence, and open-source engineering case study.">
+  <meta name="twitter:image" content="https://imahmedzarir.github.io/carea/assets/carea.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../styles.css">
+
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem("carea-theme");
+        var d = s ? s === "dark" : true;
+        document.documentElement.classList.toggle("dark", d);
+      } catch (_) {}
+    })();
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "url": "https://imahmedzarir.github.io/carea/portfolio/",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Ahmed Ishtiaque Zarir",
+      "url": "https://github.com/ImAhmedZarir",
+      "sameAs": [
+        "https://github.com/ImAhmedZarir",
+        "https://github.com/ImAhmedZarir/carea"
+      ],
+      "knowsAbout": [
+        "Software Reverse Engineering Orchestration",
+        "Clean-Room Process Architecture",
+        "MCP Tooling",
+        "Python CLI Engineering"
+      ]
+    }
+  }
+  </script>
+</head>
+<body class="bg-grid">
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand-link" href="../"><img src="../assets/carea.png" alt="carea logo" width="30" height="30"><span>carea</span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a class="nav-link" href="../">Overview</a>
+        <a class="nav-link" href="../modes/">Modes</a>
+        <a class="nav-link" href="../cli/">CLI &amp; Schema</a>
+        <a class="nav-link" href="../docs/">Docs &amp; Coexistence</a>
+        <a class="nav-link" href="./" aria-current="page">Portfolio</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn-secondary" href="https://github.com/ImAhmedZarir/carea" rel="noopener">GitHub</a>
+        <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle color theme" aria-pressed="true"><span data-theme-label>Dark</span></button>
+        <button id="mobile-menu-toggle" class="icon-btn mobile-menu-btn" type="button" aria-expanded="false" aria-controls="mobile-drawer">Menu</button>
+      </div>
+    </div>
+    <nav id="mobile-drawer" class="mobile-drawer" hidden>
+      <a href="../">Overview</a>
+      <a href="../modes/">Modes (1–6)</a>
+      <a href="../cli/">CLI &amp; Schema</a>
+      <a href="../docs/">Docs &amp; Coexistence</a>
+      <a href="./" aria-current="page">Portfolio</a>
+    </nav>
+  </header>
+
+  <main class="container section">
+    <div class="hero-split" style="margin-bottom:3rem;">
+      <div>
+        <span class="eyebrow">Project Case Study &amp; Author Profile</span>
+        <h1 class="hero-title" style="font-size:clamp(2rem,4vw,3.1rem);">Ahmed Ishtiaque Zarir</h1>
+        <p class="hero-lead">
+          Creator and maintainer of <strong>carea</strong> — designing zero-dependency developer tooling, evidence-grounded AI agent workflows, and reproducible verification gates across Linux, macOS, and Windows.
+        </p>
+        <div class="btn-row" style="margin-top:1.5rem;">
+          <a class="btn btn-primary" href="https://github.com/ImAhmedZarir/carea" rel="noopener">View Source on GitHub</a>
+          <a class="btn btn-secondary" href="https://github.com/ImAhmedZarir" rel="noopener">GitHub Profile</a>
+        </div>
+      </div>
+
+      <aside class="card" style="display:flex;gap:1.25rem;align-items:center;">
+        <img src="../assets/carea.png" alt="carea brand mark" width="84" height="84" style="flex-shrink:0;">
+        <div>
+          <span class="badge badge-info" style="margin-bottom:0.45rem;">Flagship Architecture</span>
+          <h3>Level-1 Separation Over Code Blending</h3>
+          <p style="font-size:0.9rem;">
+            Keeping Node (<code>rea</code>), Rust (<code>craft-anything-cli</code>), and Python stdlib (<code>carea</code>) isolated eliminates dual-runtime drift while preserving every upstream license intact.
+          </p>
+        </div>
+      </aside>
+    </div>
+
+    <h2 style="font-size:1.7rem;margin-bottom:1rem;">Measured Engineering Outcomes (<code>v1.0.0-rc1</code>)</h2>
+    <div class="bento-grid" style="margin-bottom:2.75rem;">
+      <article class="card col-span-3">
+        <span class="badge badge-success" style="margin-bottom:0.65rem;">Live Mode 2 Case Study</span>
+        <h3><code>pulse-timer</code> End-to-End Pipeline</h3>
+        <p>
+          Exercised the full Two-Team sequence against the self-owned sample target: live <code>rea_rea</code> MCP produced a <code>149,804</code>-byte bundle (<code>ev_835b...</code>), <code>carea spec-draft</code> emitted IDs without payload leaks, <code>airlock-lint --strict</code> + <code>airlock-sign</code> gated handoff <code>1.1.0</code>, <code>craft-anything-cli --clean-room</code> drove headless Chrome <code>158</code> (<code>ev_785a...</code>), and <code>parity-report</code> honestly returned <code>partial</code> due to unanalyzed inline HTML script coverage.
+        </p>
+      </article>
+
+      <article class="card col-span-3">
+        <span class="badge badge-info" style="margin-bottom:0.65rem;">Adversarial Defense</span>
+        <h3>Hardened Heuristic Airlock &amp; Asset-Ban CI</h3>
+        <p>
+          Built custom Python stdlib scanners catching inline bitwise/branch code, <code>0x5A3C</code>-style prose hex offsets, <code>[at]/[dot]</code> obfuscated emails, spaced <code>sk_live_ ...</code> keys, and SHA-256 hashes of banned upstream logos/fonts — verified green across <code>24</code> unit tests and 3-OS GitHub Actions runners.
+        </p>
+      </article>
+    </div>
+
+    <h2 style="font-size:1.7rem;margin-bottom:1rem;">Project Timeline &amp; Architecture Milestones</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Milestone</th>
+            <th>Deliverable</th>
+            <th>Verification Scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>v0.1.0</code></td>
+            <td>Legal, attribution, brand separation, initial <code>/carea</code> skill &amp; v1.0.0 schema</td>
+            <td>Manual audit + example schema check</td>
+          </tr>
+          <tr>
+            <td><code>v1.0.0-rc1</code></td>
+            <td><code>docs/upstream-facts.md</code>, 3 split skills, 6 modes, Topologies (a)/(b), 10 Python stdlib commands, Schema <code>1.1.0</code>, cross-OS CI, adversarial airlock, live Mode 2 E2E</td>
+            <td><code>24/24</code> unit tests, 3-OS GitHub CI green (<code>ubuntu</code>/<code>macos</code>/<code>windows</code>), live REA MCP + CA <code>0.6.0</code> CLI verified</td>
+          </tr>
+          <tr>
+            <td>Next (<code>v1.0.0</code>)</td>
+            <td>Run standalone <code>rea --version</code> / <code>rea doctor</code> on Node <code>22+</code> host &amp; optional Mode 5/6 engine/device checks</td>
+            <td>Tracked openly in <code>docs/AUDIT.md</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>Ahmed Ishtiaque Zarir</strong> · Author of <code>carea</code> · Copyright (c) 2026.</div>
+      <div><a href="../">Overview</a> · <a href="../modes/">Modes</a> · <a href="../docs/">Docs</a></div>
+    </div>
+  </footer>
+  <script src="../app.js" defer></script>
+</body>
+</html>
