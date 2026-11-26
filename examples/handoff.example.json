@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0.0",
+  "project": {
+    "name": "deck-timer-example",
+    "description": "Illustrative Two-Team Clean Room handoff record for an owned countdown timer utility.",
+    "created_at": "2026-11-26T20:15:00+06:00",
+    "authorized": true
+  },
+  "mode": "two-team-process",
+  "airlock": {
+    "status": "passed",
+    "audited_by": "independent-reviewer",
+    "audited_at": "2026-11-26T20:16:00+06:00",
+    "no_source_code": true,
+    "no_proprietary_assets": true,
+    "separate_builder_context": true,
+    "spec_path": "examples/clean-room-spec.example.md",
+    "disclaimer_acknowledged": true
+  },
+  "target_summary": {
+    "kind": "electron-app",
+    "label": "deck-timer reference application (example)",
+    "subject_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "analyst_lane": {
+    "engine": "rea",
+    "rea_version": "6.10.1",
+    "evidence_format": 2,
+    "analyst_bundle_path": "analyst-evidence/deck-timer.bundle.json",
+    "tool_families_used": [
+      "browser",
+      "electron",
+      "application",
+      "javascript-runtime",
+      "session"
+    ],
+    "evidence_ids": [
+      "ev_00000000000000000000000000000001",
+      "ev_00000000000000000000000000000002"
+    ],
+    "unknown_ids": [
+      "unk_01"
+    ]
+  },
+  "obligations": [
+    {
+      "obligation_id": "obl_ui_responsive",
+      "title": "Responsive compact and presenter timer views",
+      "category": "ui-layout",
+      "spec_section": "2. Observable User Flows & UI States",
+      "source_evidence_ids": [
+        "ev_00000000000000000000000000000001"
+      ],
+      "acceptance_criteria": [
+        "375px layout shows single-column tabular digits, >=44px controls, and zero horizontal overflow",
+        "1440px layout shows preset duration buttons and warning/completed state indicator"
+      ],
+      "ca_check_targets": [
+        "rebuild_check",
+        "web_pixels_compare",
+        "web_walkthrough_check"
+      ],
+      "rea_verification_method": "compare_web_captures",
+      "status": "passed",
+      "notes": "Verified at 375px and 1440px with original SVG controls."
+    },
+    {
+      "obligation_id": "obl_api_status_read",
+      "title": "Local HTTP GET /api/timer/status response contract",
+      "category": "api-contract",
+      "spec_section": "3. Data Contracts & API Shapes (Value-Free)",
+      "source_evidence_ids": [
+        "ev_00000000000000000000000000000002"
+      ],
+      "acceptance_criteria": [
+        "Returns state, duration_ms, remaining_ms, and warning_active fields matching documented bounds"
+      ],
+      "test_vectors": [
+        {
+          "test_id": "test_03",
+          "input_description": "GET /api/timer/status while paused at 42000ms",
+          "expected_outcome": "HTTP 200 JSON with state='paused', remaining_ms=42000, warning_active=false"
+        }
+      ],
+      "ca_check_targets": [
+        "web_walkthrough_check"
+      ],
+      "rea_verification_method": "compare_javascript_export_shapes",
+      "status": "passed"
+    },
+    {
+      "obligation_id": "obl_timer_math",
+      "title": "Monotonic timer countdown and zero-clamp state transitions",
+      "category": "state-machine",
+      "spec_section": "4. State Machines & Domain / Algorithmic Rules",
+      "source_evidence_ids": [
+        "ev_00000000000000000000000000000002"
+      ],
+      "acceptance_criteria": [
+        "Remaining milliseconds clamp to [0, duration_ms] and transition to completed at 0",
+        "Invalid durations outside [1000, 86400000] return invalid_duration without mutating state"
+      ],
+      "test_vectors": [
+        {
+          "test_id": "test_01",
+          "input_description": "duration_ms=90000, start, advance 35000ms",
+          "expected_outcome": "state='running', remaining_ms=55000, warning_active=true"
+        },
+        {
+          "test_id": "test_02",
+          "input_description": "duration_ms=10000, start, advance 15000ms",
+          "expected_outcome": "state='completed', remaining_ms=0, warning_active=false"
+        }
+      ],
+      "ca_check_targets": [
+        "rebuild_check"
+      ],
+      "rea_verification_method": "verify_reconstruction",
+      "status": "passed"
+    }
+  ],
+  "builder_lane": {
+    "engine": "craft-anything",
+    "ca_version": "0.6.1",
+    "clean_room_verified": true,
+    "workspace_path": "builder-workspace",
+    "ca_project_id": "deck-timer-clean-rebuild",
+    "ca_checks": [
+      {
+        "tool": "rebuild_check",
+        "status": "passed",
+        "summary": "Build succeeded; responsive checks passed at 375px and 1440px."
+      },
+      {
+        "tool": "web_pixels_compare",
+        "status": "passed",
+        "summary": "Layout hierarchy matches sanitized visual targets with original icons."
+      }
+    ]
+  },
+  "parity_summary": {
+    "visual_status": "passed",
+    "behavioral_status": "passed",
+    "structural_status": "partial",
+    "overall_status": "partial",
+    "limitations": [
+      "Structural equivalence checked only for exported timer state and HTTP status endpoints; audio chime path not verified offline."
+    ],
+    "unresolved_unknowns": [
+      "unk_01"
+    ]
+  }
+}
