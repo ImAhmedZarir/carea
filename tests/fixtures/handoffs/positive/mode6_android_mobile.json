@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.1.0",
+  "project": {
+    "name": "mode6-android-mobile-fixture",
+    "created_at": "2026-11-26T20:00:00Z",
+    "authorized": true
+  },
+  "mode": "android-mobile",
+  "topology": "b",
+  "deep_private": false,
+  "tool_versions": { "rea": "6.10.1", "ca": "0.6.0", "carea": "1.0.0" },
+  "airlock": {
+    "status": "passed",
+    "audited_by": "mobile-reviewer",
+    "audited_at": "2026-11-26T20:15:00Z",
+    "no_source_code": true,
+    "no_proprietary_assets": true,
+    "separate_builder_context": true,
+    "spec_path": "airlock/clean-room-spec.md",
+    "disclaimer_acknowledged": true,
+    "audit": {
+      "lint_status": "PASS",
+      "lint_hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "human_reviewer": "mobile-reviewer",
+      "signed_at": "2026-11-26T20:15:00Z",
+      "linter_version": "1.0.0"
+    }
+  },
+  "target_summary": { "kind": "android-apk", "label": "Owned sample notes APK" },
+  "analyst_lane": {
+    "engine": "rea",
+    "rea_version": "6.10.1",
+    "evidence_format": 2,
+    "analyst_bundle_path": "analyst-evidence/apk.bundle.json",
+    "tool_families_used": ["android", "apktool", "application", "session"],
+    "evidence_ids": ["ev_apk_01"],
+    "unknown_ids": ["unk_biometric_hw"]
+  },
+  "obligations": [
+    {
+      "obligation_id": "obl_mobile_notes_sync",
+      "title": "Offline note storage schema and adb screen layout",
+      "category": "mobile-bridge",
+      "spec_section": "2. Mobile Flows",
+      "source_evidence_ids": ["ev_apk_01"],
+      "acceptance_criteria": ["Notes persist offline; 390dp phone layout renders without clipping"],
+      "ca_check_targets": ["adb_screenshot_take", "runtime_captures_compare"],
+      "rea_verification_method": "compare_artifacts",
+      "status": "partial",
+      "coverage": { "scope": "partial", "notes": "Biometric prompt skipped on headless emulator" },
+      "limitations": ["Hardware keystore flow unverified on emulator"]
+    }
+  ],
+  "builder_lane": {
+    "engine": "craft-anything",
+    "ca_version": "0.6.0",
+    "clean_room_verified": true,
+    "workspace_path": "builder-workspace"
+  },
+  "parity_summary": {
+    "visual_status": "passed",
+    "behavioral_status": "partial",
+    "structural_status": "passed",
+    "overall_status": "partial",
+    "unresolved_unknowns": ["unk_biometric_hw"]
+  }
+}

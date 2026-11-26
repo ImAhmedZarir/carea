@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.1.0",
+  "project": {
+    "name": "mode2-two-team-fixture",
+    "created_at": "2026-11-26T20:00:00Z",
+    "authorized": true
+  },
+  "mode": "two-team-process",
+  "topology": "b",
+  "deep_private": false,
+  "tool_versions": { "rea": "6.10.1", "ca": "0.6.1", "carea": "1.0.0" },
+  "airlock": {
+    "status": "passed",
+    "audited_by": "qa-reviewer",
+    "audited_at": "2026-11-26T20:05:00Z",
+    "no_source_code": true,
+    "no_proprietary_assets": true,
+    "separate_builder_context": true,
+    "spec_path": "airlock/clean-room-spec.md",
+    "spec_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "disclaimer_acknowledged": true,
+    "audit": {
+      "lint_status": "PASS",
+      "lint_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "human_reviewer": "qa-reviewer",
+      "signed_at": "2026-11-26T20:05:00Z",
+      "linter_version": "1.0.0"
+    }
+  },
+  "target_summary": { "kind": "web-app", "label": "Sample calculator app" },
+  "analyst_lane": {
+    "engine": "rea",
+    "rea_version": "6.10.1",
+    "evidence_format": 2,
+    "analyst_bundle_path": "analyst-evidence/bundle.json",
+    "evidence_ids": ["ev_01"],
+    "unknown_ids": []
+  },
+  "obligations": [
+    {
+      "obligation_id": "obl_calc_add",
+      "title": "Exact decimal addition endpoint",
+      "category": "api-contract",
+      "spec_section": "3. Data Contracts",
+      "source_evidence_ids": ["ev_01"],
+      "acceptance_criteria": ["POST /api/add sums two decimal inputs within bounds"],
+      "ca_check_targets": ["web_walkthrough_check"],
+      "rea_verification_method": "verify_reconstruction",
+      "status": "passed",
+      "coverage": { "scope": "complete", "notes": "Both axes passed" },
+      "limitations": []
+    }
+  ],
+  "builder_lane": {
+    "engine": "craft-anything",
+    "ca_version": "0.6.1",
+    "clean_room_verified": true,
+    "workspace_path": "builder-workspace"
+  },
+  "parity_summary": {
+    "visual_status": "passed",
+    "behavioral_status": "passed",
+    "structural_status": "passed",
+    "overall_status": "passed",
+    "unresolved_unknowns": []
+  }
+}

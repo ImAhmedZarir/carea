@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/ImAhmedZarir/carea/schemas/carea-handoff.schema.json",
+  "$id": "https://raw.githubusercontent.com/ImAhmedZarir/carea/main/schemas/carea-handoff.schema.json",
   "title": "carea Evidence and Clean-Room Handoff Record",
-  "description": "Maps sanitized Analyst specifications, opaque REA evidence IDs, Craft Anything Clean-Room check targets, and Stage 4 parity verification outcomes.",
+  "description": "Maps sanitized Analyst specifications, opaque REA evidence IDs, Craft Anything verification targets, Airlock audit sign-off, and dual-axis parity outcomes across schema versions 1.0.0 and 1.1.0.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,10 +16,73 @@
     "builder_lane",
     "parity_summary"
   ],
+  "allOf": [
+    {
+      "if": {
+        "properties": { "schema_version": { "const": "1.0.0" } },
+        "required": ["schema_version"]
+      },
+      "then": {
+        "properties": {
+          "mode": {
+            "enum": ["clean-room-ui", "two-team-process", "deep-verification"]
+          },
+          "topology": false,
+          "deep_private": false,
+          "tool_versions": false
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "deep_private": { "const": true } },
+        "required": ["deep_private"]
+      },
+      "then": {
+        "properties": {
+          "mode": {
+            "not": { "enum": ["clean-room-ui", "two-team-process"] }
+          },
+          "airlock": {
+            "properties": {
+              "status": { "not": { "const": "passed" } }
+            }
+          },
+          "builder_lane": {
+            "properties": {
+              "clean_room_verified": { "const": false }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "airlock": {
+            "properties": { "status": { "const": "passed" } },
+            "required": ["status"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "airlock": {
+            "properties": {
+              "no_source_code": { "const": true },
+              "no_proprietary_assets": { "const": true },
+              "separate_builder_context": { "const": true }
+            }
+          }
+        }
+      }
+    }
+  ],
   "properties": {
+    "$schema": { "type": "string" },
     "schema_version": {
       "type": "string",
-      "const": "1.0.0"
+      "enum": ["1.0.0", "1.1.0"]
     },
     "project": {
       "type": "object",
@@ -38,7 +101,33 @@
     },
     "mode": {
       "type": "string",
-      "enum": ["clean-room-ui", "two-team-process", "deep-verification"]
+      "enum": [
+        "clean-room-ui",
+        "two-team-process",
+        "deep-verification",
+        "private-deep-rebuild",
+        "game-rebuild",
+        "android-mobile"
+      ]
+    },
+    "topology": {
+      "type": "string",
+      "enum": ["a", "b"],
+      "description": "Lane B isolation topology: (a) CA rebuild subprocess agent or (b) separate fresh MCP session."
+    },
+    "deep_private": {
+      "type": "boolean",
+      "default": false,
+      "description": "True only for Mode 4 authorized non-clean-room rebuilds. Never compatible with clean-room claims."
+    },
+    "tool_versions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rea": { "type": ["string", "null"] },
+        "ca": { "type": ["string", "null"] },
+        "carea": { "type": "string" }
+      }
     },
     "airlock": {
       "type": "object",
@@ -61,9 +150,22 @@
         "no_proprietary_assets": { "type": "boolean" },
         "separate_builder_context": { "type": "boolean" },
         "spec_path": { "type": "string", "minLength": 1 },
+        "spec_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
         "disclaimer_acknowledged": {
           "type": "boolean",
           "description": "Acknowledges Two-Team Clean Room is a process aid, not legal advice or a legal guarantee."
+        },
+        "audit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lint_status", "lint_hash", "human_reviewer", "signed_at"],
+          "properties": {
+            "lint_status": { "type": "string", "enum": ["PASS", "WARN", "FAIL"] },
+            "lint_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "human_reviewer": { "type": "string", "minLength": 1 },
+            "signed_at": { "type": "string", "format": "date-time" },
+            "linter_version": { "type": "string" }
+          }
         }
       }
     },
@@ -83,6 +185,8 @@
             "managed-assembly",
             "android-apk",
             "game",
+            "firmware",
+            "bundle",
             "other"
           ]
         },
@@ -151,7 +255,9 @@
               "algorithm-logic",
               "cli-behavior",
               "storage-schema",
-              "security-boundary"
+              "security-boundary",
+              "gameplay-mechanic",
+              "mobile-bridge"
             ]
           },
           "spec_section": { "type": "string", "minLength": 1 },
@@ -186,6 +292,8 @@
                 "web_pixels_compare",
                 "web_walkthrough_check",
                 "runtime_captures_compare",
+                "native_window_capture",
+                "adb_screenshot_take",
                 "none"
               ]
             }
@@ -200,7 +308,14 @@
               "compare_managed_members",
               "compare_process_captures",
               "compare_web_captures",
+              "compare_web_screenshots",
               "compare_wasm_interfaces",
+              "compare_functions",
+              "match_native_functions",
+              "build_call_path",
+              "compare_artifacts",
+              "trace_application_feature",
+              "trace_javascript_semantics",
               "correlate_static_and_runtime",
               "manual-test-vector",
               "none"
@@ -209,6 +324,22 @@
           "status": {
             "type": "string",
             "enum": ["pending", "passed", "partial", "failed", "unknown"]
+          },
+          "coverage": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["scope"],
+            "properties": {
+              "scope": {
+                "type": "string",
+                "enum": ["complete", "partial", "observable-only", "static-only", "unknown"]
+              },
+              "notes": { "type": "string" }
+            }
+          },
+          "limitations": {
+            "type": "array",
+            "items": { "type": "string" }
           },
           "notes": { "type": "string" }
         }

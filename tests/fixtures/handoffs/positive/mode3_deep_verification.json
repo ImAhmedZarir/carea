@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.1.0",
+  "project": {
+    "name": "mode3-deep-verification-fixture",
+    "created_at": "2026-11-26T20:00:00Z",
+    "authorized": true
+  },
+  "mode": "deep-verification",
+  "deep_private": false,
+  "tool_versions": { "rea": "6.10.1", "ca": null, "carea": "1.0.0" },
+  "airlock": {
+    "status": "not_applicable",
+    "no_source_code": false,
+    "no_proprietary_assets": true,
+    "separate_builder_context": false,
+    "spec_path": "verification/spec.md",
+    "disclaimer_acknowledged": true
+  },
+  "target_summary": { "kind": "firmware", "label": "Self-owned test UEFI image" },
+  "analyst_lane": {
+    "engine": "rea",
+    "rea_version": "6.10.1",
+    "evidence_format": 2,
+    "analyst_bundle_path": "analyst-evidence/uefi.bundle.json",
+    "tool_families_used": ["firmware", "uefi", "artifact", "session"],
+    "evidence_ids": ["ev_fw_01"],
+    "unknown_ids": ["unk_vendor_nvram"]
+  },
+  "obligations": [
+    {
+      "obligation_id": "obl_fw_inventory",
+      "title": "Verify firmware volume GUID structure matches v1",
+      "category": "storage-schema",
+      "spec_section": "1. Inventory",
+      "source_evidence_ids": ["ev_fw_01"],
+      "acceptance_criteria": ["UEFI volumes list matches baseline hashes"],
+      "ca_check_targets": ["none"],
+      "rea_verification_method": "compare_artifacts",
+      "status": "partial",
+      "coverage": { "scope": "static-only", "notes": "Hardware boot runtime not attached" },
+      "limitations": ["No live UEFI QEMU run executed"]
+    }
+  ],
+  "builder_lane": {
+    "engine": "manual",
+    "clean_room_verified": false,
+    "workspace_path": "verification"
+  },
+  "parity_summary": {
+    "visual_status": "not_applicable",
+    "behavioral_status": "partial",
+    "structural_status": "passed",
+    "overall_status": "partial",
+    "unresolved_unknowns": ["unk_vendor_nvram"]
+  }
+}

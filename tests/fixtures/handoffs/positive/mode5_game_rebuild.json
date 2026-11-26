@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.1.0",
+  "project": {
+    "name": "mode5-game-rebuild-fixture",
+    "created_at": "2026-11-26T20:00:00Z",
+    "authorized": true
+  },
+  "mode": "game-rebuild",
+  "topology": "b",
+  "deep_private": false,
+  "tool_versions": { "rea": "6.10.1", "ca": "0.6.0", "carea": "1.0.0" },
+  "airlock": {
+    "status": "passed",
+    "audited_by": "game-reviewer",
+    "audited_at": "2026-11-26T20:10:00Z",
+    "no_source_code": true,
+    "no_proprietary_assets": true,
+    "separate_builder_context": true,
+    "spec_path": "airlock/clean-room-spec.md",
+    "disclaimer_acknowledged": true,
+    "audit": {
+      "lint_status": "PASS",
+      "lint_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "human_reviewer": "game-reviewer",
+      "signed_at": "2026-11-26T20:10:00Z",
+      "linter_version": "1.0.0"
+    }
+  },
+  "target_summary": { "kind": "game", "label": "Self-owned MIT arcade puzzle sample" },
+  "analyst_lane": {
+    "engine": "rea",
+    "rea_version": "6.10.1",
+    "evidence_format": 2,
+    "analyst_bundle_path": "analyst-evidence/game.bundle.json",
+    "evidence_ids": ["ev_gm_01"],
+    "unknown_ids": ["unk_rng_seed"]
+  },
+  "obligations": [
+    {
+      "obligation_id": "obl_grid_gravity",
+      "title": "Tile gravity drop cadence and lock delay",
+      "category": "gameplay-mechanic",
+      "spec_section": "4. Gameplay Loop",
+      "source_evidence_ids": ["ev_gm_01"],
+      "acceptance_criteria": ["Tiles advance 1 row per 500ms tick; original generated sprite pack used"],
+      "ca_check_targets": ["native_window_capture", "runtime_captures_compare"],
+      "rea_verification_method": "manual-test-vector",
+      "status": "partial",
+      "coverage": { "scope": "partial", "notes": "Original art generated; shader timing differs by <=1 frame" },
+      "limitations": ["No asset files copied from target; game_* deep tools omitted"]
+    }
+  ],
+  "builder_lane": {
+    "engine": "craft-anything",
+    "ca_version": "0.6.0",
+    "clean_room_verified": true,
+    "workspace_path": "builder-workspace"
+  },
+  "parity_summary": {
+    "visual_status": "partial",
+    "behavioral_status": "partial",
+    "structural_status": "not_applicable",
+    "overall_status": "partial",
+    "unresolved_unknowns": ["unk_rng_seed"]
+  }
+}

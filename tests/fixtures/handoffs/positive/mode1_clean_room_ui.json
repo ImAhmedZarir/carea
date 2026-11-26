@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.1.0",
+  "project": {
+    "name": "mode1-ui-fixture",
+    "created_at": "2026-11-26T20:00:00Z",
+    "authorized": true
+  },
+  "mode": "clean-room-ui",
+  "deep_private": false,
+  "tool_versions": { "rea": null, "ca": "0.6.0", "carea": "1.0.0" },
+  "airlock": {
+    "status": "not_applicable",
+    "no_source_code": true,
+    "no_proprietary_assets": true,
+    "separate_builder_context": true,
+    "spec_path": "airlock/clean-room-spec.md",
+    "disclaimer_acknowledged": true
+  },
+  "target_summary": {
+    "kind": "website",
+    "label": "Public UI fixture",
+    "observable_url": "http://127.0.0.1:4173/"
+  },
+  "analyst_lane": {
+    "engine": "none",
+    "rea_version": "none",
+    "evidence_format": 2,
+    "evidence_ids": [],
+    "unknown_ids": []
+  },
+  "obligations": [
+    {
+      "obligation_id": "obl_ui_hero",
+      "title": "Responsive header and card stack",
+      "category": "ui-layout",
+      "spec_section": "2. Observable UI",
+      "source_evidence_ids": [],
+      "acceptance_criteria": ["No overflow at 375px or 1440px"],
+      "ca_check_targets": ["rebuild_check", "web_pixels_compare"],
+      "rea_verification_method": "none",
+      "status": "partial",
+      "coverage": { "scope": "observable-only", "notes": "UI pixels verified only" },
+      "limitations": ["No backend logic verified"]
+    }
+  ],
+  "builder_lane": {
+    "engine": "craft-anything",
+    "ca_version": "0.6.0",
+    "clean_room_verified": true,
+    "workspace_path": "builder-workspace"
+  },
+  "parity_summary": {
+    "visual_status": "passed",
+    "behavioral_status": "not_applicable",
+    "structural_status": "not_applicable",
+    "overall_status": "partial",
+    "limitations": ["Observable UI checks only"],
+    "unresolved_unknowns": []
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.1.0",
+  "project": { "name": "neg-deep-private-clean-room", "created_at": "2026-11-26T20:00:00Z", "authorized": true },
+  "mode": "private-deep-rebuild",
+  "deep_private": true,
+  "airlock": {
+    "status": "passed",
+    "no_source_code": true,
+    "no_proprietary_assets": true,
+    "separate_builder_context": true,
+    "spec_path": "airlock/spec.md"
+  },
+  "target_summary": { "kind": "web-app", "label": "Invalid mixed claim" },
+  "analyst_lane": { "engine": "rea", "rea_version": "6.10.1", "evidence_format": 2, "evidence_ids": [], "unknown_ids": [] },
+  "obligations": [
+    { "obligation_id": "obl_neg_1", "title": "Invalid", "category": "api-contract", "spec_section": "1", "source_evidence_ids": [], "acceptance_criteria": ["None"], "status": "passed" }
+  ],
+  "builder_lane": { "engine": "craft-anything", "clean_room_verified": true, "workspace_path": "builder-workspace" },
+  "parity_summary": { "visual_status": "passed", "behavioral_status": "passed", "structural_status": "passed", "overall_status": "passed", "unresolved_unknowns": [] }
+}

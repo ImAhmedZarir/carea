@@ -1,5 +1,6 @@
 {
-  "schema_version": "1.0.0",
+  "$schema": "../schemas/carea-handoff.schema.json",
+  "schema_version": "1.1.0",
   "project": {
     "name": "deck-timer-example",
     "description": "Illustrative Two-Team Clean Room handoff record for an owned countdown timer utility.",
@@ -7,6 +8,13 @@
     "authorized": true
   },
   "mode": "two-team-process",
+  "topology": "b",
+  "deep_private": false,
+  "tool_versions": {
+    "rea": "6.10.1",
+    "ca": "0.6.1",
+    "carea": "1.0.0"
+  },
   "airlock": {
     "status": "passed",
     "audited_by": "independent-reviewer",
@@ -15,7 +23,15 @@
     "no_proprietary_assets": true,
     "separate_builder_context": true,
     "spec_path": "examples/clean-room-spec.example.md",
-    "disclaimer_acknowledged": true
+    "spec_sha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "disclaimer_acknowledged": true,
+    "audit": {
+      "lint_status": "PASS",
+      "lint_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "human_reviewer": "independent-reviewer",
+      "signed_at": "2026-11-26T20:16:00+06:00",
+      "linter_version": "1.0.0"
+    }
   },
   "target_summary": {
     "kind": "electron-app",
@@ -62,6 +78,11 @@
       ],
       "rea_verification_method": "compare_web_captures",
       "status": "passed",
+      "coverage": {
+        "scope": "complete",
+        "notes": "Verified at 375px and 1440px viewports on both axes."
+      },
+      "limitations": [],
       "notes": "Verified at 375px and 1440px with original SVG controls."
     },
     {
@@ -86,7 +107,12 @@
         "web_walkthrough_check"
       ],
       "rea_verification_method": "compare_javascript_export_shapes",
-      "status": "passed"
+      "status": "passed",
+      "coverage": {
+        "scope": "complete",
+        "notes": "Response shape and walkthrough assertion matched."
+      },
+      "limitations": []
     },
     {
       "obligation_id": "obl_timer_math",
@@ -116,7 +142,14 @@
         "rebuild_check"
       ],
       "rea_verification_method": "verify_reconstruction",
-      "status": "passed"
+      "status": "partial",
+      "coverage": {
+        "scope": "partial",
+        "notes": "Timer state transitions verified cleanly; muted audio chime path left in unk_01."
+      },
+      "limitations": [
+        "Audio chime behavior when system audio output is muted could not be observed offline (unk_01)."
+      ]
     }
   ],
   "builder_lane": {
@@ -144,7 +177,7 @@
     "structural_status": "partial",
     "overall_status": "partial",
     "limitations": [
-      "Structural equivalence checked only for exported timer state and HTTP status endpoints; audio chime path not verified offline."
+      "Structural equivalence checked only for exported timer state and HTTP status endpoints; audio chime path remains unk_01."
     ],
     "unresolved_unknowns": [
       "unk_01"

@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.1.0",
+  "project": { "name": "neg-passed-without-confirm", "created_at": "2026-11-26T20:00:00Z", "authorized": true },
+  "mode": "two-team-process",
+  "airlock": {
+    "status": "passed",
+    "no_source_code": false,
+    "no_proprietary_assets": true,
+    "separate_builder_context": true,
+    "spec_path": "airlock/spec.md",
+    "audit": {
+      "lint_status": "FAIL",
+      "lint_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "human_reviewer": "reviewer",
+      "signed_at": "2026-11-26T20:05:00Z"
+    }
+  },
+  "target_summary": { "kind": "web-app", "label": "Failed audit signed" },
+  "analyst_lane": { "engine": "rea", "rea_version": "6.10.1", "evidence_format": 2, "evidence_ids": [], "unknown_ids": [] },
+  "obligations": [
+    { "obligation_id": "obl_neg_4", "title": "Invalid", "category": "api-contract", "spec_section": "1", "source_evidence_ids": [], "acceptance_criteria": ["None"], "status": "pending" }
+  ],
+  "builder_lane": { "engine": "craft-anything", "clean_room_verified": true, "workspace_path": "builder-workspace" },
+  "parity_summary": { "visual_status": "unknown", "behavioral_status": "unknown", "structural_status": "unknown", "overall_status": "unknown", "unresolved_unknowns": [] }
+}

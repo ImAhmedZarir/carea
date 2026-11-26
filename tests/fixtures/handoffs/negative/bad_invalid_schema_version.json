@@ -1,0 +1,13 @@
+{
+  "schema_version": "2.0.0",
+  "project": { "name": "neg-bad-ver", "created_at": "2026-11-26T20:00:00Z", "authorized": true },
+  "mode": "clean-room-ui",
+  "airlock": { "status": "not_applicable", "no_source_code": true, "no_proprietary_assets": true, "separate_builder_context": true, "spec_path": "airlock/spec.md" },
+  "target_summary": { "kind": "website", "label": "Unsupported version" },
+  "analyst_lane": { "engine": "none", "rea_version": "none", "evidence_format": 2, "evidence_ids": [], "unknown_ids": [] },
+  "obligations": [
+    { "obligation_id": "obl_neg_6", "title": "Invalid", "category": "ui-layout", "spec_section": "1", "source_evidence_ids": [], "acceptance_criteria": ["None"], "status": "pending" }
+  ],
+  "builder_lane": { "engine": "craft-anything", "clean_room_verified": true, "workspace_path": "builder-workspace" },
+  "parity_summary": { "visual_status": "unknown", "behavioral_status": "not_applicable", "structural_status": "not_applicable", "overall_status": "unknown", "unresolved_unknowns": [] }
+}
